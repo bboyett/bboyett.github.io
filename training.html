@@ -19,7 +19,10 @@
 
   <section class="section">
 
-  <img src="images/NCSTATE_training.png" alt="NC State training facilities" class="section-img">
+  <figure class="figure">
+    <img src="images/NCSTATE_training.png" alt="NC State training facilities" class="section-img">
+    <figcaption class="figcaption">Training at NC State</figcaption>
+  </figure>
 
   <h2>Training</h2>
   <p>
@@ -30,7 +33,57 @@
 
 </section>
 
+<section class="section">
+  <h2>Weekly Training Summary</h2>
+  <div id="weekly-data">
+    <p>Loading data...</p>
+  </div>
+</section>
+
 
 </main>
+<script>
+  const WEEKLY_URL = "https://script.google.com/macros/s/AKfycbzhEXbW1K7CxV_bvY-tAw1Cc5PvQrfDrWAnV5jDKy-eJFJzPrMiq6uzN84xkEOJFxX6/exec?sheet=WEEKLY";
+
+  fetch(WEEKLY_URL)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("weekly-data");
+
+      if (!data || data.length < 2) {
+        container.innerHTML = "<p>No data available.</p>";
+        return;
+      }
+
+      const headers = data[0];
+      const rows = data.slice(1);
+
+      let table = "<table><thead><tr>";
+
+      headers.forEach(h => {
+        table += `<th>${h}</th>`;
+      });
+
+      table += "</tr></thead><tbody>";
+
+      rows.forEach(row => {
+        table += "<tr>";
+        row.forEach(cell => {
+          table += `<td>${cell}</td>`;
+        });
+        table += "</tr>";
+      });
+
+      table += "</tbody></table>";
+      container.innerHTML = table;
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById("weekly-data").innerHTML =
+        "<p>Error loading data.</p>";
+    });
+</script>
+
+
 </body>
 </html>
