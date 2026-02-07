@@ -43,43 +43,41 @@
 </main>
 
 <script>
-  // Replace with your latest Apps Script deployment ID
-  const DEPLOYMENT_ID = "AKfycbzhEXbW1K7CxV_bvY-tAw1Cc5PvQrfDrWAnV5jDKy-eJFJzPrMiq6uzN84xkEOJFxX6";
-  const WEEKLY_URL = `https://script.google.com/macros/s/${DEPLOYMENT_ID}/exec?sheet=WEEKLY&callback=displayWeekly`;
+  // Relative path to your JSON file
+  const WEEKLY_URL = "dataWEEKLY.json";
 
-  // JSONP callback function
-  function displayWeekly(data) {
-    const container = document.getElementById("weekly-data");
-    if (!data || data.length === 0) {
-      container.innerHTML = "<p>No data available.</p>";
-      return;
-    }
+  fetch(WEEKLY_URL)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      const container = document.getElementById("weekly-data");
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p>No data available.</p>";
+        return;
+      }
 
-    const headers = Object.keys(data[0]);
-    let table = "<table><thead><tr>";
-    headers.forEach(h => table += `<th>${h}</th>`);
-    table += "</tr></thead><tbody>";
+      const headers = Object.keys(data[0]);
+      let table = "<table><thead><tr>";
+      headers.forEach(h => table += `<th>${h}</th>`);
+      table += "</tr></thead><tbody>";
 
-    data.forEach(row => {
-      table += "<tr>";
-      headers.forEach(h => table += `<td>${row[h] !== null ? row[h] : ""}</td>`);
-      table += "</tr>";
+      data.forEach(row => {
+        table += "<tr>";
+        headers.forEach(h => table += `<td>${row[h] !== null ? row[h] : ""}</td>`);
+        table += "</tr>";
+      });
+
+      table += "</tbody></table>";
+      container.innerHTML = table;
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById("weekly-data").innerHTML =
+        "<p>Error loading data. Check console for details.</p>";
     });
-
-    table += "</tbody></table>";
-    container.innerHTML = table;
-  }
-
-  // Load JSONP via script tag
-  const script = document.createElement("script");
-  script.src = WEEKLY_URL;
-  script.onerror = () => {
-    const container = document.getElementById("weekly-data");
-    container.innerHTML = "<p>Error loading data. Check deployment and ID.</p>";
-  };
-  document.body.appendChild(script);
 </script>
-
 
 </body>
 </html>
