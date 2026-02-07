@@ -19,71 +19,74 @@
 
   <section class="section">
 
-  <figure class="figure">
-    <img src="images/NCSTATE_training.png" alt="NC State training facilities" class="section-img">
-    <figcaption class="figcaption">Training at NC State</figcaption>
-  </figure>
+    <figure class="figure">
+      <img src="images/NCSTATE_training.png" alt="NC State training facilities" class="section-img">
+      <figcaption class="figcaption">Training at NC State</figcaption>
+    </figure>
 
-  <h2>Training</h2>
-  <p>
-    I enjoy both watching and playing sports, as well as working out.
-    This page will eventually include workout ideas, training thoughts,
-    and notes on professional sports.
-  </p>
+    <h2>Training</h2>
+    <p>
+      I enjoy both watching and playing sports, as well as working out.
+      This page will eventually include workout ideas, training thoughts,
+      and notes on professional sports.
+    </p>
 
-</section>
+  </section>
 
-<section class="section">
-  <h2>Weekly Training Summary</h2>
-  <div id="weekly-data">
-    <p>Loading data...</p>
-  </div>
-</section>
-
+  <section class="section">
+    <h2>Weekly Training Summary</h2>
+    <div id="weekly-data">
+      <p>Loading data...</p>
+    </div>
+  </section>
 
 </main>
+
 <script>
+  // Replace with your latest Apps Script deployment ID
   const WEEKLY_URL = "https://script.google.com/macros/s/AKfycbzhEXbW1K7CxV_bvY-tAw1Cc5PvQrfDrWAnV5jDKy-eJFJzPrMiq6uzN84xkEOJFxX6/exec?sheet=WEEKLY";
 
-  fetch(WEEKLY_URL)
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("weekly-data");
+  async function loadWeeklyData() {
+    const container = document.getElementById("weekly-data");
+    container.innerHTML = "<p>Loading data...</p>";
 
-      if (!data || data.length < 2) {
+    try {
+      const res = await fetch(WEEKLY_URL);
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+
+      const data = await res.json();
+
+      if (!data || data.length === 0) {
         container.innerHTML = "<p>No data available.</p>";
         return;
       }
 
-      const headers = data[0];
-      const rows = data.slice(1);
-
+      // Create table headers from keys of first object
+      const headers = Object.keys(data[0]);
       let table = "<table><thead><tr>";
-
-      headers.forEach(h => {
-        table += `<th>${h}</th>`;
-      });
-
+      headers.forEach(h => table += `<th>${h}</th>`);
       table += "</tr></thead><tbody>";
 
-      rows.forEach(row => {
+      // Create table rows
+      data.forEach(row => {
         table += "<tr>";
-        row.forEach(cell => {
-          table += `<td>${cell}</td>`;
+        headers.forEach(h => {
+          table += `<td>${row[h] !== null ? row[h] : ""}</td>`;
         });
         table += "</tr>";
       });
 
       table += "</tbody></table>";
       container.innerHTML = table;
-    })
-    .catch(err => {
-      console.error(err);
-      document.getElementById("weekly-data").innerHTML =
-        "<p>Error loading data.</p>";
-    });
-</script>
 
+    } catch (err) {
+      console.error("Error loading weekly data:", err);
+      container.innerHTML = "<p>Error loading data. Check console for details.</p>";
+    }
+  }
+
+  loadWeeklyData();
+</script>
 
 </body>
 </html>
