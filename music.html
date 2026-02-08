@@ -8,109 +8,114 @@
 </head>
 <body>
 
-  <script>
-  const password = "my-secret-password-thefalloff";
+  <!-- Navigation (optional, uncomment if needed) -->
+  <!--
+  <nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="engineering.html">Engineering</a>
+    <a href="sports.html">Sports</a>
+    <a href="training.html">Training</a>
+    <a href="music.html">Music</a>
+    <a href="notes.html">Notes</a>
+  </nav>
+  -->
 
-  const input = prompt("Enter password:");
-  if (input !== password) {
-    document.body.innerHTML = "<h2>Access denied</h2>";
-  }
-</script>
-
-
-  <!-- Navigation (edit / reuse your existing nav structure if needed) -->
-  <!--<nav class="navbar">
-  <a href="index.html">Home</a>
-  <a href="engineering.html">Engineering</a>
-  <a href="sports.html">Sports</a>
-  <a href="training.html">Training</a>
-  <a href="music.html">Music</a>
-  <a href="notes.html">Notes</a>
-</nav> -->
-
-  <main class="container">
+  <!-- Password-protected content -->
+  <div id="protected-content" style="display:none;">
 
     <section class="music">
       <h1>Music</h1>
       <p class="subtitle">
-        <!-- PLACEHOLDER: add a short description or context for the audio here -->
+        <!-- Add a short description here -->
+        Welcome to the private music section.
       </p>
 
-      <!-- Audio Player Section --> 
+      <!-- Diamond & Nature tracks (unrestricted audio) -->
       <div class="audio-block">
-  <h3>Diamond (Cinematic)</h3>
-  <audio controls preload="metadata">
-  <source src="music/diamond-cinematic.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-</div>
+        <h3>Diamond (Cinematic)</h3>
+        <audio controls preload="metadata">
+          <source src="music/diamond-cinematic.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
 
-<div class="audio-block">
-  <h3>Nature Ambience (32 min)</h3>
-  <audio controls preload="metadata">
-    <source src="music/nature-thirty-min.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-</div>
+      <div class="audio-block">
+        <h3>Nature Ambience (32 min)</h3>
+        <audio controls preload="metadata">
+          <source src="music/nature-thirty-min.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
 
+      <!-- Embedded Spotify preview -->
+      <div class="audio-block">
+        <h3>J. Cole: I'm The Man | (The Come Up, 2007)</h3>
+        <iframe 
+          data-testid="embed-iframe" 
+          style="border-radius:12px" 
+          src="https://open.spotify.com/embed/track/1SyfPQnTpCUvDjNbklI6Fe?utm_source=generator" 
+          width="100%" height="352" 
+          frameBorder="0" 
+          allowfullscreen 
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+          loading="lazy">
+        </iframe>
+      </div>
 
+      <!-- Birthday Blizzard '26 J Cole Tracks -->
+      <p>
+        This section is for J Cole's 2026 EP released January 28th, 2026, his 41st birthday. It is titled "Birthday Blizzard '26" and can be viewed at 
+        <a href="https://www.thefalloff.com/digital" target="_blank">thefalloff.com/digital</a>.
+        The EP contains 4 songs, hosted by DJ Clue, and pays homage to Clue's 1996 Birthday Blizzard '96.
+      </p>
 
-<!-- Embedded Section-->
-Below is embedded audio (Previews only)
-<div class="audio-block">
-  <h3>J. Cole: I'm The Man | (The Come Up, 2007)</h3>
-  <iframe 
-  data-testid="embed-iframe" 
-  style="border-radius:12px" 
-  src="https://open.spotify.com/embed/track/1SyfPQnTpCUvDjNbklI6Fe?utm_source=generator" 
-  width="100%" height="352" 
-  frameBorder="0" 
-  allowfullscreen="" 
-  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-  loading="lazy"></iframe>
-</div>
+      <div class="audio-block">
+        <h3>Bronx Zoo Freestyle</h3>
+        <audio controls preload="metadata">
+          <source src="music/01_Bronx_Zoo_Freestyle.mp3" type="audio/mpeg">
+          Your browser does not support this file.
+        </audio>
+      </div>
 
+      <div class="audio-block">
+        <h3>Golden Goose Freestyle</h3>
+        <audio controls preload="metadata">
+          <source src="music/02_Golden_Goose_Freestyle.mp3" type="audio/mpeg">
+          Your browser does not support this file.
+        </audio>
+      </div>
 
-<!-- Birthday Blizzard '26 J cole-->
- This section is for J Cole's 2026 EP he released on January 28th, 2026, his 41st birthday. It is titled "Birthday Blizzard '26" and can be viewed at https://www.thefalloff.com/digital.
- The EP is 4 songs, and was hosted by DJ Clue. This EP pays homage to Clue's 1996 Birthday Blizzard '96. J Cole released this during the big winter storm of 2026 that hit most of the eastern United States.
-<div class="audio-block">
-  <h3>Bronx Zoo Freestyle</h3>
-  <audio controls>
-  <source src="music/01_Bronx_Zoo_Freestyle.m4a" type="audio/mp4">
-  Your browser does not support this file
-</audio>
-</div>
+      <div class="audio-block">
+        <h3>Winter Storm Freestyle</h3>
+        <audio controls preload="metadata">
+          <source src="music/03_Winter_Storm_Freestyle.mp3" type="audio/mpeg">
+          Your browser does not support this file.
+        </audio>
+      </div>
 
-<div class="audio-block">
-  <h3>Golden Goose Freestyle</h3>
-  <audio controls>
-  <source src="music/02_Golden_Goose_Freestyle.m4a" type="audio/mp4">
-  Your browser does not support this file
-</audio>
-</div>
-
-<div class="audio-block">
-  <h3>Winter Storm Freestyle</h3>
-  <audio controls>
-  <source src="music/03_Winter_Storm_Freestyle.m4a" type="audio/mp4">
-  Your browser does not support this file
-</audio>
-</div>
-
-<div class="audio-block">
-  <h3>99 Build Freestyle</h3>
-  <audio controls>
-  <source src="music/04_99_Build_Freesyle.m4a" type="audio/mp4">
-  Your browser does not support this file
-</audio>
-</div>
-
-
+      <div class="audio-block">
+        <h3>99 Build Freestyle</h3>
+        <audio controls preload="metadata">
+          <source src="music/04_99_Build_Freestyle.mp3" type="audio/mpeg">
+          Your browser does not support this file.
+        </audio>
+      </div>
 
     </section>
+  </div>
 
-  </main>
+  <!-- Password script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const PASSWORD = "your-new-password-here"; // <-- change this
+      const input = prompt("Enter password:");
+      if (input !== PASSWORD) {
+        document.body.innerHTML = "<h2 style='text-align:center;margin-top:40vh;'>Access denied</h2>";
+      } else {
+        document.getElementById('protected-content').style.display = 'block';
+      }
+    });
+  </script>
 
   <footer class="footer">
     <!-- PLACEHOLDER: footer content -->
