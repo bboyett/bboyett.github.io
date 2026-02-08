@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculator | Ben Boyette</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 12px;
+      width: 320px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .display {
+      background: #000;
+      color: #0f0;
+      font-size: 2rem;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: right;
+      overflow-x: auto;
+      margin-bottom: 15px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      font-size: 1.2rem;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    button:hover {
+      background: #3a3a3a;
+    }
+
+    .operator {
+      background: #444;
+    }
+
+    .equals {
+      background: #0077ff;
+      grid-column: span 2;
+    }
+
+    .equals:hover {
+      background: #005fd1;
+    }
+
+    .clear {
+      background: #aa3333;
+    }
+
+    .clear:hover {
+      background: #cc4444;
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator">
+  <div id="display" class="display">0</div>
+
+  <div class="buttons">
+    <button class="clear" onclick="clearDisplay()">C</button>
+    <button onclick="backspace()">⌫</button>
+    <button onclick="append('%')">%</button>
+    <button class="operator" onclick="append('/')">÷</button>
+
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button class="operator" onclick="append('*')">×</button>
+
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button class="operator" onclick="append('-')">−</button>
+
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button class="operator" onclick="append('+')">+</button>
+
+    <button onclick="append('(')">(</button>
+    <button onclick="append(')')">)</button>
+    <button onclick="append('.')">.</button>
+    <button class="equals" onclick="calculate()">=</button>
+  </div>
+</div>
+<div id="history" style="margin-top:15px;">
+  <h3>History</h3>
+  <ul id="history-list"></ul>
+  <button onclick="clearHistory()">Clear History</button>
+</div>
+
+
+<script>
+const IS_ADMIN = true;
+
+
+  const display = document.getElementById("display");
+
+  function append(value) {
+    if (display.textContent === "0") {
+      display.textContent = value;
+    } else {
+      display.textContent += value;
+    }
+  }
+
+  function clearDisplay() {
+    display.textContent = "0";
+  }
+
+  function backspace() {
+    display.textContent =
+      display.textContent.length > 1
+        ? display.textContent.slice(0, -1)
+        : "0";
+  }
+
+  function calculate() {
+    try {
+      display.textContent = eval(display.textContent);
+    } catch {
+      display.textContent = "Error";
+    }
+    
+  }
+
+  const historyList = document.getElementById("history-list");
+
+function saveHistory(entry) {
+  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
+  history.unshift(entry);
+  localStorage.setItem("calcHistory", JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  historyList.innerHTML = "";
+  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
+
+  history.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    historyList.appendChild(li);
+  });
+}
+
+function clearHistory() {
+  localStorage.removeItem("calcHistory");
+  renderHistory();
+}
+
+function calculate() {
+  try {
+    const expr = display.textContent;
+    const result = eval(expr);
+    display.textContent = result;
+    saveHistory(`${expr} = ${result}`);
+  } catch {
+    display.textContent = "Error";
+  }
+}
+
+renderHistory();
+
+
+
+
+  // Keyboard support
+  document.addEventListener("keydown", (e) => {
+    const allowed = "0123456789+-*/().%";
+    if (allowed.includes(e.key)) append(e.key);
+    if (e.key === "Enter") calculate();
+    if (e.key === "Backspace") backspace();
+    if (e.key === "Escape") clearDisplay();
+  });
+</script>
+
+
+<h3>Sports Calculators</h3>
+
+<p>Pace (min/mile): <input id="pace" /> → Speed (mph)</p>
+<button onclick="paceToSpeed()">Convert</button>
+<p id="pace-result"></p>
+
+<p>Distance (miles): <input id="distance" /> Time (min): <input id="time" /></p>
+<button onclick="calcPace()">Calculate Pace</button>
+<p id="calcpace-result"></p>
+
+<script>
+  function paceToSpeed() {
+  const pace = parseFloat(document.getElementById("pace").value);
+  if (!pace) return;
+  const speed = 60 / pace;
+  document.getElementById("pace-result").textContent =
+    `${speed.toFixed(2)} mph`;
+}
+
+function calcPace() {
+  const d = parseFloat(document.getElementById("distance").value);
+  const t = parseFloat(document.getElementById("time").value);
+  if (!d || !t) return;
+  const pace = t / d;
+  document.getElementById("calcpace-result").textContent =
+    `${pace.toFixed(2)} min/mile`;
+}
+</script>
+
+<script>
+  const page = location.pathname;
+  const views = JSON.parse(localStorage.getItem("views") || "{}");
+  views[page] = (views[page] || 0) + 1;
+  localStorage.setItem("views", JSON.stringify(views));
+</script>
+
+</body>
+</html>

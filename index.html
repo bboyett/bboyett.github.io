@@ -56,6 +56,16 @@
     <p>More to come soon</p>
   </section>
 
+<script>
+const IS_ADMIN = false;
+
+
+  const page = location.pathname;
+  const views = JSON.parse(localStorage.getItem("views") || "{}");
+  views[page] = (views[page] || 0) + 1;
+  localStorage.setItem("views", JSON.stringify(views));
+</script>
+
 </main>
 </body>
 </html>

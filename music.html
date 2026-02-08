@@ -8,34 +8,26 @@
 </head>
 <body>
 
-  <!-- Navigation (optional, uncomment if needed) -->
-  <!--
-  <nav class="navbar">
-    <a href="index.html">Home</a>
-    <a href="engineering.html">Engineering</a>
-    <a href="sports.html">Sports</a>
-    <a href="training.html">Training</a>
-    <a href="music.html">Music</a>
-    <a href="notes.html">Notes</a>
-  </nav>
-  -->
-
   <!-- Password-protected content -->
   <div id="protected-content" style="display:none;">
 
     <section class="music">
       <h1>Music</h1>
+
       <p class="subtitle">
-        <!-- Add a short description here -->
         Welcome to the private music section.
       </p>
 
-      <!-- Diamond & Nature tracks (unrestricted audio) -->
+      <!-- Now Playing -->
+      <div id="now-playing" style="margin: 15px 0; font-style: italic;">
+        Now Playing: <span id="current-track">Nothing</span>
+      </div>
+
+      <!-- Local audio -->
       <div class="audio-block">
         <h3>Diamond (Cinematic)</h3>
         <audio controls preload="metadata">
           <source src="music/diamond-cinematic.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
         </audio>
       </div>
 
@@ -43,37 +35,40 @@
         <h3>Nature Ambience (32 min)</h3>
         <audio controls preload="metadata">
           <source src="music/nature-thirty-min.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
         </audio>
       </div>
 
-      <!-- Embedded Spotify preview -->
+      <!-- Spotify embed -->
       <div class="audio-block">
         <h3>J. Cole: I'm The Man | (The Come Up, 2007)</h3>
-        <iframe 
-          data-testid="embed-iframe" 
-          style="border-radius:12px" 
-          src="https://open.spotify.com/embed/track/1SyfPQnTpCUvDjNbklI6Fe?utm_source=generator" 
-          width="100%" height="352" 
-          frameBorder="0" 
-          allowfullscreen 
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        <p class="subtitle">
+          This Spotify player will not pause other audio, and other audio will not pause it.
+          You must manually pause.
+        </p>
+        <iframe
+          style="border-radius:12px"
+          src="https://open.spotify.com/embed/track/1SyfPQnTpCUvDjNbklI6Fe"
+          width="100%"
+          height="352"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy">
         </iframe>
       </div>
 
-      <!-- Birthday Blizzard '26 J Cole Tracks -->
+      <!-- Birthday Blizzard '26 -->
       <p>
-        This section is for J Cole's 2026 EP released January 28th, 2026, his 41st birthday. It is titled "Birthday Blizzard '26" and can be viewed at 
-        <a href="https://www.thefalloff.com/digital" target="_blank">thefalloff.com/digital</a>.
-        The EP contains 4 songs, hosted by DJ Clue, and pays homage to Clue's 1996 Birthday Blizzard '96.
+        This section is for J Cole's 2026 EP released January 28th, 2026.
+        Viewable at
+        <a href="https://www.thefalloff.com/digital" target="_blank">
+          thefalloff.com/digital
+        </a>.
       </p>
 
       <div class="audio-block">
         <h3>Bronx Zoo Freestyle</h3>
         <audio controls preload="metadata">
           <source src="music/Birthday Blizzard 26/01-Bronx-Zoo-Freestyle.mp3" type="audio/mpeg">
-          Your browser does not support this file.
         </audio>
       </div>
 
@@ -81,7 +76,6 @@
         <h3>Golden Goose Freestyle</h3>
         <audio controls preload="metadata">
           <source src="music/Birthday Blizzard 26/02-Golden-Goose-Freestyle.mp3" type="audio/mpeg">
-          Your browser does not support this file.
         </audio>
       </div>
 
@@ -89,7 +83,6 @@
         <h3>Winter Storm Freestyle</h3>
         <audio controls preload="metadata">
           <source src="music/Birthday Blizzard 26/03-Winter-Storm-Freestyle.mp3" type="audio/mpeg">
-          Your browser does not support this file.
         </audio>
       </div>
 
@@ -97,29 +90,75 @@
         <h3>99 Build Freestyle</h3>
         <audio controls preload="metadata">
           <source src="music/Birthday Blizzard 26/04-99-Build-Freestyle.mp3" type="audio/mpeg">
-          Your browser does not support this file.
         </audio>
       </div>
 
     </section>
   </div>
 
-  <!-- Password script -->
+  <!-- ================= SCRIPTS ================= -->
+
+  <!-- Password + Admin flag -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const PASSWORD = "benbpassword"; 
+    const IS_ADMIN = true;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const PASSWORD = "benbpassword";
       const input = prompt("Enter password:");
+
       if (input !== PASSWORD) {
-        document.body.innerHTML = "<h2 style='text-align:center;margin-top:40vh;'>Access denied</h2>";
+        document.body.innerHTML =
+          "<h2 style='text-align:center;margin-top:40vh;'>Access denied</h2>";
       } else {
-        document.getElementById('protected-content').style.display = 'block';
+        document.getElementById("protected-content").style.display = "block";
       }
     });
   </script>
 
-  <footer class="footer">
-    <!-- PLACEHOLDER: footer content -->
-  </footer>
+  <!-- Audio control + Now Playing -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const audios = document.querySelectorAll("audio");
+      const currentTrack = document.getElementById("current-track");
+
+      audios.forEach(audio => {
+        audio.addEventListener("play", () => {
+          audios.forEach(other => {
+            if (other !== audio) {
+              other.pause();
+              other.currentTime = 0;
+            }
+          });
+
+          const title =
+            audio.closest(".audio-block")
+              ?.querySelector("h3")
+              ?.textContent || "Unknown track";
+
+          currentTrack.textContent = title;
+          trackPlay(title);
+        });
+
+        audio.addEventListener("ended", () => {
+          currentTrack.textContent = "Nothing";
+        });
+      });
+    });
+  </script>
+
+  <!-- Analytics -->
+  <script>
+    const page = location.pathname;
+    const views = JSON.parse(localStorage.getItem("views") || "{}");
+    views[page] = (views[page] || 0) + 1;
+    localStorage.setItem("views", JSON.stringify(views));
+
+    function trackPlay(track) {
+      const plays = JSON.parse(localStorage.getItem("plays") || "{}");
+      plays[track] = (plays[track] || 0) + 1;
+      localStorage.setItem("plays", JSON.stringify(plays));
+    }
+  </script>
 
 </body>
 </html>

@@ -47,6 +47,9 @@
 </main>
 
 <script>
+const IS_ADMIN = false;
+
+
   // Relative path to your JSON file
   const WEEKLY_URL = "dataWEEKLY.json";
 
@@ -82,6 +85,14 @@
         "<p>Error loading data. Check console for details.</p>";
     });
 </script>
+
+<script>
+  const page = location.pathname;
+  const views = JSON.parse(localStorage.getItem("views") || "{}");
+  views[page] = (views[page] || 0) + 1;
+  localStorage.setItem("views", JSON.stringify(views));
+</script>
+
 
 </body>
 </html>

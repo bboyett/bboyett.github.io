@@ -16,6 +16,21 @@
   <a href="notes.html">Notes</a>
 </nav>
 
+<input type="text" id="search" placeholder="Search notes..." />
+<script>
+  const search = document.getElementById("search");
+  const notes = document.querySelectorAll(".note");
+
+  search.addEventListener("input", () => {
+    const q = search.value.toLowerCase();
+    notes.forEach(note => {
+      note.style.display =
+        note.textContent.toLowerCase().includes(q) ? "block" : "none";
+    });
+  });
+</script>
+
+
 <main class="container">
 
   <section class="section">
@@ -24,6 +39,17 @@
       This space is for thoughts, things I’m learning, or ideas I want to keep track of.
     </p>
   </section>
+
+<script>
+const IS_ADMIN = true;
+
+
+  const page = location.pathname;
+  const views = JSON.parse(localStorage.getItem("views") || "{}");
+  views[page] = (views[page] || 0) + 1;
+  localStorage.setItem("views", JSON.stringify(views));
+</script>
+
 
 </main>
 </body>
