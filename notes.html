@@ -5,18 +5,18 @@
   <title>Notes | Ben Boyette</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+<script>
+fetch("navbar.html")
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById("navbar").innerHTML = data;
+  });
+</script>
+
 <body>
 
-<nav class="navbar">
-  <a href="index.html">Home</a>
-  <a href="engineering.html">Engineering</a>
-  <a href="sports.html">Sports</a>
-  <a href="training.html">Training</a>
-  <a href="music.html">Music</a>
-  <a href="calculator.html">Calculator</a>
-  <a href="notes.html">Notes</a>
-  <a href="stats.html">Stats</a>
-</nav>
+<div id="navbar"></div>
+
 
 <input type="text" id="search" placeholder="Search notes..." />
 <script>
