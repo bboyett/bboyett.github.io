@@ -252,6 +252,23 @@ tr:nth-child(even) {
   background-color: #fdfdfd;
 }
 
+/* Page Previews on index.html */
+.page-preview {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.page-preview h3 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.page-preview h3 a:hover {
+  text-decoration: underline;
+}
+
+
 /* =============================
    Easter Egg
    ============================= */

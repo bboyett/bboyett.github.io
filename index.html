@@ -10,6 +10,7 @@
 
 <nav class="navbar">
   <a href="index.html">Home</a>
+  <a href="about.html">About</a>
   <a href="engineering.html">Engineering</a>
   <a href="sports.html">Sports</a>
   <a href="training.html">Training</a>
@@ -22,51 +23,65 @@
 <main class="container">
 
   <section class="intro">
-    <h1>Ben Boyette</h1>
+    <h1>Welcome</h1>
     <p>
-      I'm a Christian and a hardworking mechanical engineering student who enjoys
-      being physically active, watching sports, and spending time with friends.
+      This site is organized into focused sections. Each page covers a specific area of work, interests, or projects.
     </p>
-  </section>
-
-  <section class="section">
-    <h2>Right now</h2>
-    <ul>
-      <li>Training athletically.</li>
-      <li>Studying mechanical engineering.</li>
-      <li>Attending NC State sporting events.</li>
-      <li>Building this website.</li>
-    </ul>
   </section>
 
   <section class="section">
     <h2>Explore</h2>
-    <p>
-      This site is split into a few focused areas:
-    </p>
-    <ul>
-      <li><strong>Engineering</strong> — projects, notes, and builds</li>
-      <li><strong>Sports</strong> — game logs, notes, etc.</li>
-      <li><strong>Training</strong> — workouts and sports thoughts</li>
-      <li><strong>Notes</strong> — ideas and things I’m learning</li>
-      <li><strong>--</strong></li>
-      <li><strong>Music:</strong> I want to see if it's possible to upload music (audio files) to this site. Check that out on the music page.</li>
-    </ul>
+
+    <div class="page-preview">
+      <h3><a href="about.html">About</a></h3>
+      <p>Background information, current focus, and general updates.</p>
+    </div>
+
+    <div class="page-preview">
+      <h3><a href="engineering.html">Engineering</a></h3>
+      <p>Projects, notes, builds, and mechanical engineering work.</p>
+    </div>
+
+    <div class="page-preview">
+      <h3><a href="sports.html">Sports</a></h3>
+      <p>Game logs, analysis, and sports-related thoughts.</p>
+    </div>
+
+    <div class="page-preview">
+      <h3><a href="training.html">Training</a></h3>
+      <p>Workouts, athletic development, and performance ideas.</p>
+    </div>
+
+    <div class="page-preview">
+      <h3><a href="music.html">Music</a></h3>
+      <p>Audio uploads and experiments with music on the site.</p>
+    </div>
+
+    <div class="page-preview">
+      <h3><a href="calculator.html">Calculator</a></h3>
+      <p>Custom-built tools and interactive utilities.</p>
+    </div>
+
+    <div class="page-preview">
+      <h3><a href="notes.html">Notes</a></h3>
+      <p>Ideas, things I’m learning, and written thoughts.</p>
+    </div>
+
+    <div class="page-preview">
+      <h3><a href="stats.html">Stats</a></h3>
+      <p>Tracked metrics, progress, and site data.</p>
+    </div>
+
   </section>
 
-  <section class="easter-egg">
-    <p>More to come soon</p>
-  </section>
+</main>
 
 <script>
-
-
   const page = location.pathname;
   const views = JSON.parse(localStorage.getItem("views") || "{}");
   views[page] = (views[page] || 0) + 1;
   localStorage.setItem("views", JSON.stringify(views));
 </script>
 
-</main>
 </body>
 </html>
