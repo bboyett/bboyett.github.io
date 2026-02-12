@@ -29,7 +29,7 @@
   <a href="sports.html">Sports</a>
   <a href="training.html">Training</a>
   <a href="music.html">Music</a>
-  <a href="calculator.html">Music</a>
+  <a href="calculator.html">Calculator</a>
   <a href="notes.html">Notes</a>
   <a href="stats.html">Stats</a>
 </nav>
@@ -45,14 +45,6 @@
 </div>
 
 <script>
-  const IS_ADMIN = false; // CHANGE TO true WHEN YOU WANT ACCESS
-
-  if (!IS_ADMIN) {
-    document.body.innerHTML =
-      "<h2 style='text-align:center;margin-top:40vh;'>Access denied</h2>";
-  }
-
-
 
   const pageViews = JSON.parse(localStorage.getItem("views") || "{}");
   const audioPlays = JSON.parse(localStorage.getItem("plays") || "{}");
