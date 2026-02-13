@@ -27,6 +27,12 @@ fetch("navbar-personal.html")
   .then(data => {
     document.getElementById("navbar").innerHTML = data;
   });
+
+fetch("darkmode.html")
+  .then(response => response.text())
+  .then(data => {
+    document.body.insertAdjacentHTML('afterbegin', data);
+  });
 </script>
 
 <body>

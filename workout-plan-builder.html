@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Workout Plan Builder | Ben Boyette</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .wizard-container {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+
+    .wizard-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .wizard-header h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .wizard-header .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .progress-bar {
+      background: var(--border-light);
+      height: 8px;
+      border-radius: 4px;
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: var(--accent-color);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .step {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question {
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .question h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--accent-color);
+    }
+
+    .question-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .options {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .option {
+      background: var(--bg-color);
+      border: 2px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    .option.selected {
+      border-color: var(--accent-color);
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .option h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .option p {
+      margin: 0;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .option.selected p {
+      color: white;
+    }
+
+    .navigation {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    .nav-btn {
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn.back {
+      background: var(--bg-color);
+      color: var(--text-main);
+      border: 1px solid var(--border-light);
+    }
+
+    .nav-btn.next {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .plan-preview {
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .plan-summary {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem;
+      background: var(--bg-color);
+      border-radius: 6px;
+    }
+
+    .summary-label {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .summary-value {
+      color: var(--text-muted);
+    }
+
+    .week-preview {
+      background: var(--bg-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .week-preview h4 {
+      margin: 0 0 1rem 0;
+      color: var(--accent-color);
+    }
+
+    .day-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .day-item:last-child {
+      border-bottom: none;
+    }
+
+    .day-name {
+      font-weight: 600;
+    }
+
+    .day-workout {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .generate-btn {
+      width: 100%;
+      padding: 1.25rem;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .generate-btn:hover {
+      background: #15803d;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      font-size: 1rem;
+      background: var(--bg-color);
+      color: var(--text-main);
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg-color);
+      border: 2px solid var(--border-light);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .checkbox-option:hover {
+      border-color: var(--accent-color);
+    }
+
+    .checkbox-option.selected {
+      border-color: var(--accent-color);
+      background: rgba(37, 99, 235, 0.1);
+    }
+
+    .checkbox-option input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wizard-container">
+  
+  <div class="wizard-header">
+    <h1>🏋️ Smart Workout Plan Builder</h1>
+    <p class="subtitle">Answer a few questions and we'll build you a personalized training plan</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress"></div>
+  </div>
+
+  <!-- STEP 1: Training Goal -->
+  <div class="step active" data-step="1">
+    <div class="question">
+      <h2>What's your primary training goal?</h2>
+      <p class="question-subtitle">This helps us determine the focus and structure of your plan</p>
+      
+      <div class="options">
+        <div class="option" onclick="selectOption(this, 'goal', 'running')">
+          <h3>🏃 Running Only</h3>
+          <p>Build endurance, improve pace, train for races</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'goal', 'lifting')">
+          <h3>💪 Strength Training Only</h3>
+          <p>Build muscle, increase strength, improve physique</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'goal', 'hybrid')">
+          <h3>⚡ Hybrid (Running + Lifting)</h3>
+          <p>Balanced approach - build both endurance and strength</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="navigation">
+      <button class="nav-btn back" onclick="previousStep()" disabled>Back</button>
+      <button class="nav-btn next" onclick="nextStep()" id="next-btn" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Experience Level -->
+  <div class="step" data-step="2">
+    <div class="question">
+      <h2>What's your experience level?</h2>
+      <p class="question-subtitle">Be honest - this ensures proper progression and recovery</p>
+      
+      <div class="options" id="experience-options">
+        <!-- Dynamic based on goal -->
+      </div>
+    </div>
+    
+    <div class="navigation">
+      <button class="nav-btn back" onclick="previousStep()">Back</button>
+      <button class="nav-btn next" onclick="nextStep()" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Available Days -->
+  <div class="step" data-step="3">
+    <div class="question">
+      <h2>How many days per week can you train?</h2>
+      <p class="question-subtitle">Select which days you can realistically commit to working out</p>
+      
+      <div class="options">
+        <div class="checkbox-option" onclick="toggleDay(this, 'monday')">
+          <input type="checkbox" id="day-monday">
+          <label for="day-monday">Monday</label>
+        </div>
+        <div class="checkbox-option" onclick="toggleDay(this, 'tuesday')">
+          <input type="checkbox" id="day-tuesday">
+          <label for="day-tuesday">Tuesday</label>
+        </div>
+        <div class="checkbox-option" onclick="toggleDay(this, 'wednesday')">
+          <input type="checkbox" id="day-wednesday">
+          <label for="day-wednesday">Wednesday</label>
+        </div>
+        <div class="checkbox-option" onclick="toggleDay(this, 'thursday')">
+          <input type="checkbox" id="day-thursday">
+          <label for="day-thursday">Thursday</label>
+        </div>
+        <div class="checkbox-option" onclick="toggleDay(this, 'friday')">
+          <input type="checkbox" id="day-friday">
+          <label for="day-friday">Friday</label>
+        </div>
+        <div class="checkbox-option" onclick="toggleDay(this, 'saturday')">
+          <input type="checkbox" id="day-saturday">
+          <label for="day-saturday">Saturday</label>
+        </div>
+        <div class="checkbox-option" onclick="toggleDay(this, 'sunday')">
+          <input type="checkbox" id="day-sunday">
+          <label for="day-sunday">Sunday</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="navigation">
+      <button class="nav-btn back" onclick="previousStep()">Back</button>
+      <button class="nav-btn next" onclick="nextStep()" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Plan Duration -->
+  <div class="step" data-step="4">
+    <div class="question">
+      <h2>How long should your plan be?</h2>
+      <p class="question-subtitle">Longer plans allow for more gradual progression</p>
+      
+      <div class="options">
+        <div class="option" onclick="selectOption(this, 'duration', '4')">
+          <h3>4 Weeks</h3>
+          <p>Quick intro or maintenance phase</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'duration', '8')">
+          <h3>8 Weeks</h3>
+          <p>Solid training block for noticeable gains</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'duration', '12')">
+          <h3>12 Weeks</h3>
+          <p>Standard program length, great progression</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'duration', '16')">
+          <h3>16 Weeks</h3>
+          <p>Marathon training or major strength cycle</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="navigation">
+      <button class="nav-btn back" onclick="previousStep()">Back</button>
+      <button class="nav-btn next" onclick="nextStep()" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Running Specific (conditional) -->
+  <div class="step" data-step="5">
+    <div class="question" id="running-questions">
+      <!-- Dynamic running questions -->
+    </div>
+    
+    <div class="navigation">
+      <button class="nav-btn back" onclick="previousStep()">Back</button>
+      <button class="nav-btn next" onclick="nextStep()" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 6: Lifting Specific (conditional) -->
+  <div class="step" data-step="6">
+    <div class="question" id="lifting-questions">
+      <!-- Dynamic lifting questions -->
+    </div>
+    
+    <div class="navigation">
+      <button class="nav-btn back" onclick="previousStep()">Back</button>
+      <button class="nav-btn next" onclick="nextStep()" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 7: Personal Details -->
+  <div class="step" data-step="7">
+    <div class="question">
+      <h2>Tell us about yourself</h2>
+      <p class="question-subtitle">This personalizes your plan document</p>
+      
+      <div style="display: grid; gap: 1rem;">
+        <div>
+          <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Your Name</label>
+          <input type="text" class="input-field" id="user-name" placeholder="e.g., Ben Boyette" onchange="enableNext()">
+        </div>
+        <div>
+          <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Plan Name (optional)</label>
+          <input type="text" class="input-field" id="plan-name" placeholder="e.g., Spring Training 2026">
+        </div>
+      </div>
+    </div>
+    
+    <div class="navigation">
+      <button class="nav-btn back" onclick="previousStep()">Back</button>
+      <button class="nav-btn next" onclick="nextStep()" disabled>Review Plan</button>
+    </div>
+  </div>
+
+  <!-- STEP 8: Plan Review & Generate -->
+  <div class="step" data-step="8">
+    <div class="plan-preview">
+      <h2 style="margin-top: 0; color: var(--accent-color);">Your Custom Training Plan</h2>
+      
+      <div class="plan-summary" id="plan-summary">
+        <!-- Dynamic summary -->
+      </div>
+
+      <h3>Sample Weeks</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">Here's how your plan progresses:</p>
+      
+      <div id="week-previews">
+        <!-- Dynamic week previews -->
+      </div>
+    </div>
+    
+    <button class="generate-btn" onclick="generatePDF()">📄 Generate My Training Plan PDF</button>
+    
+    <div class="navigation" style="margin-top: 2rem;">
+      <button class="nav-btn back" onclick="previousStep()">Back</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // User's answers
+  const userData = {
+    goal: null,
+    experience: null,
+    days: [],
+    duration: null,
+    runningGoal: null,
+    currentMileage: null,
+    targetRace: null,
+    liftingStyle: null,
+    liftingGoal: null,
+    userName: '',
+    planName: ''
+  };
+
+  let currentStep = 1;
+  const totalSteps = 8;
+
+  function updateProgress() {
+    const progress = (currentStep / totalSteps) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+  }
+
+  function selectOption(element, key, value) {
+    // Deselect all options in this group
+    const container = element.parentElement;
+    container.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+    
+    // Select this option
+    element.classList.add('selected');
+    userData[key] = value;
+    
+    enableNext();
+  }
+
+  function toggleDay(element, day) {
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    element.classList.toggle('selected');
+    
+    if (checkbox.checked) {
+      if (!userData.days.includes(day)) {
+        userData.days.push(day);
+      }
+    } else {
+      userData.days = userData.days.filter(d => d !== day);
+    }
+    
+    // Enable next if at least 2 days selected
+    if (userData.days.length >= 2) {
+      enableNext();
+    } else {
+      disableNext();
+    }
+  }
+
+  function enableNext() {
+    const step = document.querySelector('.step.active');
+    const nextBtn = step.querySelector('.nav-btn.next');
+    
+    // Check if current step has required data
+    let canProceed = false;
+    
+    if (currentStep === 1) canProceed = userData.goal !== null;
+    if (currentStep === 2) canProceed = userData.experience !== null;
+    if (currentStep === 3) canProceed = userData.days.length >= 2;
+    if (currentStep === 4) canProceed = userData.duration !== null;
+    if (currentStep === 5) canProceed = validateRunningQuestions();
+    if (currentStep === 6) canProceed = validateLiftingQuestions();
+    if (currentStep === 7) canProceed = userData.userName.trim() !== '';
+    
+    if (canProceed) {
+      nextBtn.disabled = false;
+    }
+  }
+
+  function disableNext() {
+    const step = document.querySelector('.step.active');
+    const nextBtn = step.querySelector('.nav-btn.next');
+    if (nextBtn) nextBtn.disabled = true;
+  }
+
+  function validateRunningQuestions() {
+    if (userData.goal === 'running' || userData.goal === 'hybrid') {
+      return userData.runningGoal !== null && userData.currentMileage !== null;
+    }
+    return true;
+  }
+
+  function validateLiftingQuestions() {
+    if (userData.goal === 'lifting' || userData.goal === 'hybrid') {
+      return userData.liftingStyle !== null && userData.liftingGoal !== null;
+    }
+    return true;
+  }
+
+  function nextStep() {
+    // Hide current step
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    
+    // Determine next step (skip conditional steps)
+    currentStep++;
+    
+    // Skip running questions if not running
+    if (currentStep === 5 && userData.goal === 'lifting') {
+      currentStep++;
+    }
+    
+    // Skip lifting questions if only running
+    if (currentStep === 6 && userData.goal === 'running') {
+      currentStep++;
+    }
+    
+    // Show next step
+    const nextStep = document.querySelector(`.step[data-step="${currentStep}"]`);
+    nextStep.classList.add('active');
+    
+    // Update progress
+    updateProgress();
+    
+    // Load dynamic content if needed
+    if (currentStep === 2) loadExperienceOptions();
+    if (currentStep === 5) loadRunningQuestions();
+    if (currentStep === 6) loadLiftingQuestions();
+    if (currentStep === 8) loadPlanPreview();
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function previousStep() {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    
+    currentStep--;
+    
+    // Skip conditional steps going backwards too
+    if (currentStep === 6 && userData.goal === 'running') {
+      currentStep--;
+    }
+    if (currentStep === 5 && userData.goal === 'lifting') {
+      currentStep--;
+    }
+    
+    const prevStep = document.querySelector(`.step[data-step="${currentStep}"]`);
+    prevStep.classList.add('active');
+    
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function loadExperienceOptions() {
+    const container = document.getElementById('experience-options');
+    
+    if (userData.goal === 'running' || userData.goal === 'hybrid') {
+      container.innerHTML = `
+        <div class="option" onclick="selectOption(this, 'experience', 'beginner')">
+          <h3>Beginner Runner</h3>
+          <p>New to running or running less than 10 miles/week</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'experience', 'intermediate')">
+          <h3>Intermediate Runner</h3>
+          <p>Running 15-30 miles/week consistently</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'experience', 'advanced')">
+          <h3>Advanced Runner</h3>
+          <p>Running 30+ miles/week, experienced with speedwork</p>
+        </div>
+      `;
+    } else if (userData.goal === 'lifting') {
+      container.innerHTML = `
+        <div class="option" onclick="selectOption(this, 'experience', 'beginner')">
+          <h3>Beginner Lifter</h3>
+          <p>Less than 6 months of consistent training</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'experience', 'intermediate')">
+          <h3>Intermediate Lifter</h3>
+          <p>6 months - 2 years of training, comfortable with compound lifts</p>
+        </div>
+        <div class="option" onclick="selectOption(this, 'experience', 'advanced')">
+          <h3>Advanced Lifter</h3>
+          <p>2+ years of consistent training, strong foundation</p>
+        </div>
+      `;
+    }
+  }
+
+  function loadRunningQuestions() {
+    const container = document.getElementById('running-questions');
+    container.innerHTML = `
+      <h2>Running Details</h2>
+      <p class="question-subtitle">Let's dial in your running plan</p>
+      
+      <div class="options">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="font-weight: 600; display: block; margin-bottom: 0.75rem;">What's your running goal?</label>
+          <div class="option" onclick="selectOption(this, 'runningGoal', 'general-fitness')">
+            <h3>General Fitness</h3>
+            <p>Stay active, improve overall health and endurance</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'runningGoal', '5k')">
+            <h3>5K Training</h3>
+            <p>Prepare for a 5K race or improve 5K time</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'runningGoal', '10k-half')">
+            <h3>10K or Half Marathon</h3>
+            <p>Build endurance for longer distances</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'runningGoal', 'marathon')">
+            <h3>Marathon</h3>
+            <p>Train for a full marathon (26.2 miles)</p>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-weight: 600; display: block; margin-bottom: 0.75rem;">Current weekly mileage?</label>
+          <div class="option" onclick="selectOption(this, 'currentMileage', '0-10')">
+            <h3>0-10 miles/week</h3>
+          </div>
+          <div class="option" onclick="selectOption(this, 'currentMileage', '10-20')">
+            <h3>10-20 miles/week</h3>
+          </div>
+          <div class="option" onclick="selectOption(this, 'currentMileage', '20-30')">
+            <h3>20-30 miles/week</h3>
+          </div>
+          <div class="option" onclick="selectOption(this, 'currentMileage', '30+')">
+            <h3>30+ miles/week</h3>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function loadLiftingQuestions() {
+    const container = document.getElementById('lifting-questions');
+    container.innerHTML = `
+      <h2>Lifting Details</h2>
+      <p class="question-subtitle">Let's customize your strength training</p>
+      
+      <div class="options">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="font-weight: 600; display: block; margin-bottom: 0.75rem;">Preferred training style?</label>
+          <div class="option" onclick="selectOption(this, 'liftingStyle', 'full-body')">
+            <h3>Full Body</h3>
+            <p>Train everything each session, 2-3x per week</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'liftingStyle', 'upper-lower')">
+            <h3>Upper/Lower Split</h3>
+            <p>Separate upper and lower body days</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'liftingStyle', 'ppl')">
+            <h3>Push/Pull/Legs</h3>
+            <p>Classic bodybuilding split, 6 days/week</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'liftingStyle', 'bro-split')">
+            <h3>Body Part Split</h3>
+            <p>One muscle group per day (chest, back, legs, etc.)</p>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-weight: 600; display: block; margin-bottom: 0.75rem;">Primary lifting goal?</label>
+          <div class="option" onclick="selectOption(this, 'liftingGoal', 'strength')">
+            <h3>Max Strength</h3>
+            <p>Lower reps, heavier weights, build pure strength</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'liftingGoal', 'hypertrophy')">
+            <h3>Muscle Growth</h3>
+            <p>Moderate reps and weight, maximize muscle size</p>
+          </div>
+          <div class="option" onclick="selectOption(this, 'liftingGoal', 'endurance')">
+            <h3>Muscular Endurance</h3>
+            <p>Higher reps, lighter weight, build stamina</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function loadPlanPreview() {
+    const summaryContainer = document.getElementById('plan-summary');
+    const weekContainer = document.getElementById('week-previews');
+    
+    // Generate summary
+    summaryContainer.innerHTML = `
+      <div class="summary-item">
+        <span class="summary-label">Athlete</span>
+        <span class="summary-value">${userData.userName}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Plan Duration</span>
+        <span class="summary-value">${userData.duration} weeks</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Training Days</span>
+        <span class="summary-value">${userData.days.length} days/week</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Focus</span>
+        <span class="summary-value">${userData.goal === 'hybrid' ? 'Running + Lifting' : userData.goal === 'running' ? 'Running' : 'Strength Training'}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Experience Level</span>
+        <span class="summary-value">${userData.experience.charAt(0).toUpperCase() + userData.experience.slice(1)}</span>
+      </div>
+    `;
+    
+    // Generate week previews
+    const plan = generatePlan();
+    const weeksToShow = [1, Math.floor(plan.weeks.length / 2), plan.weeks.length];
+    
+    weekContainer.innerHTML = weeksToShow.map(weekNum => {
+      const week = plan.weeks[weekNum - 1];
+      return `
+        <div class="week-preview">
+          <h4>Week ${weekNum} ${week.phase ? `(${week.phase})` : ''}</h4>
+          ${week.days.map(day => `
+            <div class="day-item">
+              <span class="day-name">${day.name}</span>
+              <span class="day-workout">${day.workout}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }).join('');
+  }
+
+  function generatePlan() {
+    const plan = {
+      name: userData.planName || `${userData.duration}-Week ${userData.goal.charAt(0).toUpperCase() + userData.goal.slice(1)} Plan`,
+      athlete: userData.userName,
+      duration: userData.duration,
+      weeks: []
+    };
+    
+    // Build weekly structure
+    for (let week = 1; week <= userData.duration; week++) {
+      const weekData = {
+        number: week,
+        phase: getPhase(week, userData.duration),
+        days: []
+      };
+      
+      // Assign workouts to each selected day
+      const allDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+      
+      allDays.forEach(day => {
+        if (userData.days.includes(day)) {
+          const workout = assignWorkout(day, week, userData);
+          weekData.days.push({
+            name: day.charAt(0).toUpperCase() + day.slice(1),
+            workout: workout
+          });
+        }
+      });
+      
+      plan.weeks.push(weekData);
+    }
+    
+    return plan;
+  }
+
+  function getPhase(week, totalWeeks) {
+    const percentComplete = week / totalWeeks;
+    
+    if (percentComplete <= 0.33) return 'Base Phase';
+    if (percentComplete <= 0.66) return 'Build Phase';
+    if (percentComplete <= 0.90) return 'Peak Phase';
+    return 'Taper';
+  }
+
+  function assignWorkout(day, weekNum, userData) {
+    // Smart workout assignment based on goals and progression
+    const isRecoveryWeek = weekNum % 4 === 0;
+    const phase = getPhase(weekNum, userData.duration);
+    
+    // HYBRID LOGIC
+    if (userData.goal === 'hybrid') {
+      const trainingDays = userData.days.length;
+      const dayIndex = userData.days.indexOf(day);
+      
+      // Alternate running and lifting
+      if (dayIndex % 2 === 0) {
+        // Running day
+        return getRunningWorkout(weekNum, phase, isRecoveryWeek, userData);
+      } else {
+        // Lifting day
+        return getLiftingWorkout(weekNum, phase, isRecoveryWeek, userData);
+      }
+    }
+    
+    // RUNNING ONLY LOGIC
+    if (userData.goal === 'running') {
+      return getRunningWorkout(weekNum, phase, isRecoveryWeek, userData);
+    }
+    
+    // LIFTING ONLY LOGIC
+    if (userData.goal === 'lifting') {
+      return getLiftingWorkout(weekNum, phase, isRecoveryWeek, userData);
+    }
+  }
+
+  function getRunningWorkout(week, phase, isRecovery, userData) {
+    const baseMileage = {
+      'beginner': 3,
+      'intermediate': 5,
+      'advanced': 7
+    }[userData.experience];
+    
+    // Progressive mileage increase
+    const weeklyIncrease = isRecovery ? -0.5 : 0.5;
+    const currentMileage = baseMileage + (week * weeklyIncrease);
+    
+    const workoutTypes = ['Easy Run', 'Tempo Run', 'Long Run', 'Recovery Run', 'Intervals'];
+    const selectedType = workoutTypes[Math.floor(Math.random() * workoutTypes.length)];
+    
+    if (selectedType === 'Long Run') {
+      return `Long Run: ${Math.round(currentMileage * 1.5)} miles @ easy pace`;
+    } else if (selectedType === 'Tempo Run') {
+      return `Tempo: 1mi WU, ${Math.round(currentMileage - 2)}mi @ tempo, 1mi CD`;
+    } else if (selectedType === 'Intervals') {
+      return `Intervals: 1mi WU, ${Math.floor(currentMileage)}x400m @ 5K pace, 1mi CD`;
+    } else if (selectedType === 'Recovery Run') {
+      return `Recovery: ${Math.round(currentMileage * 0.6)} miles @ very easy pace`;
+    } else {
+      return `Easy Run: ${Math.round(currentMileage)} miles @ conversational pace`;
+    }
+  }
+
+  function getLiftingWorkout(week, phase, isRecovery, userData) {
+    const repSchemes = {
+      'strength': '5x5',
+      'hypertrophy': '4x8-10',
+      'endurance': '3x12-15'
+    };
+    
+    const reps = repSchemes[userData.liftingGoal] || '4x8';
+    
+    const splits = {
+      'full-body': ['Full Body - Squat, Bench, Row, OHP', 'Full Body - Deadlift, Incline Press, Pull-ups, Curls'],
+      'upper-lower': ['Upper Body - Bench, Row, OHP, Pull-ups', 'Lower Body - Squat, Deadlift, Lunges, Leg Curl'],
+      'ppl': ['Push - Chest, Shoulders, Triceps', 'Pull - Back, Biceps', 'Legs - Quads, Hamstrings, Calves'],
+      'bro-split': ['Chest Day', 'Back Day', 'Leg Day', 'Shoulder Day', 'Arm Day']
+    };
+    
+    const workouts = splits[userData.liftingStyle] || ['Strength Training'];
+    const randomWorkout = workouts[Math.floor(Math.random() * workouts.length)];
+    
+    return `${randomWorkout} - ${reps}${isRecovery ? ' (Deload: -20% weight)' : ''}`;
+  }
+
+  function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const plan = generatePlan();
+    
+    // Cover page
+    doc.setFontSize(28);
+    doc.setFont(undefined, 'bold');
+    doc.text(plan.name, 105, 60, { align: 'center' });
+    
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'normal');
+    doc.text(`${userData.duration}-Week Training Program`, 105, 75, { align: 'center' });
+    
+    doc.setFontSize(12);
+    doc.text(`Created for: ${plan.athlete}`, 105, 95, { align: 'center' });
+    doc.text(`Focus: ${userData.goal.toUpperCase()}`, 105, 105, { align: 'center' });
+    doc.text(`Experience: ${userData.experience}`, 105, 115, { align: 'center' });
+    
+    // Each week on new page
+    plan.weeks.forEach((week, index) => {
+      doc.addPage();
+      
+      doc.setFontSize(20);
+      doc.setFont(undefined, 'bold');
+      doc.text(`Week ${week.number} - ${week.phase}`, 20, 20);
+      
+      let yPos = 35;
+      doc.setFontSize(11);
+      
+      week.days.forEach(day => {
+        if (yPos > 260) {
+          doc.addPage();
+          yPos = 20;
+        }
+        
+        doc.setFont(undefined, 'bold');
+        doc.text(day.name, 20, yPos);
+        
+        doc.setFont(undefined, 'normal');
+        const workoutLines = doc.splitTextToSize(day.workout, 160);
+        doc.text(workoutLines, 25, yPos + 7);
+        
+        // Checkbox
+        doc.rect(185, yPos - 3, 4, 4);
+        
+        yPos += (workoutLines.length * 6) + 12;
+      });
+    });
+    
+    // Save
+    const fileName = `${userData.userName.replace(/\s+/g, '_')}_${userData.duration}week_plan.pdf`;
+    doc.save(fileName);
+    
+    alert('✅ Your personalized training plan has been generated!');
+  }
+
+  // Input field listeners
+  document.getElementById('user-name').addEventListener('input', (e) => {
+    userData.userName = e.target.value;
+    enableNext();
+  });
+
+  document.getElementById('plan-name').addEventListener('input', (e) => {
+    userData.planName = e.target.value;
+  });
+
+  // Initialize
+  updateProgress();
+</script>
+
+</body>
+</html>
