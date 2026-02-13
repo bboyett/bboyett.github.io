@@ -6,14 +6,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <script>
-// Dynamically load navbar based on referrer or default to professional
-const referrer = document.referrer;
-const personalPages = ['sports.html', 'training.html', 'music.html', 'stats.html'];
-const isFromPersonal = personalPages.some(page => referrer.includes(page));
-
-const navbarFile = isFromPersonal ? "navbar-personal.html" : "navbar-professional.html";
-
-fetch(navbarFile)
+fetch("navbar.html")
   .then(response => response.text())
   .then(data => {
     document.getElementById("navbar").innerHTML = data;
@@ -45,7 +38,7 @@ fetch(navbarFile)
   <section class="section">
     <h2>Notes</h2>
     <p>
-      This space is for thoughts, things I'm learning, or ideas I want to keep track of.
+      This space is for thoughts, things I’m learning, or ideas I want to keep track of.
     </p>
   </section>
 
