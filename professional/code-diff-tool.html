@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +26,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
         }
 
@@ -292,7 +293,7 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
@@ -307,11 +308,25 @@
             font-size: 0.9em;
         }
 
-        .green-stat { color: #28a745; }
-        .yellow-stat { color: #ffc107; }
-        .orange-stat { color: #fd7e14; }
-        .red-stat { color: #dc3545; }
-        .blue-stat { color: #667eea; }
+        .green-stat {
+            color: #28a745;
+        }
+
+        .yellow-stat {
+            color: #ffc107;
+        }
+
+        .orange-stat {
+            color: #fd7e14;
+        }
+
+        .red-stat {
+            color: #dc3545;
+        }
+
+        .blue-stat {
+            color: #667eea;
+        }
 
         .loading {
             text-align: center;
@@ -321,6 +336,7 @@
         }
 
         @media (max-width: 768px) {
+
             .upload-section,
             .comparison-header,
             .comparison-content {
@@ -328,20 +344,21 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
 </head>
 
 <script>
-fetch("navbar-professional.html")
-  .then(response => response.text())
-  .then(data => {
-    document.getElementById("navbar").innerHTML = data;
-  });
+    fetch("../assets/includes/navbar-professional.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("navbar").innerHTML = data;
+        });
 
-fetch("darkmode.html")
-  .then(response => response.text())
-  .then(data => {
-    document.body.insertAdjacentHTML('afterbegin', data);
-  });
+    fetch("../assets/includes/darkmode.html")
+        .then(response => response.text())
+        .then(data => {
+            document.body.insertAdjacentHTML('afterbegin', data);
+        });
 </script>
 
 <body>
@@ -361,7 +378,8 @@ fetch("darkmode.html")
                             Choose File
                         </button>
                     </label>
-                    <input type="file" id="oldFile" accept=".py,.js,.java,.cpp,.c,.cs,.rb,.php,.go,.rs,.swift,.kt,.ts,.jsx,.tsx,.html,.css,.sql,.sh,.bash,.r,.m,.scala,.perl,.lua">
+                    <input type="file" id="oldFile"
+                        accept=".py,.js,.java,.cpp,.c,.cs,.rb,.php,.go,.rs,.swift,.kt,.ts,.jsx,.tsx,.html,.css,.sql,.sh,.bash,.r,.m,.scala,.perl,.lua">
                     <div class="file-name" id="oldFileName"></div>
                 </div>
 
@@ -372,7 +390,8 @@ fetch("darkmode.html")
                             Choose File
                         </button>
                     </label>
-                    <input type="file" id="newFile" accept=".py,.js,.java,.cpp,.c,.cs,.rb,.php,.go,.rs,.swift,.kt,.ts,.jsx,.tsx,.html,.css,.sql,.sh,.bash,.r,.m,.scala,.perl,.lua">
+                    <input type="file" id="newFile"
+                        accept=".py,.js,.java,.cpp,.c,.cs,.rb,.php,.go,.rs,.swift,.kt,.ts,.jsx,.tsx,.html,.css,.sql,.sh,.bash,.r,.m,.scala,.perl,.lua">
                     <div class="file-name" id="newFileName"></div>
                 </div>
             </div>
@@ -404,7 +423,8 @@ fetch("darkmode.html")
 
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="compareFiles()">Compare Files</button>
-                <button class="btn btn-secondary" onclick="downloadPDF()" id="downloadBtn" style="display: none;">Download PDF Report</button>
+                <button class="btn btn-secondary" onclick="downloadPDF()" id="downloadBtn"
+                    style="display: none;">Download PDF Report</button>
             </div>
         </div>
 
@@ -459,24 +479,24 @@ fetch("darkmode.html")
         let comparisonResults = null;
 
         // File upload handlers
-        document.getElementById('oldFile').addEventListener('change', function(e) {
+        document.getElementById('oldFile').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('oldFileName').textContent = file.name;
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     oldFileContent = e.target.result;
                 };
                 reader.readAsText(file);
             }
         });
 
-        document.getElementById('newFile').addEventListener('change', function(e) {
+        document.getElementById('newFile').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('newFileName').textContent = file.name;
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     newFileContent = e.target.result;
                 };
                 reader.readAsText(file);
@@ -549,10 +569,10 @@ fetch("darkmode.html")
             const syntax = getCommentSyntax(language);
             const comments = [];
             const lines = code.split('\n');
-            
+
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
-                
+
                 // Single line comments
                 if (syntax.single && line.includes(syntax.single)) {
                     const commentStart = line.indexOf(syntax.single);
@@ -564,7 +584,7 @@ fetch("darkmode.html")
                         });
                     }
                 }
-                
+
                 // Multi-line comments
                 if (syntax.multi) {
                     if (line.includes(syntax.multi.start)) {
@@ -583,7 +603,7 @@ fetch("darkmode.html")
                     }
                 }
             }
-            
+
             return comments;
         }
 
@@ -591,18 +611,18 @@ fetch("darkmode.html")
         function removeComments(code, language) {
             const syntax = getCommentSyntax(language);
             let result = code;
-            
+
             // Remove multi-line comments first
             if (syntax.multi) {
                 const multiRegex = new RegExp(
-                    syntax.multi.start.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + 
-                    '[\\s\\S]*?' + 
+                    syntax.multi.start.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
+                    '[\\s\\S]*?' +
                     syntax.multi.end.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
                     'g'
                 );
                 result = result.replace(multiRegex, '');
             }
-            
+
             // Remove single-line comments
             if (syntax.single) {
                 const lines = result.split('\n');
@@ -614,7 +634,7 @@ fetch("darkmode.html")
                     return line;
                 }).join('\n');
             }
-            
+
             return result;
         }
 
@@ -625,41 +645,41 @@ fetch("darkmode.html")
             let currentSection = [];
             let inFunction = false;
             let braceCount = 0;
-            
+
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 const trimmed = line.trim();
-                
+
                 // Skip empty lines
                 if (trimmed.length === 0) continue;
-                
+
                 currentSection.push(line);
-                
+
                 // Track braces for block detection
                 braceCount += (line.match(/{/g) || []).length;
                 braceCount -= (line.match(/}/g) || []).length;
-                
+
                 // Detect function/class boundaries
                 const isFunctionStart = /^(function|def|class|public|private|protected|static)/.test(trimmed);
                 const isBlockEnd = braceCount === 0 && trimmed.includes('}');
-                
+
                 // Create section at logical boundaries
-                if ((isFunctionStart && currentSection.length > 1) || 
+                if ((isFunctionStart && currentSection.length > 1) ||
                     (isBlockEnd && braceCount === 0) ||
                     (trimmed.endsWith(';') && currentSection.length > 5)) {
-                    
+
                     if (currentSection.length > 0) {
                         sections.push(currentSection.join('\n'));
                         currentSection = [];
                     }
                 }
             }
-            
+
             // Add remaining lines
             if (currentSection.length > 0) {
                 sections.push(currentSection.join('\n'));
             }
-            
+
             return sections;
         }
 
@@ -668,10 +688,10 @@ fetch("darkmode.html")
             const dmp = new diff_match_patch();
             const diffs = dmp.diff_main(str1, str2);
             dmp.diff_cleanupSemantic(diffs);
-            
+
             let matches = 0;
             let total = 0;
-            
+
             diffs.forEach(diff => {
                 const length = diff[1].length;
                 total += length;
@@ -679,7 +699,7 @@ fetch("darkmode.html")
                     matches += length;
                 }
             });
-            
+
             return total > 0 ? (matches / total) * 100 : 0;
         }
 
@@ -688,22 +708,22 @@ fetch("darkmode.html")
             const results = [];
             const oldComments = oldSections.map(s => extractComments(s, language));
             const newComments = newSections.map(s => extractComments(s, language));
-            
+
             const maxSections = Math.max(oldSections.length, newSections.length);
-            
+
             for (let i = 0; i < maxSections; i++) {
                 const oldSection = i < oldSections.length ? oldSections[i] : '';
                 const newSection = i < newSections.length ? newSections[i] : '';
-                
+
                 const oldWithoutComments = removeComments(normalizeCode(oldSection), language);
                 const newWithoutComments = removeComments(normalizeCode(newSection), language);
-                
+
                 const oldHasComments = oldComments[i] && oldComments[i].length > 0;
                 const newHasComments = newComments[i] && newComments[i].length > 0;
-                
+
                 let category = 'green';
                 let similarity = calculateSimilarity(oldWithoutComments, newWithoutComments);
-                
+
                 // Determine category
                 if (oldSection === '' || newSection === '') {
                     category = 'red';
@@ -718,7 +738,7 @@ fetch("darkmode.html")
                         category = 'green';
                     }
                 }
-                
+
                 results.push({
                     number: i + 1,
                     oldCode: oldSection,
@@ -730,7 +750,7 @@ fetch("darkmode.html")
                     commentDiff: oldHasComments !== newHasComments
                 });
             }
-            
+
             return results;
         }
 
@@ -738,19 +758,19 @@ fetch("darkmode.html")
         function renderComparison(results) {
             const container = document.getElementById('comparisonContent');
             container.innerHTML = '';
-            
+
             const oldPanel = document.createElement('div');
             oldPanel.className = 'code-panel';
             const newPanel = document.createElement('div');
             newPanel.className = 'code-panel';
-            
+
             results.forEach(result => {
                 // Old file section
                 const oldSection = document.createElement('div');
                 oldSection.className = `code-section ${result.category}`;
-                
+
                 let oldContent = `<div class="section-number">#${result.number}</div>`;
-                
+
                 if (result.oldCode === '') {
                     oldContent += `<div class="label-text" style="background: #f8d7da; color: #721c24;">MISSING</div>`;
                 } else if (result.category === 'red' && result.newCode !== '') {
@@ -758,21 +778,21 @@ fetch("darkmode.html")
                 } else if (result.category === 'orange') {
                     oldContent += `<div class="label-text" style="background: #ffe8cc; color: #856404;">DIFFERENT</div>`;
                 }
-                
+
                 if (result.commentDiff && !result.oldHasComments && result.newHasComments) {
                     oldContent += `<div class="label-text" style="background: #fff3cd; color: #856404;">MISSING COMMENT</div>`;
                 }
-                
+
                 oldContent += `<div class="code-block">${escapeHtml(result.oldCode)}</div>`;
                 oldSection.innerHTML = oldContent;
                 oldPanel.appendChild(oldSection);
-                
+
                 // New file section
                 const newSection = document.createElement('div');
                 newSection.className = `code-section ${result.category}`;
-                
+
                 let newContent = `<div class="section-number">#${result.number}</div>`;
-                
+
                 if (result.newCode === '') {
                     newContent += `<div class="label-text" style="background: #f8d7da; color: #721c24;">MISSING</div>`;
                 } else if (result.category === 'red' && result.oldCode !== '') {
@@ -780,16 +800,16 @@ fetch("darkmode.html")
                 } else if (result.category === 'orange') {
                     newContent += `<div class="label-text" style="background: #ffe8cc; color: #856404;">DIFFERENT</div>`;
                 }
-                
+
                 if (result.commentDiff && result.oldHasComments && !result.newHasComments) {
                     newContent += `<div class="label-text" style="background: #fff3cd; color: #856404;">MISSING COMMENT</div>`;
                 }
-                
+
                 newContent += `<div class="code-block">${escapeHtml(result.newCode)}</div>`;
                 newSection.innerHTML = newContent;
                 newPanel.appendChild(newSection);
             });
-            
+
             container.appendChild(oldPanel);
             container.appendChild(newPanel);
         }
@@ -804,15 +824,15 @@ fetch("darkmode.html")
                 totalLines: 0,
                 similarity: 0
             };
-            
+
             results.forEach(result => {
                 stats[result.category]++;
                 stats.totalLines += result.oldCode.split('\n').length + result.newCode.split('\n').length;
                 stats.similarity += result.similarity;
             });
-            
+
             stats.similarity = (stats.similarity / results.length).toFixed(1);
-            
+
             document.getElementById('totalLines').textContent = stats.totalLines;
             document.getElementById('similarity').textContent = stats.similarity + '%';
             document.getElementById('greenSections').textContent = stats.green;
@@ -839,14 +859,14 @@ fetch("darkmode.html")
                 alert('Please upload both files first!');
                 return;
             }
-            
+
             document.getElementById('loading').style.display = 'block';
             document.getElementById('comparisonContainer').style.display = 'none';
             document.getElementById('statsContainer').style.display = 'none';
-            
+
             setTimeout(() => {
                 const languageSelect = document.getElementById('languageSelect').value;
-                
+
                 if (languageSelect === 'auto') {
                     const oldFileName = document.getElementById('oldFileName').textContent;
                     detectedLanguage = detectLanguage(oldFileName, oldFileContent);
@@ -859,15 +879,15 @@ fetch("darkmode.html")
                 } else {
                     detectedLanguage = languageSelect;
                 }
-                
+
                 const oldSections = parseIntoSections(oldFileContent, detectedLanguage);
                 const newSections = parseIntoSections(newFileContent, detectedLanguage);
-                
+
                 comparisonResults = compareSections(oldSections, newSections, detectedLanguage);
-                
+
                 renderComparison(comparisonResults);
                 renderStatistics(comparisonResults);
-                
+
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('comparisonContainer').style.display = 'block';
                 document.getElementById('statsContainer').style.display = 'block';
@@ -881,20 +901,20 @@ fetch("darkmode.html")
                 alert('Please compare files first!');
                 return;
             }
-            
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             let yPosition = 20;
             const pageHeight = doc.internal.pageSize.height;
             const lineHeight = 7;
             const margin = 20;
-            
+
             // Title
             doc.setFontSize(20);
             doc.text('Code Comparison Report', margin, yPosition);
             yPosition += 15;
-            
+
             // Stats
             doc.setFontSize(12);
             doc.text(`Language: ${detectedLanguage}`, margin, yPosition);
@@ -903,7 +923,7 @@ fetch("darkmode.html")
             yPosition += lineHeight;
             doc.text(`Total Lines: ${document.getElementById('totalLines').textContent}`, margin, yPosition);
             yPosition += lineHeight * 2;
-            
+
             // Section counts
             doc.text(`Matching: ${document.getElementById('greenSections').textContent}`, margin, yPosition);
             yPosition += lineHeight;
@@ -913,46 +933,47 @@ fetch("darkmode.html")
             yPosition += lineHeight;
             doc.text(`Very Different/Missing: ${document.getElementById('redSections').textContent}`, margin, yPosition);
             yPosition += lineHeight * 2;
-            
+
             // Sections
             doc.setFontSize(14);
             doc.text('Detailed Comparison', margin, yPosition);
             yPosition += lineHeight * 2;
-            
+
             doc.setFontSize(10);
             comparisonResults.forEach((result, index) => {
                 if (yPosition > pageHeight - 40) {
                     doc.addPage();
                     yPosition = 20;
                 }
-                
+
                 const categoryText = {
                     'green': 'MATCH',
                     'yellow': 'COMMENT DIFF',
                     'orange': 'DIFFERENT',
                     'red': 'VERY DIFFERENT/MISSING'
                 };
-                
+
                 doc.text(`Section #${result.number} - ${categoryText[result.category]}`, margin, yPosition);
                 yPosition += lineHeight;
-                
+
                 if (result.oldCode) {
                     const oldLines = doc.splitTextToSize(`Old: ${result.oldCode.substring(0, 200)}...`, 170);
                     doc.text(oldLines, margin, yPosition);
                     yPosition += oldLines.length * lineHeight;
                 }
-                
+
                 if (result.newCode) {
                     const newLines = doc.splitTextToSize(`New: ${result.newCode.substring(0, 200)}...`, 170);
                     doc.text(newLines, margin, yPosition);
                     yPosition += newLines.length * lineHeight;
                 }
-                
+
                 yPosition += lineHeight;
             });
-            
+
             doc.save('code-comparison-report.pdf');
         }
     </script>
 </body>
+
 </html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Training | Ben Boyette</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<script>
+  fetch("../assets/includes/navbar-personal.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+
+  fetch("../assets/includes/darkmode.html")
+    .then(response => response.text())
+    .then(data => {
+      document.body.insertAdjacentHTML('afterbegin', data);
+    });
+</script>
+
+<body>
+
+  <div id="navbar"></div>
+
+
+  <main class="container">
+
+    <section class="section">
+
+      <figure class="figure">
+        <img src="../assets/images/NCSTATE_training.png" alt="NC State training facilities" class="section-img">
+        <figcaption class="figcaption">Training at NC State</figcaption>
+      </figure>
+
+      <h2>Training</h2>
+      <p>
+        I train by running and working out. This month has a chest focus, and I am still running. My goal has been to
+        run 3x per week since mid-October. While I haven't always hit that, I have recorded enough miles to prepare for
+        the Krispy Kreme challenge, which I run (or if you are reading this after, ran) on February 7.
+      </p>
+
+    </section>
+
+    <section class="section">
+      <h2>Weekly Training Summary</h2>
+
+      <!-- Subtitle / description placeholder -->
+      <p id="weekly-subtitle">[The below chart is a log of my running since mid-October. While crude, it still shows all
+        the information I currently have this chart downloaded as a JSON file and inserted into this page's html file. I
+        am trying to have the training.html file (this page's file) read my google apps script where I have all of this
+        information, but that was not working. That is something I will update in the future.]</p>
+
+      <div id="weekly-data">
+        <p>Loading data...</p>
+      </div>
+    </section>
+
+
+  </main>
+
+  <script>
+
+    // Relative path to your JSON file
+    const WEEKLY_URL = "../assets/data/dataWEEKLY.json";
+
+    fetch(WEEKLY_URL)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        const container = document.getElementById("weekly-data");
+        if (!data || data.length === 0) {
+          container.innerHTML = "<p>No data available.</p>";
+          return;
+        }
+
+        const headers = Object.keys(data[0]);
+        let table = "<table><thead><tr>";
+        headers.forEach(h => table += `<th>${h}</th>`);
+        table += "</tr></thead><tbody>";
+
+        data.forEach(row => {
+          table += "<tr>";
+          headers.forEach(h => table += `<td>${row[h] !== null ? row[h] : ""}</td>`);
+          table += "</tr>";
+        });
+
+        table += "</tbody></table>";
+        container.innerHTML = table;
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("weekly-data").innerHTML =
+          "<p>Error loading data. Check console for details.</p>";
+      });
+  </script>
+
+  <script>
+    const page = location.pathname;
+    const views = JSON.parse(localStorage.getItem("views") || "{}");
+    views[page] = (views[page] || 0) + 1;
+    localStorage.setItem("views", JSON.stringify(views));
+  </script>
+
+
+</body>
+
+</html>

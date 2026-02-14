@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Sports | Ben Boyette</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<script>
+  fetch("../assets/includes/navbar-personal.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+
+  fetch("../assets/includes/darkmode.html")
+    .then(response => response.text())
+    .then(data => {
+      document.body.insertAdjacentHTML('afterbegin', data);
+    });
+</script>
+
+<body>
+
+  <div id="navbar"></div>
+
+
+  <main class="container">
+
+    <section class="section">
+
+      <figure class="figure">
+        <img src="images/Block_S_sports.png" alt="NC State Block S" class="section-img">
+        <figcaption class="figcaption">NC State Block S</figcaption>
+      </figure>
+
+      <h2>Sports</h2>
+      <p>
+        I enjoy watching sports. I am a LA Clippers fan, Washington Nationals fan,
+        and a fan of all NC State Athletics.
+      </p>
+
+      <figure class="figure">
+        <img src="images/kawhi_sports.png" alt="Kawhi Leonard" class="section-img">
+        <figcaption class="figcaption">Kawhi Leonard</figcaption>
+      </figure>
+
+      <figure class="figure">
+        <img src="images/laClippers_Sports.png" alt="LA Clippers" class="section-img">
+        <figcaption class="figcaption">Los Angeles Clippers</figcaption>
+      </figure>
+
+      <figure class="figure">
+        <img src="images/nationals_sports.png" alt="Washington Nationals" class="section-img">
+        <figcaption class="figcaption">Washington Nationals</figcaption>
+      </figure>
+
+    </section>
+    <script>
+
+
+      const page = location.pathname;
+      const views = JSON.parse(localStorage.getItem("views") || "{}");
+      views[page] = (views[page] || 0) + 1;
+      localStorage.setItem("views", JSON.stringify(views));
+    </script>
+
+
+
+  </main>
+</body>
+
+</html>

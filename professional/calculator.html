@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator | Ben Boyette</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f0f0f;
+    }
+
+    .calculator-container {
+      display: flex;
+      gap: 14px;
+    }
+
+    .side-panel {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      background: #161616;
+      padding: 12px;
+      border-radius: 10px;
+      min-width: 150px;
+    }
+
+    .side-panel h4 {
+      color: white;
+      margin: 4px 0;
+    }
+
+    .side-panel button,
+    .side-panel input {
+      padding: 6px;
+      border-radius: 6px;
+      border: none;
+      font-size: 0.85rem;
+    }
+
+    .side-panel button {
+      background: #222;
+      color: white;
+      cursor: pointer;
+    }
+
+    .side-panel input {
+      background: #eee;
+    }
+
+    .calculator-wrapper {
+      width: 380px;
+      background: #111;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .screen {
+      height: 60px;
+      background: #000;
+      color: #00ff9c;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      overflow-x: auto;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .buttons button {
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: white;
+      cursor: pointer;
+    }
+
+    .operator {
+      background: #333;
+    }
+
+    .equals {
+      background: #4f46e5;
+      grid-column: span 2;
+    }
+
+    .fn {
+      background: #1f2937;
+    }
+
+    /* GRAPH PANEL */
+    .graph-panel {
+      display: none;
+      margin-top: 12px;
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .y-list {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    canvas {
+      background: white;
+    }
+  </style>
+</head>
+<script>
+  fetch("../assets/includes/navbar-professional.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+
+  fetch("../assets/includes/darkmode.html")
+    .then(response => response.text())
+    .then(data => {
+      document.body.insertAdjacentHTML('afterbegin', data);
+    });
+</script>
+
+<body>
+  <div id="navbar"></div>
+
+
+  <div class="calculator-container">
+
+    <!-- LEFT SIDEBAR -->
+    <div id="leftPanel" class="side-panel">
+      <h4>Trig</h4>
+      <button onclick="append('Math.sin(')">sin</button>
+      <button onclick="append('Math.cos(')">cos</button>
+      <button onclick="append('Math.tan(')">tan</button>
+      <button onclick="append('Math.PI')">π</button>
+      <button onclick="append('Math.E')">e</button>
+
+      <h4>Graphing</h4>
+      <button onclick="openGraph()">y=</button>
+      <button onclick="drawGraph()">Graph</button>
+
+      <h4>Bounds</h4>
+      <label style="color:white">x minimum <input id="xmin" value="-10" /></label>
+      <label style="color:white">x maximum <input id="xmax" value="10" /></label>
+      <label style="color:white">y minimum <input id="ymin" value="-10" /></label>
+      <label style="color:white">y maximum <input id="ymax" value="10" /></label>
+
+      <button onclick="closeLeft()">✕ Close</button>
+    </div>
+
+    <!-- CALCULATOR -->
+    <div class="calculator-wrapper">
+
+      <div id="screen" class="screen">▮</div>
+
+      <div class="buttons">
+        <button onclick="clearScreen()">C</button>
+        <button onclick="backspace()">⌫</button>
+        <button onclick="moveCursor(-1)">◀</button>
+        <button onclick="moveCursor(1)">▶</button>
+        <button onclick="append('/')" class="operator">÷</button>
+
+        <button onclick="openLeft()" class="fn">Sidebar</button>
+        <button onclick="append('(')">(</button>
+        <button onclick="append(')')">)</button>
+        <button onclick="append('*')" class="operator">×</button>
+        <button onclick="append('-')" class="operator">−</button>
+
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
+        <button onclick="append('+')" class="operator">+</button>
+        <button onclick="append('**')" class="fn">xʸ</button>
+
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button onclick="calculate()" class="equals">=</button>
+        <button onclick="append('.')">.</button>
+
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+        <button onclick="append('0')">0</button>
+      </div>
+
+      <div id="graphPanel" class="graph-panel">
+        <div class="y-list">
+          <span>y₁ =</span><input id="y1" />
+          <span>y₂ =</span><input id="y2" />
+          <span>y₃ =</span><input id="y3" />
+          <span>y₄ =</span><input id="y4" />
+          <span>y₅ =</span><input id="y5" />
+        </div>
+        <canvas id="graphCanvas" height="250"></canvas>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const screen = document.getElementById('screen');
+    let cursorPos = 0;
+    let chart;
+
+    function raw() { return screen.textContent.replace('▮', ''); }
+    function render(txt) {
+      screen.textContent = txt.slice(0, cursorPos) + '▮' + txt.slice(cursorPos);
+    }
+
+    function append(v) { const r = raw(); cursorPos += v.length; render(r.slice(0, cursorPos - v.length) + v + r.slice(cursorPos - v.length)); }
+    function backspace() { if (cursorPos === 0) return; const r = raw(); cursorPos--; render(r.slice(0, cursorPos) + r.slice(cursorPos + 1)); }
+    function moveCursor(d) { const r = raw(); cursorPos = Math.max(0, Math.min(r.length, cursorPos + d)); render(r); }
+    function clearScreen() { cursorPos = 0; render(''); }
+
+    function calculate() { try { const r = eval(raw()); cursorPos = String(r).length; render(String(r)); } catch { render('Error'); cursorPos = 5; } }
+
+    function openLeft() { document.getElementById('leftPanel').style.display = 'flex'; }
+    function closeLeft() { document.getElementById('leftPanel').style.display = 'none'; }
+
+    function openGraph() { document.getElementById('graphPanel').style.display = 'block'; }
+
+    function drawGraph() {
+      openGraph();
+      const xmin = +xminEl.value, xmax = +xmaxEl.value;
+      const ymin = +yminEl.value, ymax = +ymaxEl.value;
+
+      const funcs = [y1, y2, y3, y4, y5].map(i => i.value).filter(v => v);
+      const xs = []; for (let x = xmin; x <= xmax; x += (xmax - xmin) / 200) xs.push(x);
+
+      const datasets = funcs.map((f, i) => ({
+        data: xs.map(x => { try { return eval(f.replace(/x/g, `(${x})`)); } catch { return null; } }),
+        borderWidth: 2
+      }));
+
+      if (chart) chart.destroy();
+      chart = new Chart(graphCanvas, {
+        type: 'line',
+        data: { labels: xs, datasets },
+        options: {
+          scales: { x: { min: xmin, max: xmax }, y: { min: ymin, max: ymax } },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    const xminEl = document.getElementById('xmin');
+    const xmaxEl = document.getElementById('xmax');
+    const yminEl = document.getElementById('ymin');
+    const ymaxEl = document.getElementById('ymax');
+
+    clearScreen();
+  </script>
+
+</body>
+
+</html>

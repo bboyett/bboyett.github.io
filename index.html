@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ben Boyette</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <script>
-fetch("navbar-professional.html")
+fetch("assets/includes/navbar-professional.html")
   .then(response => response.text())
   .then(data => {
     document.getElementById("navbar").innerHTML = data;
   });
 
-fetch("darkmode.html")
+fetch("assets/includes/darkmode.html")
   .then(response => response.text())
   .then(data => {
     document.body.insertAdjacentHTML('afterbegin', data);
@@ -38,22 +38,22 @@ fetch("darkmode.html")
     <h2>Explore</h2>
 
     <div class="page-preview">
-      <h3><a href="about.html">About</a></h3>
+      <h3><a href="professional/about.html">About</a></h3>
       <p>Background information, current focus, and general updates.</p>
     </div>
 
     <div class="page-preview">
-      <h3><a href="engineering.html">Engineering</a></h3>
+      <h3><a href="professional/engineering.html">Engineering</a></h3>
       <p>Projects, notes, builds, and mechanical engineering work.</p>
     </div>
 
     <div class="page-preview">
-      <h3><a href="calculator.html">Calculator</a></h3>
+      <h3><a href="professional/calculator.html">Calculator</a></h3>
       <p>Custom-built tools and interactive utilities.</p>
     </div>
 
     <div class="page-preview">
-      <h3><a href="notes.html">Notes</a></h3>
+      <h3><a href="professional/notes.html">Notes</a></h3>
       <p>Ideas, things I'm learning, and written thoughts.</p>
     </div>
 

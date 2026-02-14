@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Notes | Ben Boyette</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<script>
+  // Dynamically load navbar based on referrer or default to professional
+  const referrer = document.referrer;
+  const personalPages = ['sports.html', 'training.html', 'music.html', 'stats.html'];
+  const isFromPersonal = personalPages.some(page => referrer.includes(page));
+
+  const navbarFile = isFromPersonal ? "../assets/includes/navbar-personal.html" : "../assets/includes/navbar-professional.html";
+
+  fetch(navbarFile)
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+
+  fetch("../assets/includes/darkmode.html")
+    .then(response => response.text())
+    .then(data => {
+      document.body.insertAdjacentHTML('afterbegin', data);
+    });
+</script>
+
+<body>
+
+  <div id="navbar"></div>
+
+
+  <input type="text" id="search" placeholder="Search notes..." />
+  <script>
+    const search = document.getElementById("search");
+    const notes = document.querySelectorAll(".note");
+
+    search.addEventListener("input", () => {
+      const q = search.value.toLowerCase();
+      notes.forEach(note => {
+        note.style.display =
+          note.textContent.toLowerCase().includes(q) ? "block" : "none";
+      });
+    });
+  </script>
+
+
+  <main class="container">
+
+    <section class="section">
+      <h2>Notes</h2>
+      <p>
+        This space is for thoughts, things I'm learning, or ideas I want to keep track of.
+      </p>
+    </section>
+
+    <script>
+
+
+      const page = location.pathname;
+      const views = JSON.parse(localStorage.getItem("views") || "{}");
+      views[page] = (views[page] || 0) + 1;
+      localStorage.setItem("views", JSON.stringify(views));
+    </script>
+
+
+  </main>
+</body>
+
+</html>
