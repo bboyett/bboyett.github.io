@@ -3,70 +3,129 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Notes | Ben Boyette</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <script src="../assets/js/main.js" defer></script>
+  <style>
+    .search-container {
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    #search {
+      width: 100%;
+      padding: 1.25rem 1.5rem 1.25rem 3.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      color: var(--text-main);
+      font-size: 1.1rem;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    #search:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.2rem;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .note-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .note-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+
+    .note-tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+  </style>
 </head>
-<script>
-  // Dynamically load navbar based on referrer or default to professional
-  const referrer = document.referrer;
-  const personalPages = ['sports.html', 'training.html', 'music.html', 'stats.html'];
-  const isFromPersonal = personalPages.some(page => referrer.includes(page));
-
-  const navbarFile = isFromPersonal ? "../assets/includes/navbar-personal.html" : "../assets/includes/navbar-professional.html";
-
-  fetch(navbarFile)
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("navbar").innerHTML = data;
-    });
-
-  fetch("../assets/includes/darkmode.html")
-    .then(response => response.text())
-    .then(data => {
-      document.body.insertAdjacentHTML('afterbegin', data);
-    });
-</script>
 
 <body>
-
   <div id="navbar"></div>
 
+  <main class="container">
+    <section class="intro">
+      <h1>Digital Garden</h1>
+      <p>A collection of thoughts, technical explorations, and design philosophies.</p>
+    </section>
 
-  <input type="text" id="search" placeholder="Search notes..." />
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search" placeholder="Search my notes and ideas..." />
+    </div>
+
+    <div class="notes-grid" id="notesGrid">
+      <div class="note-card" data-category="engineering">
+        <span class="note-tag">Engineering</span>
+        <h3>Fluid Dynamics Foundations</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Reflections on Navier-Stokes and computational fluid
+          simulations.</p>
+      </div>
+
+      <div class="note-card" data-category="design">
+        <span class="note-tag">Design</span>
+        <h3>The Power of Glassmorphism</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">How tactile transparency enhances user interaction in
+          modern UI.</p>
+      </div>
+
+      <div class="note-card" data-category="personal">
+        <span class="note-tag">Productivity</span>
+        <h3>Building a Second Brain</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">My system for capturing information and generating new
+          insights.</p>
+      </div>
+    </div>
+  </main>
+
   <script>
     const search = document.getElementById("search");
-    const notes = document.querySelectorAll(".note");
+    const notes = document.querySelectorAll(".note-card");
 
     search.addEventListener("input", () => {
       const q = search.value.toLowerCase();
       notes.forEach(note => {
-        note.style.display =
-          note.textContent.toLowerCase().includes(q) ? "block" : "none";
+        const text = note.textContent.toLowerCase();
+        note.style.display = text.includes(q) ? "block" : "none";
       });
     });
   </script>
-
-
-  <main class="container">
-
-    <section class="section">
-      <h2>Notes</h2>
-      <p>
-        This space is for thoughts, things I'm learning, or ideas I want to keep track of.
-      </p>
-    </section>
-
-    <script>
-
-
-      const page = location.pathname;
-      const views = JSON.parse(localStorage.getItem("views") || "{}");
-      views[page] = (views[page] || 0) + 1;
-      localStorage.setItem("views", JSON.stringify(views));
-    </script>
-
-
-  </main>
 </body>
 
 </html>

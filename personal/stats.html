@@ -3,78 +3,75 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Stats Dashboard | Ben Boyette</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    body {
-      max-width: 800px;
-      margin: 40px auto;
-      font-family: system-ui, sans-serif;
-    }
-
-    h2 {
-      margin-top: 30px;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard | Ben Boyette</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <script src="../assets/js/main.js" defer></script>
 </head>
-<script>
-  fetch("../assets/includes/navbar-personal.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("navbar").innerHTML = data;
-    });
-
-  fetch("../assets/includes/darkmode.html")
-    .then(response => response.text())
-    .then(data => {
-      document.body.insertAdjacentHTML('afterbegin', data);
-    });
-</script>
 
 <body>
-
   <div id="navbar"></div>
 
+  <main class="container">
+    <section class="intro">
+      <h1>Analytics Dashboard</h1>
+      <p>Local performance insights and interaction metrics captured during your session.</p>
+    </section>
 
-  <h1>Stats Dashboard</h1>
+    <div class="stats-grid" style="margin-bottom: 3rem;">
+      <div class="stat-item">
+        <span class="stat-value" id="totalViews">0</span>
+        <span class="stat-label">Total Page Views</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="totalPlays">0</span>
+        <span class="stat-label">Total Track Plays</span>
+      </div>
+    </div>
 
-  <div id="dashboard">
-    <h2>Page Views</h2>
-    <ul id="page-views"></ul>
-
-    <h2>Audio Plays</h2>
-    <ul id="audio-plays"></ul>
-  </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <div class="section" style="padding: 1.5rem;">
+        <h3>Detailed Page Views</h3>
+        <div id="page-views-list" style="margin-top: 1rem;"></div>
+      </div>
+      <div class="section" style="padding: 1.5rem;">
+        <h3>Audio Playback History</h3>
+        <div id="audio-plays-list" style="margin-top: 1rem;"></div>
+      </div>
+    </div>
+  </main>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const pageViews = JSON.parse(localStorage.getItem("views") || "{}");
+      const audioPlays = JSON.parse(localStorage.getItem("plays") || "{}");
 
-    const pageViews = JSON.parse(localStorage.getItem("views") || "{}");
-    const audioPlays = JSON.parse(localStorage.getItem("plays") || "{}");
+      const pageList = document.getElementById("page-views-list");
+      const audioList = document.getElementById("audio-plays-list");
 
-    const pageViewsList = document.getElementById("page-views");
-    const audioPlaysList = document.getElementById("audio-plays");
+      let totalV = 0;
+      let totalP = 0;
 
-    for (const page in pageViews) {
-      const li = document.createElement("li");
-      li.textContent = `${page}: ${pageViews[page]} views`;
-      pageViewsList.appendChild(li);
-    }
+      Object.entries(pageViews).forEach(([page, count]) => {
+        totalV += count;
+        const div = document.createElement("div");
+        div.style.cssText = "display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--card-border);";
+        div.innerHTML = `<span style="font-weight: 500;">${page.split('/').pop() || 'Home'}</span><span style="color: var(--accent); font-weight: 600;">${count}</span>`;
+        pageList.appendChild(div);
+      });
 
-    for (const track in audioPlays) {
-      const li = document.createElement("li");
-      li.textContent = `${track}: ${audioPlays[track]} plays`;
-      audioPlaysList.appendChild(li);
-    }
+      Object.entries(audioPlays).forEach(([track, count]) => {
+        totalP += count;
+        const div = document.createElement("div");
+        div.style.cssText = "display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--card-border);";
+        div.innerHTML = `<span style="font-weight: 500;">${track}</span><span style="color: var(--accent); font-weight: 600;">${count}</span>`;
+        audioList.appendChild(div);
+      });
+
+      document.getElementById('totalViews').textContent = totalV;
+      document.getElementById('totalPlays').textContent = totalP;
+    });
   </script>
-
 </body>
 
 </html>

@@ -6,59 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About | Ben Boyette</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <script src="../assets/js/main.js" defer></script>
 </head>
-<script>
-  fetch("../assets/includes/navbar-professional.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("navbar").innerHTML = data;
-    });
-
-  fetch("../assets/includes/darkmode.html")
-    .then(response => response.text())
-    .then(data => {
-      document.body.insertAdjacentHTML('afterbegin', data);
-    });
-</script>
 
 <body>
-
   <div id="navbar"></div>
 
-
   <main class="container">
-
     <section class="intro">
       <h1>Ben Boyette</h1>
       <p>
-        I'm a Christian and a hardworking mechanical engineering student who enjoys
+        I'm a Christian and a hardworking mechanical engineering student at NC State who enjoys
         being physically active, watching sports, and spending time with friends.
       </p>
     </section>
 
     <section class="section">
-      <h2>Right now</h2>
+      <h2>Current Focus</h2>
       <ul>
-        <li>Training athletically.</li>
-        <li>Studying mechanical engineering.</li>
-        <li>Attending NC State sporting events.</li>
-        <li>Building this website.</li>
+        <li>Training athletically and exploring human performance.</li>
+        <li>Studying Mechanical Engineering with a focus on design and CAD.</li>
+        <li>Attending NC State sporting events (Go Pack!).</li>
+        <li>Developing this digital space to document my work.</li>
       </ul>
     </section>
 
-    <section class="easter-egg">
-      <p>More to come soon</p>
-    </section>
-
+    <footer class="easter-egg">
+      <p>More to come soon. Keep moving forward.</p>
+    </footer>
   </main>
-
-  <script>
-    const page = location.pathname;
-    const views = JSON.parse(localStorage.getItem("views") || "{}");
-    views[page] = (views[page] || 0) + 1;
-    localStorage.setItem("views", JSON.stringify(views));
-  </script>
-
 </body>
 
 </html>

@@ -6,121 +6,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Music | Ben Boyette</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <script src="../assets/js/main.js" defer></script>
 </head>
-<script>
-  fetch("../assets/includes/navbar-personal.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("navbar").innerHTML = data;
-    });
-
-  fetch("../assets/includes/darkmode.html")
-    .then(response => response.text())
-    .then(data => {
-      document.body.insertAdjacentHTML('afterbegin', data);
-    });
-</script>
 
 <body>
-
-  <!-- Password Protected Content -->
   <div id="protected-content" style="display:none;">
-
     <div id="navbar"></div>
 
-    <section class="music">
-      <h1>Music</h1>
-      <p class="subtitle">Welcome to the private music section.</p>
+    <main class="container">
+      <section class="intro">
+        <h1>Music</h1>
+        <p>A private collection of tracks and sessions.</p>
+      </section>
 
-      <!-- Track List -->
-      <div class="track-list">
-        <button onclick="loadTrack(0)">Diamond (Cinematic)</button>
-        <button onclick="loadTrack(1)">Nature Ambience (32 min)</button>
-        <button onclick="loadTrack(2)">Bronx Zoo Freestyle</button>
-        <button onclick="loadTrack(3)">Golden Goose Freestyle</button>
-        <button onclick="loadTrack(4)">Winter Storm Freestyle</button>
-        <button onclick="loadTrack(5)">99 Build Freestyle</button>
-      </div>
-
-    </section>
+      <section class="section">
+        <h2>Sessions</h2>
+        <div class="track-list" style="display: grid; gap: 1rem;">
+          <button class="track-btn" onclick="loadTrack(0)">Diamond (Cinematic)</button>
+          <button class="track-btn" onclick="loadTrack(1)">Nature Ambience (32 min)</button>
+          <button class="track-btn" onclick="loadTrack(2)">Bronx Zoo Freestyle</button>
+          <button class="track-btn" onclick="loadTrack(3)">Golden Goose Freestyle</button>
+          <button class="track-btn" onclick="loadTrack(4)">Winter Storm Freestyle</button>
+          <button class="track-btn" onclick="loadTrack(5)">99 Build Freestyle</button>
+        </div>
+      </section>
+    </main>
   </div>
-
-  <!-- ================= STICKY PLAYER ================= -->
 
   <div id="music-player">
     <img id="album-art" src="" alt="Album Art">
-
     <div class="player-header">Now Playing</div>
-    <div id="track-title">Nothing Playing</div>
+    <div id="track-title" style="font-weight: 600; margin-bottom: 0.5rem;">Nothing Playing</div>
 
-    <div class="time-row">
+    <div class="time-row"
+      style="display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.25rem;">
       <span id="current-time">0:00</span>
       <span id="duration">0:00</span>
     </div>
 
-    <input type="range" id="progress" value="0" min="0" max="100">
+    <input type="range" id="progress" value="0" min="0" max="100"
+      style="width: 100%; margin-bottom: 1rem; accent-color: var(--accent);">
 
-    <div class="controls">
-      <button onclick="prevTrack()">⏮</button>
-      <button onclick="togglePlay()" id="play-btn">▶</button>
-      <button onclick="nextTrack()">⏭</button>
+    <div class="controls" style="display: flex; justify-content: center; gap: 1.5rem;">
+      <button onclick="prevTrack()"
+        style="background: none; border: none; font-size: 1.5rem; color: white; cursor: pointer;">⏮</button>
+      <button onclick="togglePlay()" id="play-btn"
+        style="background: white; border: none; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: black; cursor: pointer;">▶</button>
+      <button onclick="nextTrack()"
+        style="background: none; border: none; font-size: 1.5rem; color: white; cursor: pointer;">⏭</button>
     </div>
-
     <audio id="audio"></audio>
   </div>
 
-  <!-- ================= SCRIPTS ================= -->
+  <style>
+    .track-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      text-align: left;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  <!-- Password -->
+    .track-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .track-btn::after {
+      content: '▶';
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+
+    #album-art:not([src]) {
+      display: none;
+    }
+  </style>
+
   <script>
+    // Password Protection
     document.addEventListener("DOMContentLoaded", () => {
       const PASSWORD = "benbpassword";
       const input = prompt("Enter password:");
-
       if (input !== PASSWORD) {
-        document.body.innerHTML =
-          "<h2 style='text-align:center;margin-top:40vh;'>Access denied</h2>";
+        document.body.innerHTML = "<div style='display:grid; place-items:center; height: 100vh;'><div class='section'><h2>Access Denied</h2><p>Please contact the site owner for access.</p></div></div>";
       } else {
         document.getElementById("protected-content").style.display = "block";
       }
     });
-  </script>
 
-  <!-- Player Script -->
-  <script>
+    // Player Data
     const tracks = [
-      {
-        title: "Diamond (Cinematic)",
-        src: "../assets/music/diamond-cinematic.mp3",
-        // art: "../assets/images/default-art.jpg"
-      },
-      {
-        title: "Nature Ambience (32 min)",
-        src: "../assets/music/nature-thirty-min.mp3",
-        // art: "../assets/images/default-art.jpg" commenting here bc no image for this file. same as above.
-      },
-      {
-        title: "Bronx Zoo Freestyle",
-        src: "../assets/music/Birthday Blizzard 26/01-Bronx-Zoo-Freestyle.mp3",
-        art: "../assets/images/birthday-blizzard_music.jpg"
-      },
-      {
-        title: "Golden Goose Freestyle",
-        src: "../assets/music/Birthday Blizzard 26/02-Golden-Goose-Freestyle.mp3",
-        art: "../assets/images/birthday-blizzard_music.jpg"
-      },
-      {
-        title: "Winter Storm Freestyle",
-        src: "../assets/music/Birthday Blizzard 26/03-Winter-Storm-Freestyle.mp3",
-        art: "../assets/images/birthday-blizzard_music.jpg"
-      },
-      {
-        title: "99 Build Freestyle",
-        src: "../assets/music/Birthday Blizzard 26/04-99-Build-Freestyle.mp3",
-        art: "../assets/images/birthday-blizzard_music.jpg"
-      }
+      { title: "Diamond (Cinematic)", src: "../assets/music/diamond-cinematic.mp3" },
+      { title: "Nature Ambience (32 min)", src: "../assets/music/nature-thirty-min.mp3" },
+      { title: "Bronx Zoo Freestyle", src: "../assets/music/Birthday Blizzard 26/01-Bronx-Zoo-Freestyle.mp3", art: "../assets/images/birthday-blizzard_music.jpg" },
+      { title: "Golden Goose Freestyle", src: "../assets/music/Birthday Blizzard 26/02-Golden-Goose-Freestyle.mp3", art: "../assets/images/birthday-blizzard_music.jpg" },
+      { title: "Winter Storm Freestyle", src: "../assets/music/Birthday Blizzard 26/03-Winter-Storm-Freestyle.mp3", art: "../assets/images/birthday-blizzard_music.jpg" },
+      { title: "99 Build Freestyle", src: "../assets/music/Birthday Blizzard 26/04-99-Build-Freestyle.mp3", art: "../assets/images/birthday-blizzard_music.jpg" }
     ];
-
 
     let currentTrack = 0;
     const audio = document.getElementById("audio");
@@ -136,30 +128,27 @@
       currentTrack = index;
       audio.src = tracks[index].src;
       trackTitle.textContent = tracks[index].title;
-      albumArt.src = tracks[index].art;
-
+      if (tracks[index].art) {
+        albumArt.src = tracks[index].art;
+        albumArt.style.display = "block";
+      } else {
+        albumArt.style.display = "none";
+      }
       audio.play();
       playBtn.textContent = "⏸";
-      player.classList.add("playing");
-
       trackPlay(tracks[index].title);
     }
 
-
     function togglePlay() {
       if (!audio.src) return;
-
       if (audio.paused) {
         audio.play();
         playBtn.textContent = "⏸";
-        player.classList.add("playing");
       } else {
         audio.pause();
         playBtn.textContent = "▶";
-        player.classList.remove("playing");
       }
     }
-
 
     function prevTrack() {
       currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
@@ -174,7 +163,6 @@
     audio.addEventListener("timeupdate", () => {
       const percent = (audio.currentTime / audio.duration) * 100;
       progress.value = percent || 0;
-
       currentTimeEl.textContent = formatTime(audio.currentTime);
       durationEl.textContent = formatTime(audio.duration);
     });
@@ -183,11 +171,7 @@
       audio.currentTime = (progress.value / 100) * audio.duration;
     });
 
-    audio.addEventListener("ended", () => {
-      player.classList.remove("playing");
-      nextTrack();
-    });
-
+    audio.addEventListener("ended", () => nextTrack());
 
     function formatTime(time) {
       if (!time) return "0:00";
@@ -195,14 +179,6 @@
       const seconds = Math.floor(time % 60).toString().padStart(2, "0");
       return `${minutes}:${seconds}`;
     }
-  </script>
-
-  <!-- Analytics -->
-  <script>
-    const page = location.pathname;
-    const views = JSON.parse(localStorage.getItem("views") || "{}");
-    views[page] = (views[page] || 0) + 1;
-    localStorage.setItem("views", JSON.stringify(views));
 
     function trackPlay(track) {
       const plays = JSON.parse(localStorage.getItem("plays") || "{}");
@@ -210,7 +186,6 @@
       localStorage.setItem("plays", JSON.stringify(plays));
     }
   </script>
-
 </body>
 
 </html>

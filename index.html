@@ -1,72 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ben Boyette</title>
+  <title>Ben Boyette | Mechanical Engineer</title>
+  <meta name="description"
+    content="Personal website of Ben Boyette, a mechanical engineering student sharing projects, notes, and interests." />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="assets/js/main.js" defer></script>
 </head>
-<script>
-fetch("assets/includes/navbar-professional.html")
-  .then(response => response.text())
-  .then(data => {
-    document.getElementById("navbar").innerHTML = data;
-  });
-
-fetch("assets/includes/darkmode.html")
-  .then(response => response.text())
-  .then(data => {
-    document.body.insertAdjacentHTML('afterbegin', data);
-  });
-</script>
 
 <body>
+  <div id="navbar"></div>
 
-<div id="navbar"></div>
+  <main class="container">
+    <section class="intro">
+      <h1>Ben Boyette</h1>
+      <p>
+        Mechanical engineering student passionate about building, learning, and sharing focused thoughts on technology
+        and life.
+      </p>
+    </section>
 
+    <section class="section">
+      <h2>Professional</h2>
 
-<main class="container">
+      <div class="page-preview">
+        <h3><a href="professional/about.html">About</a></h3>
+        <p>My background, current engineering focus, and personal philosophy.</p>
+      </div>
 
-  <section class="intro">
-    <h1>Welcome</h1>
-    <p>
-      This site is organized into focused sections. Each page covers a specific area of work, interests, or projects.
-    </p>
-  </section>
+      <div class="page-preview">
+        <h3><a href="professional/engineering.html">Engineering</a></h3>
+        <p>A collection of mechanical projects, technical builds, and engineering notes.</p>
+      </div>
 
-  <section class="section">
-    <h2>Explore</h2>
+      <div class="page-preview">
+        <h3><a href="professional/calculator.html">Tools & Calculators</a></h3>
+        <p>Interactive utilities and custom-built engineering tools.</p>
+      </div>
 
-    <div class="page-preview">
-      <h3><a href="professional/about.html">About</a></h3>
-      <p>Background information, current focus, and general updates.</p>
-    </div>
+      <div class="page-preview">
+        <h3><a href="professional/notes.html">Notes & Ideas</a></h3>
+        <p>Daily learnings, written thoughts, and documentation of my growth.</p>
+      </div>
+    </section>
 
-    <div class="page-preview">
-      <h3><a href="professional/engineering.html">Engineering</a></h3>
-      <p>Projects, notes, builds, and mechanical engineering work.</p>
-    </div>
+    <section class="section">
+      <h2>Interests</h2>
+      <div class="page-preview" style="background: var(--accent-soft); border-left-color: var(--accent);">
+        <h3><a href="personal/sports.html">Life & Interests</a></h3>
+        <p>Exploring the personal side: sports, physical training, and music.</p>
+      </div>
+    </section>
 
-    <div class="page-preview">
-      <h3><a href="professional/calculator.html">Calculator</a></h3>
-      <p>Custom-built tools and interactive utilities.</p>
-    </div>
-
-    <div class="page-preview">
-      <h3><a href="professional/notes.html">Notes</a></h3>
-      <p>Ideas, things I'm learning, and written thoughts.</p>
-    </div>
-
-  </section>
-
-</main>
-
-<script>
-  const page = location.pathname;
-  const views = JSON.parse(localStorage.getItem("views") || "{}");
-  views[page] = (views[page] || 0) + 1;
-  localStorage.setItem("views", JSON.stringify(views));
-</script>
-
+    <footer class="easter-egg">
+      <p>Built with intentionality. &copy; 2026 Ben Boyette</p>
+    </footer>
+  </main>
 </body>
+
 </html>
