@@ -5,22 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smart Workout Plan Builder | Ben Boyette</title>
+  <meta name="description" content="Build a personalized training plan with smart workout generation and PDF export." />
+  <meta name="theme-color" content="#2563eb" />
+  <meta property="og:title" content="Workout Plan Builder | Ben Boyette" />
+  <meta property="og:description" content="Build a personalized workout plan and export to PDF." />
+  <meta property="og:type" content="website" />
+  <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <script>
-    fetch("../assets/includes/navbar-personal.html")
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById("navbar").innerHTML = data;
-      });
-
-    fetch("../assets/includes/darkmode.html")
-      .then(response => response.text())
-      .then(data => {
-        document.body.insertAdjacentHTML('afterbegin', data);
-      });
-  </script>
+  <script src="../assets/js/main.js" defer></script>
+  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
   <style>
     .wizard-container {
       max-width: 700px;
@@ -43,18 +37,18 @@
     }
 
     .progress-bar {
-      background: var(--border-light);
+      background: var(--card-border);
       height: 8px;
-      border-radius: 4px;
+      border-radius: 8px;
       margin: 2rem 0;
       overflow: hidden;
     }
 
     .progress-fill {
-      background: var(--accent-color);
+      background: var(--accent);
       height: 100%;
       width: 0%;
-      transition: width 0.3s ease;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .step {
@@ -80,16 +74,17 @@
 
     .question {
       background: var(--card-bg);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
       padding: 2rem;
       margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
     }
 
     .question h2 {
       margin-top: 0;
       margin-bottom: 0.5rem;
-      color: var(--accent-color);
+      color: var(--accent);
     }
 
     .question-subtitle {
@@ -105,21 +100,22 @@
 
     .option {
       background: var(--bg-color);
-      border: 2px solid var(--border-light);
-      border-radius: 8px;
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
       padding: 1.25rem;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .option:hover {
-      border-color: var(--accent-color);
-      transform: translateY(-2px);
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
 
     .option.selected {
-      border-color: var(--accent-color);
-      background: var(--accent-color);
+      border-color: var(--accent);
+      background: var(--accent);
       color: white;
     }
 
@@ -148,21 +144,21 @@
     .nav-btn {
       padding: 0.75rem 2rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .nav-btn.back {
       background: var(--bg-color);
       color: var(--text-main);
-      border: 1px solid var(--border-light);
+      border: 1px solid var(--card-border);
     }
 
     .nav-btn.next {
-      background: var(--accent-color);
+      background: var(--accent);
       color: white;
     }
 
@@ -173,14 +169,16 @@
 
     .nav-btn:hover:not(:disabled) {
       transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .plan-preview {
       background: var(--card-bg);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
       padding: 2rem;
       margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
     }
 
     .plan-summary {
@@ -192,9 +190,10 @@
     .summary-item {
       display: flex;
       justify-content: space-between;
-      padding: 0.75rem;
+      padding: 0.75rem 1rem;
       background: var(--bg-color);
-      border-radius: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
     }
 
     .summary-label {
@@ -208,21 +207,22 @@
 
     .week-preview {
       background: var(--bg-color);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 1.5rem;
       margin-bottom: 1rem;
+      border: 1px solid var(--card-border);
     }
 
     .week-preview h4 {
       margin: 0 0 1rem 0;
-      color: var(--accent-color);
+      color: var(--accent);
     }
 
     .day-item {
       display: flex;
       justify-content: space-between;
       padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--card-border);
     }
 
     .day-item:last-child {
@@ -241,61 +241,73 @@
     .generate-btn {
       width: 100%;
       padding: 1.25rem;
-      background: #16a34a;
+      background: var(--accent);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 1.2rem;
       font-weight: 600;
       cursor: pointer;
       margin-top: 1rem;
+      transition: all 0.25s ease;
+      box-shadow: var(--shadow-md);
     }
 
     .generate-btn:hover {
-      background: #15803d;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
 
     .input-field {
       width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border-light);
-      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
       font-size: 1rem;
       background: var(--bg-color);
       color: var(--text-main);
       margin-top: 0.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--accent);
     }
 
     .checkbox-option {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 0.75rem;
+      padding: 0.75rem 1rem;
       background: var(--bg-color);
-      border: 2px solid var(--border-light);
-      border-radius: 6px;
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .checkbox-option:hover {
-      border-color: var(--accent-color);
+      border-color: var(--accent);
+      transform: translateY(-2px);
     }
 
     .checkbox-option.selected {
-      border-color: var(--accent-color);
-      background: rgba(37, 99, 235, 0.1);
+      border-color: var(--accent);
+      background: var(--accent-soft);
     }
 
     .checkbox-option input[type="checkbox"] {
       width: 20px;
       height: 20px;
       cursor: pointer;
+      accent-color: var(--accent);
     }
   </style>
 </head>
 
 <body>
+  <div id="navbar"></div>
 
   <div class="wizard-container">
 
@@ -481,7 +493,7 @@
     <!-- STEP 8: Plan Review & Generate -->
     <div class="step" data-step="8">
       <div class="plan-preview">
-        <h2 style="margin-top: 0; color: var(--accent-color);">Your Custom Training Plan</h2>
+        <h2 style="margin-top: 0; color: var(--accent);">Your Custom Training Plan</h2>
 
         <div class="plan-summary" id="plan-summary">
           <!-- Dynamic summary -->

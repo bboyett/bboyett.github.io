@@ -5,8 +5,154 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Analytics Dashboard | Ben Boyette</title>
+  <meta name="description" content="Local analytics dashboard with activity heatmap and performance insights." />
+  <meta name="theme-color" content="#2563eb" />
+  <meta property="og:title" content="Analytics | Ben Boyette" />
+  <meta property="og:description" content="Analytics dashboard and activity heatmap." />
+  <meta property="og:type" content="website" />
+  <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <script src="../assets/js/main.js" defer></script>
+  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
+  <style>
+    .heatmap-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+
+    .heatmap-grid {
+      display: inline-grid;
+      grid-template-rows: repeat(7, 14px);
+      grid-auto-flow: column;
+      gap: 3px;
+    }
+
+    .heatmap-cell {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      background: var(--accent-soft);
+      cursor: default;
+      position: relative;
+      transition: transform 0.15s ease;
+    }
+
+    .heatmap-cell:hover {
+      transform: scale(1.6);
+      z-index: 1;
+    }
+
+    .heatmap-cell.l1 {
+      background: rgba(37, 99, 235, 0.25);
+    }
+
+    .heatmap-cell.l2 {
+      background: rgba(37, 99, 235, 0.45);
+    }
+
+    .heatmap-cell.l3 {
+      background: rgba(37, 99, 235, 0.65);
+    }
+
+    .heatmap-cell.l4 {
+      background: var(--accent);
+    }
+
+    [data-theme="dark"] .heatmap-cell.l1 {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    [data-theme="dark"] .heatmap-cell.l2 {
+      background: rgba(56, 189, 248, 0.4);
+    }
+
+    [data-theme="dark"] .heatmap-cell.l3 {
+      background: rgba(56, 189, 248, 0.6);
+    }
+
+    [data-theme="dark"] .heatmap-cell.l4 {
+      background: var(--accent);
+    }
+
+    .heatmap-tooltip {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text-main);
+      color: var(--bg-color);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .heatmap-cell:hover .heatmap-tooltip {
+      opacity: 1;
+    }
+
+    .heatmap-legend {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .heatmap-legend-cell {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .detail-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-name {
+      font-weight: 500;
+    }
+
+    .detail-count {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -15,10 +161,10 @@
   <main class="container">
     <section class="intro">
       <h1>Analytics Dashboard</h1>
-      <p>Local performance insights and interaction metrics captured during your session.</p>
+      <p>Local performance insights and interaction metrics captured across sessions.</p>
     </section>
 
-    <div class="stats-grid" style="margin-bottom: 3rem;">
+    <div class="stats-grid" style="margin-bottom: 2rem;">
       <div class="stat-item">
         <span class="stat-value" id="totalViews">0</span>
         <span class="stat-label">Total Page Views</span>
@@ -27,16 +173,37 @@
         <span class="stat-value" id="totalPlays">0</span>
         <span class="stat-label">Total Track Plays</span>
       </div>
+      <div class="stat-item">
+        <span class="stat-value" id="activeDays">0</span>
+        <span class="stat-label">Active Days</span>
+      </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-      <div class="section" style="padding: 1.5rem;">
-        <h3>Detailed Page Views</h3>
-        <div id="page-views-list" style="margin-top: 1rem;"></div>
+    <section class="section" style="padding: 0; background: none; border: none; box-shadow: none;">
+      <h2>Activity Heatmap</h2>
+      <p style="font-size: 0.85rem; margin-bottom: 1rem;">Your browsing intensity over the past year.</p>
+      <div class="heatmap-container">
+        <div class="heatmap-grid" id="heatmapGrid"></div>
+        <div class="heatmap-legend">
+          <span>Less</span>
+          <div class="heatmap-legend-cell" style="background: var(--accent-soft);"></div>
+          <div class="heatmap-legend-cell l1" style="background: rgba(37, 99, 235, 0.25);"></div>
+          <div class="heatmap-legend-cell l2" style="background: rgba(37, 99, 235, 0.45);"></div>
+          <div class="heatmap-legend-cell l3" style="background: rgba(37, 99, 235, 0.65);"></div>
+          <div class="heatmap-legend-cell l4" style="background: var(--accent);"></div>
+          <span>More</span>
+        </div>
       </div>
-      <div class="section" style="padding: 1.5rem;">
-        <h3>Audio Playback History</h3>
-        <div id="audio-plays-list" style="margin-top: 1rem;"></div>
+    </section>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <h3>Page Views</h3>
+        <div id="page-views-list"></div>
+      </div>
+      <div class="detail-card">
+        <h3>Audio History</h3>
+        <div id="audio-plays-list"></div>
       </div>
     </div>
   </main>
@@ -45,31 +212,75 @@
     document.addEventListener('DOMContentLoaded', () => {
       const pageViews = JSON.parse(localStorage.getItem("views") || "{}");
       const audioPlays = JSON.parse(localStorage.getItem("plays") || "{}");
+      const dailyViews = JSON.parse(localStorage.getItem("dailyViews") || "{}");
 
-      const pageList = document.getElementById("page-views-list");
-      const audioList = document.getElementById("audio-plays-list");
-
-      let totalV = 0;
-      let totalP = 0;
-
-      Object.entries(pageViews).forEach(([page, count]) => {
-        totalV += count;
-        const div = document.createElement("div");
-        div.style.cssText = "display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--card-border);";
-        div.innerHTML = `<span style="font-weight: 500;">${page.split('/').pop() || 'Home'}</span><span style="color: var(--accent); font-weight: 600;">${count}</span>`;
-        pageList.appendChild(div);
-      });
-
-      Object.entries(audioPlays).forEach(([track, count]) => {
-        totalP += count;
-        const div = document.createElement("div");
-        div.style.cssText = "display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--card-border);";
-        div.innerHTML = `<span style="font-weight: 500;">${track}</span><span style="color: var(--accent); font-weight: 600;">${count}</span>`;
-        audioList.appendChild(div);
-      });
-
+      // Totals
+      let totalV = 0, totalP = 0;
+      Object.values(pageViews).forEach(c => totalV += c);
+      Object.values(audioPlays).forEach(c => totalP += c);
       document.getElementById('totalViews').textContent = totalV;
       document.getElementById('totalPlays').textContent = totalP;
+      document.getElementById('activeDays').textContent = Object.keys(dailyViews).length;
+
+      // Page views list
+      const pageList = document.getElementById("page-views-list");
+      Object.entries(pageViews)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([page, count]) => {
+          const div = document.createElement("div");
+          div.className = "detail-row";
+          div.innerHTML = `<span class="detail-name">${page.split('/').pop() || 'Home'}</span><span class="detail-count">${count}</span>`;
+          pageList.appendChild(div);
+        });
+
+      // Audio plays list
+      const audioList = document.getElementById("audio-plays-list");
+      if (Object.keys(audioPlays).length === 0) {
+        audioList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">No audio plays recorded yet.</p>';
+      }
+      Object.entries(audioPlays)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([track, count]) => {
+          const div = document.createElement("div");
+          div.className = "detail-row";
+          div.innerHTML = `<span class="detail-name">${track}</span><span class="detail-count">${count}</span>`;
+          audioList.appendChild(div);
+        });
+
+      // Build heatmap (52 weeks × 7 days = 364 cells)
+      const grid = document.getElementById('heatmapGrid');
+      const today = new Date();
+      const startDate = new Date(today);
+      startDate.setDate(startDate.getDate() - 363); // go back ~1 year
+      // Align to Sunday
+      startDate.setDate(startDate.getDate() - startDate.getDay());
+
+      const maxVal = Math.max(1, ...Object.values(dailyViews));
+
+      for (let i = 0; i < 52 * 7; i++) {
+        const d = new Date(startDate);
+        d.setDate(d.getDate() + i);
+        const key = d.toISOString().slice(0, 10);
+        const count = dailyViews[key] || 0;
+
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+
+        if (count > 0) {
+          const pct = count / maxVal;
+          if (pct > 0.75) cell.classList.add('l4');
+          else if (pct > 0.5) cell.classList.add('l3');
+          else if (pct > 0.25) cell.classList.add('l2');
+          else cell.classList.add('l1');
+        }
+
+        const tooltip = document.createElement('div');
+        tooltip.className = 'heatmap-tooltip';
+        tooltip.textContent = `${key}: ${count} visit${count !== 1 ? 's' : ''}`;
+        cell.appendChild(tooltip);
+
+        grid.appendChild(cell);
+      }
     });
   </script>
 </body>

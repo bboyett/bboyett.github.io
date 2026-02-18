@@ -5,8 +5,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Training | Ben Boyette</title>
+  <meta name="description"
+    content="Fitness and training performance tracking with weekly mileage and workout charts." />
+  <meta name="theme-color" content="#2563eb" />
+  <meta property="og:title" content="Training | Ben Boyette" />
+  <meta property="og:description" content="Training and performance tracking with charts." />
+  <meta property="og:type" content="website" />
+  <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../assets/js/main.js" defer></script>
+  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
   <style>
     .training-table-container {
       overflow-x: auto;
@@ -47,6 +56,34 @@
       background: var(--accent-soft);
       color: var(--text-main);
     }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+    }
+
+    .chart-card h3 {
+      margin-bottom: 1rem;
+    }
+
+    .chart-card canvas {
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -70,16 +107,27 @@
           <p>Currently focused on a hybrid approach: building explosive strength with a chest focus while maintaining
             cardiovascular endurance through consistent running.</p>
           <p>Consistency is the core metric. Since October, the goal is 3 runs per week, preparing for challenges like
-            the Krispy Kreme challenge.</p>
+            the Krispy Kreme Challenge.</p>
         </div>
       </div>
     </section>
 
+    <!-- Charts -->
+    <div class="chart-grid" id="chartSection" style="display: none;">
+      <div class="chart-card">
+        <h3>Weekly Mileage Trend</h3>
+        <canvas id="mileageChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Workout Volume Per Week</h3>
+        <canvas id="volumeChart"></canvas>
+      </div>
+    </div>
+
     <section class="section">
       <h2>Weekly Training Log</h2>
       <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Data synced from weekly performance
-        logs. Visualizing endurance trends and volume progress.</p>
-
+        logs.</p>
       <div id="weekly-data" class="training-table-container">
         <p>Initializing training datasets...</p>
       </div>
@@ -98,23 +146,96 @@
           return;
         }
 
+        // Build table
         const headers = Object.keys(data[0]);
         let table = "<table><thead><tr>";
         headers.forEach(h => table += `<th>${h}</th>`);
         table += "</tr></thead><tbody>";
-
         data.forEach(row => {
           table += "<tr>";
           headers.forEach(h => table += `<td>${row[h] !== null ? row[h] : ""}</td>`);
           table += "</tr>";
         });
-
         table += "</tbody></table>";
         container.innerHTML = table;
+
+        // Build charts from data
+        buildCharts(data, headers);
       })
       .catch(() => {
         document.getElementById("weekly-data").innerHTML = "<p>Unable to load local training data.</p>";
       });
+
+    function buildCharts(data, headers) {
+      // Attempt to find relevant columns for charting
+      // Look for columns that might contain week labels, miles, or workout counts
+      const weekCol = headers.find(h => /week|date/i.test(h)) || headers[0];
+      const mileCol = headers.find(h => /mile|distance|run/i.test(h));
+      const volumeCol = headers.find(h => /volume|workout|session|total/i.test(h));
+
+      if (!mileCol && !volumeCol) return; // No chartable data
+
+      document.getElementById('chartSection').style.display = 'grid';
+
+      const labels = data.map(r => r[weekCol] || '');
+      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2563eb';
+
+      // Mileage chart
+      if (mileCol) {
+        const mileData = data.map(r => parseFloat(r[mileCol]) || 0);
+        new Chart(document.getElementById('mileageChart'), {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Miles',
+              data: mileData,
+              borderColor: accentColor,
+              backgroundColor: accentColor + '20',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 4,
+              pointHoverRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { color: 'rgba(0,0,0,0.05)' } },
+              y: { grid: { color: 'rgba(0,0,0,0.05)' }, beginAtZero: true }
+            }
+          }
+        });
+      }
+
+      // Volume chart
+      if (volumeCol) {
+        const volData = data.map(r => parseFloat(r[volumeCol]) || 0);
+        new Chart(document.getElementById('volumeChart'), {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Volume',
+              data: volData,
+              backgroundColor: accentColor + '40',
+              borderColor: accentColor,
+              borderWidth: 1,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false } },
+              y: { grid: { color: 'rgba(0,0,0,0.05)' }, beginAtZero: true }
+            }
+          }
+        });
+      }
+    }
   </script>
 </body>
 

@@ -5,8 +5,192 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Engineering | Ben Boyette</title>
+  <meta name="description"
+    content="Engineering projects and portfolio — mechanical design, software, and rapid prototyping." />
+  <meta name="theme-color" content="#2563eb" />
+  <meta property="og:title" content="Engineering | Ben Boyette" />
+  <meta property="og:description" content="Engineering projects and portfolio by Ben Boyette." />
+  <meta property="og:type" content="website" />
+  <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <script src="../assets/js/main.js" defer></script>
+  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }
+
+    .project-tag {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-card h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card p {
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.visible .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--text-main);
+    }
+
+    .modal-tag {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 0.75rem;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .tech-badge {
+      padding: 0.25rem 0.75rem;
+      background: var(--bg-color);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
 
 <body>
@@ -14,21 +198,17 @@
 
   <main class="container">
     <section class="intro">
-      <h1>Engineering & Construction</h1>
-      <p>Exploring the intersection of mechanical design, aerospace innovation, and digital craftsmanship.</p>
+      <h1>Engineering & Projects</h1>
+      <p>A portfolio of mechanical design, software builds, and rapid prototyping explorations.</p>
     </section>
 
     <section class="section">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; margin-bottom: 2rem;">
         <div>
           <h2>Academic Focus</h2>
-          <p>
-            Currently pursuing Mechanical Engineering at NC State. My focus lies in structural analysis, fluid dynamics,
-            and the integration of smart systems in mechanical design.
-          </p>
-          <p>
-            This space serves as a portfolio for projects, ranging from physical prototypes to computational models.
-          </p>
+          <p>Currently pursuing Mechanical Engineering at NC State. My focus lies in structural analysis, fluid
+            dynamics, and integrating smart systems in mechanical design.</p>
+          <p>This space serves as a portfolio for projects from physical prototypes to computational models.</p>
         </div>
         <figure class="figure">
           <img src="images/MAEdept_engineering.png" alt="Mechanical Engineering Department" class="section-img"
@@ -39,23 +219,130 @@
     </section>
 
     <section class="section">
-      <h2>Project Roadmap</h2>
-      <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="stat-item">
-          <span class="stat-value">01</span>
-          <span class="stat-label">Structural Analysis</span>
+      <h2>Project Gallery</h2>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterProjects('all', this)">All</button>
+        <button class="filter-btn" onclick="filterProjects('mechanical', this)">Mechanical</button>
+        <button class="filter-btn" onclick="filterProjects('software', this)">Software</button>
+        <button class="filter-btn" onclick="filterProjects('prototyping', this)">Prototyping</button>
+      </div>
+
+      <div class="project-grid" id="projectGrid">
+        <div class="project-card" data-category="mechanical" onclick="openModal('stress')">
+          <span class="project-tag">Mechanical</span>
+          <h3>Stress Analysis Framework</h3>
+          <p>FEA-based stress analysis tool for thin-walled pressure vessels using ANSYS workflows.</p>
         </div>
-        <div class="stat-item">
-          <span class="stat-value">02</span>
-          <span class="stat-label">Rapid Prototyping</span>
+        <div class="project-card" data-category="software" onclick="openModal('website')">
+          <span class="project-tag">Software</span>
+          <h3>Personal Website</h3>
+          <p>This site — a custom-built static platform with glassmorphism, PWA support, and interactive tools.</p>
         </div>
-        <div class="stat-item">
-          <span class="stat-value">03</span>
-          <span class="stat-label">Control Systems</span>
+        <div class="project-card" data-category="prototyping" onclick="openModal('drone')">
+          <span class="project-tag">Prototyping</span>
+          <h3>Drone Frame Design</h3>
+          <p>Lightweight 3D-printed quadcopter frame optimized for structural integrity and weight reduction.</p>
+        </div>
+        <div class="project-card" data-category="software" onclick="openModal('comparer')">
+          <span class="project-tag">Software</span>
+          <h3>Code Comparer Tool</h3>
+          <p>Professional file comparison utility with syntax highlighting, scroll lock, and diff navigation.</p>
+        </div>
+        <div class="project-card" data-category="mechanical" onclick="openModal('cad')">
+          <span class="project-tag">Mechanical</span>
+          <h3>CAD Assembly Library</h3>
+          <p>Parametric SolidWorks models for common mechanical components and fastener assemblies.</p>
+        </div>
+        <div class="project-card" data-category="prototyping" onclick="openModal('sensor')">
+          <span class="project-tag">Prototyping</span>
+          <h3>Sensor Integration Pod</h3>
+          <p>Arduino-based environmental sensor housing with real-time data logging and dashboard.</p>
         </div>
       </div>
     </section>
   </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-content" id="modalContent">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const projects = {
+      stress: {
+        tag: 'Mechanical',
+        title: 'Stress Analysis Framework',
+        desc: 'A finite element analysis workflow for evaluating stress distributions in thin-walled pressure vessels. This project applies classical mechanics principles alongside modern simulation tools to predict failure modes and optimize wall thickness.',
+        tech: ['ANSYS', 'MATLAB', 'SolidWorks', 'FEA']
+      },
+      website: {
+        tag: 'Software',
+        title: 'Personal Website',
+        desc: 'A fully custom static website built from scratch with HTML, CSS, and vanilla JavaScript. Features include a glassmorphism design system, dark mode, a command palette, PWA offline support, and multiple interactive tools including a calculator and code comparer.',
+        tech: ['HTML5', 'CSS3', 'JavaScript', 'Chart.js', 'Prism.js']
+      },
+      drone: {
+        tag: 'Prototyping',
+        title: 'Drone Frame Design',
+        desc: 'Designed and 3D-printed a lightweight quadcopter frame using topology optimization. The frame reduced weight by 30% compared to conventional designs while maintaining structural rigidity under flight loads.',
+        tech: ['SolidWorks', '3D Printing', 'PLA/PETG', 'Topology Optimization']
+      },
+      comparer: {
+        tag: 'Software',
+        title: 'Code Comparer Tool',
+        desc: 'A professional-grade file comparison utility built into this website. Features auto-detected syntax highlighting via Prism.js, synchronized scroll locking, and jump-to-change navigation for efficient code review.',
+        tech: ['JavaScript', 'Prism.js', 'diff-match-patch', 'CSS Grid']
+      },
+      cad: {
+        tag: 'Mechanical',
+        title: 'CAD Assembly Library',
+        desc: 'A parametric library of reusable SolidWorks models for mechanical components including bolts, brackets, and bearing housings. Designed for rapid iteration and integration into larger assembly projects.',
+        tech: ['SolidWorks', 'Parametric Modeling', 'GD&T']
+      },
+      sensor: {
+        tag: 'Prototyping',
+        title: 'Sensor Integration Pod',
+        desc: 'An Arduino-based environmental monitoring pod with temperature, humidity, and pressure sensors. Includes a custom 3D-printed housing and a web dashboard for real-time data visualization.',
+        tech: ['Arduino', 'C++', '3D Printing', 'Sensors', 'Web Dashboard']
+      }
+    };
+
+    function filterProjects(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.style.display = (cat === 'all' || card.dataset.category === cat) ? 'block' : 'none';
+      });
+    }
+
+    function openModal(id) {
+      const p = projects[id];
+      if (!p) return;
+      document.getElementById('modalBody').innerHTML = `
+        <span class="modal-tag">${p.tag}</span>
+        <h2>${p.title}</h2>
+        <p>${p.desc}</p>
+        <div class="tech-list">${p.tech.map(t => `<span class="tech-badge">${t}</span>`).join('')}</div>
+      `;
+      document.getElementById('modalOverlay').classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+      if (e && e.target !== document.getElementById('modalOverlay') && e.target.className !== 'modal-close') return;
+      document.getElementById('modalOverlay').classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
 </body>
 
 </html>

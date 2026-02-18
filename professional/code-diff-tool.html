@@ -5,9 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Comparer | Ben Boyette</title>
+    <meta name="description"
+        content="Professional file comparison utility with syntax highlighting and diff navigation." />
+    <meta name="theme-color" content="#2563eb" />
+    <meta property="og:title" content="Code Comparer | Ben Boyette" />
+    <meta property="og:description" content="Compare code files with syntax highlighting and diff navigation." />
+    <meta property="og:type" content="website" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="../assets/js/main.js" defer></script>
+    <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
     <style>
         .diff-container {
             display: grid;
@@ -24,6 +37,8 @@
         .diff-panel {
             background: var(--card-bg);
             overflow-x: auto;
+            overflow-y: auto;
+            max-height: 600px;
         }
 
         .diff-line {
@@ -48,6 +63,17 @@
             flex: 1;
         }
 
+        /* Override Prism background to inherit our diff styling */
+        .line-content code[class*="language-"],
+        .line-content pre[class*="language-"] {
+            background: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            text-shadow: none !important;
+            font-size: inherit;
+            font-family: inherit;
+        }
+
         .diff-added {
             background-color: rgba(52, 211, 153, 0.15);
         }
@@ -59,6 +85,11 @@
         .diff-empty {
             background-color: var(--bg-color);
             opacity: 0.3;
+        }
+
+        /* Change marker for diff navigation */
+        .diff-change-marker {
+            border-left: 3px solid var(--accent);
         }
 
         .upload-grid {
@@ -134,6 +165,96 @@
             font-weight: 600;
         }
 
+        /* Toolbar: Lock Scroll + Nav */
+        .diff-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .diff-toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            background: var(--card-border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(16px);
+        }
+
+        .diff-nav-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.4rem 0.75rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .diff-nav-btn:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .diff-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .change-counter {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
 
             .upload-grid,
@@ -184,11 +305,27 @@
 
         <div id="results" style="display: none;">
             <section class="section" style="padding: 0; background: none; border: none; box-shadow: none;">
-                <div
-                    style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 0 1rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
-                    <span>Original File</span>
-                    <span>Modified File</span>
+                <!-- Toolbar -->
+                <div class="diff-toolbar">
+                    <div class="diff-toolbar-group">
+                        <div
+                            style="display: flex; justify-content: space-between; padding: 0; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                            <span>Original → Modified</span>
+                        </div>
+                    </div>
+                    <div class="diff-toolbar-group">
+                        <label class="toggle-label">
+                            <div id="scrollLockToggle" class="toggle-switch" onclick="toggleScrollLock()"></div>
+                            Lock Scroll
+                        </label>
+                        <span class="change-counter" id="changeCounter">0 / 0</span>
+                        <button class="diff-nav-btn" onclick="navChange(-1)" id="prevChangeBtn" disabled>◀
+                            Prev</button>
+                        <button class="diff-nav-btn" onclick="navChange(1)" id="nextChangeBtn" disabled>Next
+                            ▶</button>
+                    </div>
                 </div>
+
                 <div class="diff-container" style="box-shadow: var(--shadow-lg);">
                     <div class="diff-panel" id="panel-old"></div>
                     <div class="diff-panel" id="panel-new"></div>
@@ -215,7 +352,31 @@
     <script>
         let oldContent = "";
         let newContent = "";
+        let oldFileName = "";
+        let newFileName = "";
+        let scrollLocked = false;
+        let changePositions = []; // Array of {oldEl, newEl} for diff navigation
+        let currentChangeIdx = -1;
 
+        // ---------- File extension → Prism language mapping ----------
+        const extToLang = {
+            'js': 'javascript', 'jsx': 'jsx', 'ts': 'typescript', 'tsx': 'tsx',
+            'py': 'python', 'rb': 'ruby', 'java': 'java', 'c': 'c', 'cpp': 'cpp',
+            'cs': 'csharp', 'go': 'go', 'rs': 'rust', 'swift': 'swift',
+            'html': 'html', 'htm': 'html', 'css': 'css', 'scss': 'scss',
+            'json': 'json', 'xml': 'xml', 'yaml': 'yaml', 'yml': 'yaml',
+            'md': 'markdown', 'sql': 'sql', 'sh': 'bash', 'bash': 'bash',
+            'php': 'php', 'r': 'r', 'dart': 'dart', 'kt': 'kotlin',
+            'lua': 'lua', 'toml': 'toml', 'dockerfile': 'docker',
+        };
+
+        function detectLanguage(filename) {
+            if (!filename) return '';
+            const ext = filename.split('.').pop().toLowerCase();
+            return extToLang[ext] || '';
+        }
+
+        // ---------- File handling ----------
         const handleFile = (id) => {
             document.getElementById(id).addEventListener('change', (e) => {
                 const file = e.target.files[0];
@@ -224,6 +385,9 @@
                 const nameEl = document.getElementById(`name-${id.split('-')[1]}`);
                 nameEl.textContent = file.name;
                 nameEl.style.display = "inline-block";
+
+                if (id === 'file-old') oldFileName = file.name;
+                else newFileName = file.name;
 
                 const reader = new FileReader();
                 reader.onload = (event) => {
@@ -237,6 +401,49 @@
         handleFile('file-old');
         handleFile('file-new');
 
+        // ---------- Scroll locking ----------
+        function toggleScrollLock() {
+            scrollLocked = !scrollLocked;
+            document.getElementById('scrollLockToggle').classList.toggle('active', scrollLocked);
+
+            const panelOld = document.getElementById('panel-old');
+            const panelNew = document.getElementById('panel-new');
+
+            if (scrollLocked) {
+                panelOld._scrollHandler = () => { panelNew.scrollTop = panelOld.scrollTop; panelNew.scrollLeft = panelOld.scrollLeft; };
+                panelNew._scrollHandler = () => { panelOld.scrollTop = panelNew.scrollTop; panelOld.scrollLeft = panelNew.scrollLeft; };
+                panelOld.addEventListener('scroll', panelOld._scrollHandler);
+                panelNew.addEventListener('scroll', panelNew._scrollHandler);
+            } else {
+                panelOld.removeEventListener('scroll', panelOld._scrollHandler);
+                panelNew.removeEventListener('scroll', panelNew._scrollHandler);
+            }
+        }
+
+        // ---------- Diff navigation ----------
+        function navChange(direction) {
+            if (changePositions.length === 0) return;
+            currentChangeIdx = Math.max(0, Math.min(changePositions.length - 1, currentChangeIdx + direction));
+            updateChangeCounter();
+
+            const pos = changePositions[currentChangeIdx];
+            const target = pos.newEl || pos.oldEl;
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Brief highlight
+                target.style.outline = '2px solid var(--accent)';
+                setTimeout(() => target.style.outline = '', 1200);
+            }
+        }
+
+        function updateChangeCounter() {
+            document.getElementById('changeCounter').textContent =
+                changePositions.length > 0 ? `${currentChangeIdx + 1} / ${changePositions.length}` : '0 / 0';
+            document.getElementById('prevChangeBtn').disabled = currentChangeIdx <= 0;
+            document.getElementById('nextChangeBtn').disabled = currentChangeIdx >= changePositions.length - 1;
+        }
+
+        // ---------- Core diff logic ----------
         function performDiff() {
             if (!oldContent && !newContent) return alert("Please upload files to compare.");
 
@@ -249,10 +456,14 @@
             panelOld.innerHTML = '';
             panelNew.innerHTML = '';
 
+            const lang = detectLanguage(newFileName) || detectLanguage(oldFileName);
+
             let lineOld = 1;
             let lineNew = 1;
             let adds = 0;
             let dels = 0;
+            changePositions = [];
+            currentChangeIdx = -1;
 
             diffs.forEach(([type, text]) => {
                 const lines = text.split('\n');
@@ -263,19 +474,21 @@
 
                     if (type === 0) { // Unchanged
                         if (line || !isLast) {
-                            addDiffLine(panelOld, lineOld++, line);
-                            addDiffLine(panelNew, lineNew++, line);
+                            addDiffLine(panelOld, lineOld++, line, '', lang);
+                            addDiffLine(panelNew, lineNew++, line, '', lang);
                         }
                     } else if (type === 1) { // Added
                         if (line || !isLast) {
-                            addDiffLine(panelOld, '', '', 'diff-empty'); // Anchor alignment
-                            addDiffLine(panelNew, lineNew++, line, 'diff-added');
+                            const oldEl = addDiffLine(panelOld, '', '', 'diff-empty', lang);
+                            const newEl = addDiffLine(panelNew, lineNew++, line, 'diff-added diff-change-marker', lang);
+                            changePositions.push({ oldEl, newEl });
                             adds++;
                         }
                     } else if (type === -1) { // Removed
                         if (line || !isLast) {
-                            addDiffLine(panelOld, lineOld++, line, 'diff-removed');
-                            addDiffLine(panelNew, '', '', 'diff-empty'); // Anchor alignment
+                            const oldEl = addDiffLine(panelOld, lineOld++, line, 'diff-removed diff-change-marker', lang);
+                            const newEl = addDiffLine(panelNew, '', '', 'diff-empty', lang);
+                            changePositions.push({ oldEl, newEl });
                             dels++;
                         }
                     }
@@ -290,34 +503,58 @@
             const similarity = totalChars === 0 ? 100 : Math.round((1 - dmp.diff_levenshtein(diffs) / totalChars) * 100);
             document.getElementById('stat-similarity').textContent = Math.max(0, similarity) + "%";
 
+            // Update change navigation
+            if (changePositions.length > 0) currentChangeIdx = 0;
+            updateChangeCounter();
+
             document.getElementById('results').style.display = 'block';
             document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+
+            // Apply Prism highlighting to all code elements
+            if (lang) {
+                requestAnimationFrame(() => Prism.highlightAll());
+            }
         }
 
-        function addDiffLine(panel, num, content, className = '') {
+        function addDiffLine(panel, num, content, className = '', lang = '') {
             const div = document.createElement('div');
             div.className = `diff-line ${className}`;
-            div.innerHTML = `
-                <div class="line-number">${num}</div>
-                <div class="line-content">${escapeHtml(content)}</div>
-            `;
-            panel.appendChild(div);
-        }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+            const lineNumDiv = document.createElement('div');
+            lineNumDiv.className = 'line-number';
+            lineNumDiv.textContent = num;
+
+            const lineContentDiv = document.createElement('div');
+            lineContentDiv.className = 'line-content';
+
+            if (lang && content) {
+                const code = document.createElement('code');
+                code.className = `language-${lang}`;
+                code.textContent = content;
+                lineContentDiv.appendChild(code);
+            } else {
+                lineContentDiv.textContent = content;
+            }
+
+            div.appendChild(lineNumDiv);
+            div.appendChild(lineContentDiv);
+            panel.appendChild(div);
+            return div;
         }
 
         function clearAll() {
             oldContent = "";
             newContent = "";
+            oldFileName = "";
+            newFileName = "";
             document.getElementById('file-old').value = "";
             document.getElementById('file-new').value = "";
             document.getElementById('name-old').style.display = "none";
             document.getElementById('name-new').style.display = "none";
             document.getElementById('results').style.display = 'none';
+            changePositions = [];
+            currentChangeIdx = -1;
+            updateChangeCounter();
         }
     </script>
 </body>
