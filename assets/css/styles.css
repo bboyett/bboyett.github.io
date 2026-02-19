@@ -5,8 +5,8 @@
    ============================= */
 :root {
   /* Light Theme */
-  --bg-color: #f8fafc;
-  --bg-dots: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+  --bg-color: #ffffff;
+  --bg-dots: radial-gradient(circle, #e5e5e5 1px, transparent 1px);
   --card-bg: rgba(255, 255, 255, 0.8);
   --card-border: rgba(226, 232, 240, 0.8);
   --text-main: #0f172a;
@@ -20,12 +20,12 @@
 }
 
 [data-theme="dark"] {
-  --bg-color: #0f172a;
-  --bg-dots: radial-gradient(circle, #1e293b 1px, transparent 1px);
-  --card-bg: rgba(30, 41, 59, 0.7);
-  --card-border: rgba(51, 65, 85, 0.5);
+  --bg-color: #0a0a0a;
+  --bg-dots: radial-gradient(circle, #262626 1px, transparent 1px);
+  --card-bg: rgba(23, 23, 23, 0.7);
+  --card-border: rgba(64, 64, 64, 0.5);
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --text-muted: #a3a3a3;
   --accent: #38bdf8;
   --accent-soft: rgba(56, 189, 248, 0.1);
 }
