@@ -1,0 +1,636 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule Viewer</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
+
+/* HEADER */
+header {
+  background: #1a1a2e; color: white;
+  padding: 10px 18px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 3px solid #4f86c6;
+  min-height: 56px;
+}
+header h1 { font-size: 1.1rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+.hcontrols { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; flex: 1; }
+.hlabel { color: #aac; font-size: 0.75rem; white-space: nowrap; }
+select, input[type=number] {
+  padding: 5px 8px; border-radius: 5px; border: none;
+  font-size: 0.82rem; background: #2d2d4e; color: white; cursor: pointer;
+}
+input[type=number] { width: 72px; }
+.hbtn {
+  padding: 5px 12px; background: #4f86c6; color: white; border: none;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer; border-radius: 5px;
+}
+.hbtn:hover { background: #3a6fa8; }
+.count-badge {
+  background: #4f86c6; border-radius: 10px;
+  padding: 2px 10px; font-size: 0.75rem; white-space: nowrap;
+}
+
+/* LAYOUT */
+.layout { display: flex; height: calc(100vh - 56px); overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 300px; min-width: 220px;
+  display: flex; flex-direction: column;
+  background: white; border-right: 1px solid #ddd;
+  overflow: hidden;
+}
+.schedule-list { flex: 1; overflow-y: auto; }
+.sched-item {
+  padding: 9px 13px; cursor: pointer;
+  border-bottom: 1px solid #f0f0f0; transition: background 0.1s;
+}
+.sched-item:hover { background: #f5f7ff; }
+.sched-item.active { background: #dbeafe; border-left: 3px solid #3b82f6; }
+.sched-rank { font-weight: 700; font-size: 0.95rem; color: #1e40af; }
+.sched-score { font-size: 0.75rem; color: #666; }
+.sched-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+.tag { font-size: 0.62rem; padding: 1px 5px; border-radius: 3px; color: white; font-family: monospace; }
+
+/* FILTER PANEL (chip style, top of sidebar) */
+.filter-panel {
+  background: #f8f9ff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 13px;
+  flex-shrink: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.filter-title {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+  color: #666; text-transform: uppercase; margin-bottom: 8px;
+}
+.filter-course-block { margin-bottom: 10px; }
+.filter-course-label {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.72rem; color: #555; margin-bottom: 4px;
+  font-family: monospace;
+}
+.filter-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.filter-section-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip {
+  padding: 2px 8px; border-radius: 10px;
+  border: 1px solid #ccc; background: transparent;
+  color: #666; font-size: 0.66rem; font-family: monospace;
+  cursor: pointer; transition: all 0.1s; white-space: nowrap;
+}
+.chip:hover { border-color: #999; color: #333; }
+.chip.active { color: white; border-color: transparent; }
+.filter-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 6px; padding-top: 6px; border-top: 1px solid #e8e8e8;
+}
+.filter-count { font-size: 0.68rem; font-family: monospace; color: #888; }
+.filter-reset {
+  padding: 3px 10px; background: transparent;
+  border: 1px solid #ccc; color: #888;
+  font-size: 0.66rem; cursor: pointer; border-radius: 3px; font-family: monospace;
+}
+.filter-reset:hover { border-color: #4f86c6; color: #4f86c6; }
+
+/* DETAIL */
+.detail-panel { flex: 1; overflow-y: auto; padding: 14px; background: #f0f2f5; }
+.detail-header {
+  background: white; border-radius: 10px; padding: 12px 18px;
+  margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.detail-header h2 { font-size: 1.2rem; color: #1e40af; }
+.detail-score { font-size: 1rem; font-weight: 700; color: #374151; }
+
+/* CALENDAR */
+.calendar { background: white; border-radius: 10px; overflow: hidden; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.cal-head { display: grid; background: #1a1a2e; color: white; font-size: 0.75rem; font-weight: 600; text-align: center; }
+.cal-head > div { padding: 8px 4px; }
+.cal-body { display: grid; position: relative; }
+.time-col { display: flex; flex-direction: column; }
+.time-label { height: 40px; display: flex; align-items: flex-start; justify-content: flex-end; padding-right: 6px; padding-top: 3px; font-size: 0.62rem; color: #999; }
+.day-col { position: relative; border-left: 1px solid #efefef; }
+.hour-line { height: 40px; border-bottom: 1px solid #f5f5f5; }
+.event-block {
+  position: absolute; left: 2px; right: 2px; border-radius: 5px;
+  font-size: 0.68rem; padding: 3px 5px; z-index: 2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18); overflow: hidden;
+}
+.ev-course { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev-section { opacity: 0.85; font-size: 0.65rem; }
+.ev-time { opacity: 0.75; font-size: 0.6rem; }
+
+/* TABLE */
+.course-table { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 12px; }
+.course-table table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.course-table th { background: #1a1a2e; color: white; padding: 8px 12px; text-align: left; font-size: 0.72rem; }
+.course-table td { padding: 8px 12px; border-bottom: 1px solid #f5f5f5; }
+.course-table tr:last-child td { border-bottom: none; }
+.course-table tr:hover td { background: #fafafa; }
+.cr-badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; background: #dbeafe; color: #1e40af; margin-left: 4px; }
+
+/* MAE 306 QUICK PICK — shown below table inside detail panel */
+.lab-pick-box {
+  background: white; border-radius: 10px; padding: 14px 18px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  border-top: 3px solid #f97316;
+}
+.lab-pick-title {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+  color: #f97316; text-transform: uppercase; margin-bottom: 10px;
+}
+.lab-pick-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lab-pick-label { font-size: 0.8rem; color: #555; white-space: nowrap; }
+.lab-pick-select {
+  flex: 1; min-width: 180px; padding: 6px 10px; border-radius: 6px;
+  border: 1px solid #ddd; background: white; color: #333;
+  font-size: 0.8rem; font-family: monospace; cursor: pointer;
+}
+.lab-pick-select:focus { outline: none; border-color: #f97316; }
+.lab-pick-info { font-size: 0.72rem; color: #888; margin-top: 8px; font-family: monospace; }
+
+.no-select { padding: 60px; text-align: center; color: #aaa; }
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .layout { flex-direction: column; height: auto; overflow: visible; }
+  .sidebar { width: 100%; height: auto; max-height: 300px; border-right: none; border-bottom: 1px solid #ddd; }
+  .filter-panel { max-height: 160px; }
+  .schedule-list { max-height: 120px; }
+  .detail-panel { overflow-y: visible; overflow-x: hidden; }
+  .calendar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cal-head, .cal-body { min-width: 500px; }
+  .course-table { overflow-x: auto; }
+  .course-table table { min-width: 460px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📅 Schedule Viewer</h1>
+  <div class="hcontrols">
+    <span class="hlabel">Sort:</span>
+    <select id="sortSelect" onchange="renderList()">
+      <option value="rank_asc">Rank: Best First</option>
+      <option value="rank_desc">Rank: Worst First</option>
+      <option value="score_desc">Score: High → Low</option>
+      <option value="score_asc">Score: Low → High</option>
+    </select>
+    <span class="hlabel">Min Score:</span>
+    <select id="filterSelect" onchange="renderList()">
+      <option value="0">All</option>
+      <option value="150">≥ 150</option>
+      <option value="160">≥ 160</option>
+      <option value="170">≥ 170</option>
+      <option value="180">≥ 180</option>
+      <option value="190">≥ 190</option>
+      <option value="200">≥ 200</option>
+    </select>
+    <span class="hlabel">Jump to #:</span>
+    <input type="number" id="jumpInput" min="1" max="39" placeholder="rank">
+    <button class="hbtn" onclick="jumpToRank()">Go</button>
+    <span class="count-badge" id="countBadge">39 schedules</span>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="sidebar">
+    <!-- Chip filter for non-306 courses -->
+    <div class="filter-panel" id="filterPanel">
+      <div class="filter-title">🔍 Filter by Section</div>
+      <div id="filterGrid"></div>
+      <div class="filter-footer">
+        <span class="filter-count" id="filterCount"></span>
+        <button class="filter-reset" onclick="resetFilters()">Clear All</button>
+      </div>
+    </div>
+
+    <!-- Schedule list -->
+    <div class="schedule-list" id="listPanel"></div>
+  </div>
+
+  <div class="detail-panel" id="detailPanel">
+    <div class="no-select">← Select a schedule from the list</div>
+  </div>
+</div>
+
+<script>
+const SCHEDULES = [{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":205,"rank":1},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":205,"rank":2},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":190,"rank":3},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":184,"rank":4},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":184,"rank":5},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":183,"rank":6},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":183,"rank":7},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":177,"rank":8},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":177,"rank":9},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":174,"rank":10},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":174,"rank":11},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":174,"rank":12},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":174,"rank":13},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":171,"rank":14},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":171,"rank":15},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":171,"rank":16},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":171,"rank":17},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":169,"rank":18},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":168,"rank":19},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":168,"rank":20},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":168,"rank":21},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":162,"rank":22},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":162,"rank":23},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":162,"rank":24},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":159,"rank":25},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":159,"rank":26},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":156,"rank":27},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":156,"rank":28},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":153,"rank":29},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":153,"rank":30},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":153,"rank":31},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":150,"rank":32},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":150,"rank":33},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":147,"rank":34},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":147,"rank":35},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":147,"rank":36},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":138,"rank":37},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":135,"rank":38},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":132,"rank":39}];
+
+const COLORS = {
+  'MAE 302': ['#ef4444','#fff'],
+  'MAE 306': ['#f97316','#fff'],
+  'MAE 308': ['#8b5cf6','#fff'],
+  'MAE 315': ['#06b6d4','#fff'],
+  'MAE 420': ['#10b981','#fff'],
+  'ST 370':  ['#3b82f6','#fff'],
+  'HESF 106':['#ec4899','#fff'],
+};
+
+const DAYS_ORDER = ['M','T','W','H','F'];
+const DAY_NAMES  = ['Mon','Tue','Wed','Thu','Fri'];
+const CAL_START  = 8 * 60;
+const CAL_END    = 18 * 60;
+const PX_PER_MIN = 32 / 60;
+
+// ── State ──────────────────────────────────────────────
+// filters[course] = Set of allowed section strings, or null (= all allowed)
+// MAE 306 is handled separately via lab306 dropdown
+const filters = {};
+let activeIdx  = null;
+let currentSchedules = [];
+
+// ── Build course→sections map ──────────────────────────
+const courseMap = {};
+SCHEDULES.forEach(s => {
+  s.classes.forEach(c => {
+    if (!courseMap[c.course]) courseMap[c.course] = new Map();
+    const key = String(c.section);
+    if (!courseMap[c.course].has(key))
+      courseMap[c.course].set(key, `§${c.section}  ${c.days}  ${c.time}`);
+  });
+});
+const courseNames = Object.keys(courseMap);
+
+// Initialize filters (null = no filter)
+courseNames.forEach(course => { filters[course] = null; });
+
+// ── FILTER PANEL (chips, excludes MAE 306 since it has its own control) ──
+function buildFilterPanel() {
+  const grid = document.getElementById('filterGrid');
+  grid.innerHTML = '';
+
+  courseNames.forEach(course => {
+
+    const sections = courseMap[course];
+
+    // skip courses that only have one section, or MAE 306 (handled by pin section)
+    if (sections.size <= 1) return;
+    if (course === 'MAE 306') return;
+    const [color] = COLORS[course] || ['#888'];
+    const activeSet = filters[course];
+
+    const chips = [];
+    // "All" chip
+    chips.push(`<span class="chip${activeSet === null ? ' active" style="background:' + color + '"' : '"'} onclick="toggleCourseFilter('${course}')"}>All</span>`);
+    sections.forEach((label, key) => {
+      const isActive = activeSet !== null && activeSet.has(key);
+      chips.push(`<span class="chip${isActive ? '" style="background:' + color + '"' : '"'} onclick="toggleSection('${course}','${key}')">${label}</span>`);
+    });
+
+    const block = document.createElement('div');
+    block.className = 'filter-course-block';
+    block.innerHTML = `
+      <div class="filter-course-label">
+        <span class="filter-dot" style="background:${color}"></span>
+        ${course}
+      </div>
+      <div class="filter-section-chips">${chips.join('')}</div>`;
+    grid.appendChild(block);
+  });
+
+  updateFilterCount();
+}
+
+function updateFilterCount() {
+  const active = courseNames.filter(c => filters[c] !== null).length;
+  document.getElementById('filterCount').textContent = active > 0 ? `${active} filter${active > 1 ? 's' : ''} active` : '';
+}
+
+function toggleCourseFilter(course) {
+  filters[course] = null;
+  buildFilterPanel();
+  renderList();
+}
+
+function toggleSection(course, key) {
+  if (filters[course] === null) {
+    filters[course] = new Set([key]);
+  } else {
+    const s = filters[course];
+    if (s.has(key)) {
+      s.delete(key);
+      if (s.size === 0) filters[course] = null;
+    } else {
+      s.add(key);
+    }
+  }
+  buildFilterPanel();
+  renderList();
+}
+
+function resetFilters() {
+  courseNames.forEach(c => { filters[c] = null; });
+  buildFilterPanel();
+  renderList();
+}
+
+function applyFilters(list) {
+  return list.filter(s =>
+    s.classes.every(c => {
+      const f = filters[c.course];
+      return f === null || f.has(String(c.section));
+    })
+  );
+}
+
+// ── SCHEDULE LIST ──────────────────────────────────────
+function getFiltered() {
+  const sort     = document.getElementById('sortSelect').value;
+  const minScore = parseInt(document.getElementById('filterSelect').value) || 0;
+  let list = SCHEDULES.filter(s => s.weighted_score >= minScore);
+  list = applyFilters(list);
+  if (sort === 'rank_asc')   list.sort((a,b) => a.rank - b.rank);
+  if (sort === 'rank_desc')  list.sort((a,b) => b.rank - a.rank);
+  if (sort === 'score_desc') list.sort((a,b) => b.weighted_score - a.weighted_score);
+  if (sort === 'score_asc')  list.sort((a,b) => a.weighted_score - b.weighted_score);
+  return list;
+}
+
+function renderList() {
+  currentSchedules = getFiltered();
+  document.getElementById('countBadge').textContent = `${currentSchedules.length} schedules`;
+  const panel = document.getElementById('listPanel');
+
+  if (currentSchedules.length === 0) {
+    panel.innerHTML = '<div style="padding:20px;text-align:center;color:#aaa;font-size:0.82rem">No schedules match your filters.</div>';
+    document.getElementById('detailPanel').innerHTML = '<div class="no-select" style="padding:40px;text-align:center;color:#aaa">No results — try relaxing your filters.</div>';
+    return;
+  }
+
+  panel.innerHTML = currentSchedules.map((s, i) => {
+    const tags = s.classes.filter(c => c.course !== 'MAE 306').map(c => {
+      const [bg] = COLORS[c.course] || ['#888'];
+      return '<span class="tag" style="background:' + bg + '">' + c.course + '</span>';
+    }).join('');
+    const hesfTag = !hesfHasConflict(s)
+      ? '<span class="tag" style="background:#ec4899">HESF 106</span>'
+      : '';
+    return '<div class="sched-item' + (i === activeIdx ? ' active' : '') + '" onclick="selectSchedule(' + i + ')">'
+      + '<div style="display:flex;justify-content:space-between;align-items:baseline">'
+      + '<span class="sched-rank">#' + s.rank + '</span>'
+      + '<span class="sched-score">Score: ' + s.weighted_score + '</span>'
+      + '</div>'
+      + '<div class="sched-tags">' + tags + hesfTag + '</div>'
+      + '</div>';
+  }).join('');
+
+  if (activeIdx !== null && activeIdx < currentSchedules.length) {
+    selectSchedule(activeIdx);
+  } else {
+    activeIdx = 0;
+    selectSchedule(0);
+  }
+}
+
+function selectSchedule(i) {
+  activeIdx = i;
+  document.querySelectorAll('.sched-item').forEach((el, j) => el.classList.toggle('active', j === i));
+  renderDetail(currentSchedules[i]);
+}
+
+function jumpToRank() {
+  const r = parseInt(document.getElementById('jumpInput').value);
+  if (isNaN(r)) return;
+  const idx = currentSchedules.findIndex(s => s.rank === r);
+  if (idx < 0) { alert('Rank #' + r + ' not in current filtered list.'); return; }
+  selectSchedule(idx);
+  document.querySelectorAll('.sched-item')[idx]?.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// ── CALENDAR ──────────────────────────────────────────
+function parseTime(str) {
+  const m = str.match(/(\d+):(\d+)/);
+  if (!m) return null;
+  let h = parseInt(m[1]), min = parseInt(m[2]);
+  if (h < 7) h += 12;
+  return h * 60 + min;
+}
+function expandDays(d) {
+  const s = (d || '').trim();
+  if (s === 'MW')  return ['M','W'];
+  if (s === 'TH')  return ['T','H'];
+  if (s === 'MWF') return ['M','W','F'];
+  return [s];
+}
+function toAMPM(mins) {
+  const h = Math.floor(mins/60), m = mins % 60;
+  return `${h > 12 ? h-12 : h}:${String(m).padStart(2,'0')}${h >= 12 ? 'pm' : 'am'}`;
+}
+
+// ── DETAIL VIEW ────────────────────────────────────────
+// lab306Override: section string to display in calendar/table instead of the schedule's own lab.
+// null = show the schedule's original lab.
+let lab306Override = null;
+let currentDetailSchedule = null; // keep reference so setLab306 can re-render
+
+// HESF 106 toggle — true = show it, false = hide it
+const HESF_106 = { course: 'HESF 106', section: 95, days: 'M', time: '12:50-2:40', prof: 'Harrington,Renee', credits: 1 };
+let hesfToggle = true; // default on; will be corrected per-schedule in renderDetail
+
+function hesfHasConflict(schedule) {
+  const hesfDays = expandDays(HESF_106.days);
+  const [hs, he] = HESF_106.time.split('-').map(parseTime);
+  return schedule.classes
+    .filter(c => c.course !== 'MAE 306')
+    .some(c => {
+      const cDays = expandDays(c.days);
+      if (!hesfDays.some(d => cDays.includes(d))) return false;
+      const [cs, ce] = c.time.split('-').map(parseTime);
+      return hs < ce && he > cs;
+    });
+}
+
+function renderDetail(s) {
+  const panel = document.getElementById('detailPanel');
+  const totalPx = (CAL_END - CAL_START) * PX_PER_MIN;
+
+  // Determine HESF availability; auto-on only when switching to a new schedule
+  const hesfConflict = hesfHasConflict(s);
+  const isNewSchedule = currentDetailSchedule !== s;
+  if (hesfConflict) {
+    hesfToggle = false;
+  } else if (isNewSchedule) {
+    hesfToggle = true; // auto-on when first viewing this schedule
+  }
+  // (if same schedule, preserve whatever the user set via toggleHesf)
+  currentDetailSchedule = s;
+
+  // Build the effective class list — swap MAE 306 with the override if set, inject HESF if toggled
+  let effectiveClasses = s.classes.map(c => {
+    if (c.course === 'MAE 306' && lab306Override !== null) {
+      // Find the override section's data from courseMap
+      const overrideLabel = courseMap['MAE 306'].get(lab306Override); // "§210  T  3:00-4:50"
+      // Parse label back into parts: "§210  T  3:00-4:50"
+      const labelMatch = overrideLabel && overrideLabel.match(/§(\S+)\s+(\S+)\s+(\S+)/);
+      if (labelMatch) {
+        return {
+          ...c,
+          section: parseInt(labelMatch[1]) || lab306Override,
+          days: labelMatch[2],
+          time: labelMatch[3],
+        };
+      }
+    }
+    return c;
+  });
+
+  // Inject HESF 106 if toggled on and no conflict
+  if (!hesfConflict && hesfToggle) {
+    effectiveClasses = [...effectiveClasses, HESF_106];
+  }
+
+  const dayMap = { M:[], T:[], W:[], H:[], F:[] };
+  effectiveClasses.forEach(c => {
+    const parts = (c.time || '').split('-');
+    if (parts.length < 2) return;
+    const start = parseTime(parts[0]), end = parseTime(parts[1]);
+    if (!start || !end) return;
+    expandDays(c.days).forEach(d => { if (dayMap[d]) dayMap[d].push({...c, start, end}); });
+  });
+
+  const timeLabels = [];
+  for (let m = CAL_START; m <= CAL_END; m += 60)
+    timeLabels.push(`<div class="time-label">${toAMPM(m)}</div>`);
+
+  const dayCols = DAYS_ORDER.map(d => {
+    const lines = Array.from({length: Math.ceil((CAL_END-CAL_START)/60)}, () => '<div class="hour-line"></div>').join('');
+    const events = dayMap[d].map(ev => {
+      const top = (ev.start - CAL_START) * PX_PER_MIN;
+      const height = Math.max((ev.end - ev.start) * PX_PER_MIN, 20);
+      const [bg, fg] = COLORS[ev.course] || ['#999','#fff'];
+      return `<div class="event-block" style="top:${top}px;height:${height}px;background:${bg};color:${fg}">
+        <div class="ev-course">${ev.course}</div>
+        <div class="ev-section">§${ev.section}</div>
+        <div class="ev-time">${ev.time}</div>
+      </div>`;
+    }).join('');
+    return `<div class="day-col" style="height:${totalPx}px">${lines}${events}</div>`;
+  }).join('');
+
+  const tableRows = effectiveClasses.map(c => {
+    const [bg] = COLORS[c.course] || ['#888'];
+    const isOverridden = c.course === 'MAE 306' && lab306Override !== null;
+    return `<tr${isOverridden ? ' style="background:#fff8f0"' : ''}>
+      <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${bg};margin-right:5px"></span>
+        ${c.course}<span class="cr-badge">${c.credits}cr</span>${isOverridden ? ' <span style="font-size:0.65rem;color:#f97316;font-weight:700">★ pinned</span>' : ''}</td>
+      <td>§${c.section}</td><td>${c.days}</td><td>${c.time}</td><td>${c.prof}</td>
+    </tr>`;
+  }).join('');
+
+// All 8 MAE 306 lab sections
+const ALL_LABS = [
+  { key: '204', days: 'T', time: '8:30-10:20',  label: '§204  T   8:30-10:20' },
+  { key: '205', days: 'H', time: '8:30-10:20',  label: '§205  H   8:30-10:20' },
+  { key: '206', days: 'T', time: '10:40-12:30', label: '§206  T   10:40-12:30' },
+  { key: '207', days: 'H', time: '10:40-12:30', label: '§207  H   10:40-12:30' },
+  { key: '208', days: 'T', time: '12:50-2:40',  label: '§208  T   12:50-2:40' },
+  { key: '209', days: 'H', time: '12:50-2:40',  label: '§209  H   12:50-2:40' },
+  { key: '210', days: 'T', time: '3:00-4:50',   label: '§210  T   3:00-4:50' },
+  { key: '211', days: 'H', time: '3:00-4:50',   label: '§211  H   3:00-4:50' },
+];
+
+// Check if a lab option overlaps with any existing class in the schedule
+function labHasConflict(lab, schedule) {
+  const labDays = expandDays(lab.days);
+  const labParts = lab.time.split('-');
+  const labStart = parseTime(labParts[0]);
+  const labEnd   = parseTime(labParts[1]);
+
+  return schedule.classes
+    .filter(c => c.course !== 'MAE 306')
+    .some(c => {
+      const parts = (c.time || '').split('-');
+      if (parts.length < 2) return false;
+      const cStart = parseTime(parts[0]);
+      const cEnd   = parseTime(parts[1]);
+      const cDays  = expandDays(c.days);
+      // Check day overlap first
+      const sharedDay = labDays.some(d => cDays.includes(d));
+      if (!sharedDay) return false;
+      // Then check time overlap (treat as exclusive end)
+      return labStart < cEnd && labEnd > cStart;
+    });
+}
+
+const labOptions = [
+  '<option value="">— original (from schedule) —</option>'
+];
+
+ALL_LABS.forEach(({ key, label, days, time }) => {
+  if (labHasConflict({ days, time }, s)) return;
+  labOptions.push(
+    `<option value="${key}" ${lab306Override === key ? 'selected' : ''}>${label}</option>`
+  );
+});
+
+  let html = '';
+  html += '<div class="detail-header">';
+  html += '<h2>Rank #' + s.rank + '</h2>';
+  html += '<span class="detail-score">Weighted Score: ' + s.weighted_score + '</span>';
+  html += '</div>';
+  html += '<div class="calendar">';
+  html += '<div class="cal-head" style="grid-template-columns:60px repeat(5,1fr)">';
+  html += '<div></div>' + DAY_NAMES.map(n => '<div>' + n + '</div>').join('');
+  html += '</div>';
+  html += '<div class="cal-body" style="grid-template-columns:60px repeat(5,1fr)">';
+  html += '<div class="time-col">' + timeLabels.join('') + '</div>';
+  html += dayCols;
+  html += '</div></div>';
+  html += '<div class="course-table"><table>';
+  html += '<thead><tr><th>Course</th><th>Section</th><th>Days</th><th>Time</th><th>Professor</th></tr></thead>';
+  html += '<tbody>' + tableRows + '</tbody>';
+  html += '</table></div>';
+  html += '<div class="lab-pick-box">';
+  html += '<div class="lab-pick-title">🧪 MAE 306 Lab — Pin a section</div>';
+  html += '<div class="lab-pick-row"><span class="lab-pick-label">Show lab:</span>';
+  html += '<select class="lab-pick-select" id="lab306Select" onchange="setLab306Override(this.value)">';
+  html += labOptions.join('');
+  html += '</select></div>';
+  html += '<div class="lab-pick-info">' + (lab306Override === null ? "Showing this schedule's original lab assignment." : 'Calendar &amp; table updated to show §' + lab306Override + '. List is unchanged.') + '</div>';
+  html += '</div>';
+  if (!hesfConflict) {
+    const bg = hesfToggle ? '#ec4899' : '#ccc';
+    const knobLeft = hesfToggle ? '21px' : '3px';
+    const onoff = hesfToggle ? 'On' : 'Off';
+    html += '<div class="lab-pick-box" style="border-top-color:#ec4899;margin-top:12px">';
+    html += '<div class="lab-pick-title" style="color:#ec4899">🏃 HESF 106 — Add 1-credit PE</div>';
+    html += '<div class="lab-pick-row">';
+    html += '<span class="lab-pick-label">Include HESF 106 (M 12:50–2:40)?</span>';
+    html += '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-left:auto">';
+    html += '<span style="font-size:0.78rem;color:#888">' + onoff + '</span>';
+    html += '<div onclick="toggleHesf()" style="width:40px;height:22px;border-radius:11px;background:' + bg + ';position:relative;cursor:pointer;transition:background 0.2s">';
+    html += '<div style="position:absolute;top:3px;left:' + knobLeft + ';width:16px;height:16px;border-radius:50%;background:white;transition:left 0.2s"></div>';
+    html += '</div></label></div>';
+    html += '<div class="lab-pick-info">§95 · Mon 12:50–2:40 · Harrington,Renee · 1 cr</div>';
+    html += '</div>';
+  }
+  panel.innerHTML = html;
+}
+
+function setLab306Override(value) {
+  lab306Override = value === '' ? null : value;
+  if (currentDetailSchedule) renderDetail(currentDetailSchedule);
+}
+
+function toggleHesf() {
+  hesfToggle = !hesfToggle;
+  if (currentDetailSchedule) renderDetail(currentDetailSchedule);
+}
+
+// ── INIT ──────────────────────────────────────────────
+document.getElementById('jumpInput').onkeydown = e => { if (e.key === 'Enter') jumpToRank(); };
+
+buildFilterPanel();
+renderList();
+</script>
+</body>
+</html>
