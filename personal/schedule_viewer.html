@@ -273,7 +273,7 @@ function buildFilterPanel() {
   const sections = courseMap[course];
 
   // skip courses that only have one section
-  if (sections.size <= 1) return;
+  if (!sections || sections.size <= 1) return;
     const [color] = COLORS[course] || ['#888'];
     const sections = courseMap[course];
     const activeSet = filters[course];
