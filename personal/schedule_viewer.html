@@ -162,6 +162,9 @@ const COURSE_SECTIONS = [
   { course:'MAE 306',  section:209, days:'H',      time:'12:50-2:40',  prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
   { course:'MAE 306',  section:210, days:'T',      time:'3:00-4:50',   prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
   { course:'MAE 306',  section:211, days:'H',      time:'3:00-4:50',   prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  // MAE 308 — required
+  { course:'MAE 308',  section:1,   days:'MW',     time:'8:30-9:45',   prof:'Chen,Mingtai Ted',   credits:3, profR:7,  timeR:5  },
+  { course:'MAE 308',  section:3,   days:'TH',     time:'1:30-2:45',   prof:'Chen,Chuyi',         credits:3, profR:7,  timeR:7  },
   // MAE 315 — required
   { course:'MAE 315',  section:1,   days:'MW',     time:'8:30-9:45',   prof:'Kiefer,Scott',       credits:3, profR:10, timeR:5  },
   { course:'MAE 315',  section:2,   days:'MW',     time:'11:45-1:00',  prof:'Muller,Marie',       credits:3, profR:4,  timeR:8  },
@@ -178,7 +181,7 @@ const COURSE_SECTIONS = [
 ];
 
 // Courses that must appear in every schedule
-const REQUIRED_COURSES = ['MAE 302', 'MAE 315', 'ENG 331'];
+const REQUIRED_COURSES = ['MAE 302', 'MAE 308', 'MAE 315', 'ENG 331'];
 // Exactly one of these must appear
 const PICK_ONE_GROUP   = ['ST 370', 'EC301', 'EC302'];
 // Lab course (handled separately, always included)
@@ -190,6 +193,7 @@ const COURSE_COLORS = {
   'MAE 302':  ['#ef4444','#fff'],
   'MAE 306':  ['#f97316','#fff'],
   'MAE 315':  ['#8b5cf6','#fff'],
+  'MAE 308':  ['#a855f7','#fff'],
   'ENG 331':  ['#10b981','#fff'],
   'ST 370':   ['#3b82f6','#fff'],
   'EC301':    ['#0ea5e9','#fff'],
