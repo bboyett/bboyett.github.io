@@ -7,7 +7,7 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
-<div id="navbar"></div>
+
 /* HEADER */
 header {
   background: #1a1a2e; color: white;
@@ -914,6 +914,8 @@ function rebuildAndRender() {
   applyConditions();
 }
 
+
+const TEMPLATE_XLSX_B64 = "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";
 const DAYS_ORDER = ['M','T','W','H','F'];
 const DAY_NAMES  = ['Mon','Tue','Wed','Thu','Fri'];
 const CAL_START  = 8 * 60;
@@ -1087,8 +1089,14 @@ function renderList() {
   const panel = document.getElementById('listPanel');
 
   if (currentSchedules.length === 0) {
-    panel.innerHTML = '<div style="padding:20px;text-align:center;color:#aaa;font-size:0.82rem">No schedules match your filters.</div>';
-    document.getElementById('detailPanel').innerHTML = '<div class="no-select" style="padding:40px;text-align:center;color:#aaa">No results — try relaxing your filters.</div>';
+    if (COURSE_SECTIONS.length === 0) {
+      // No data loaded yet — show the landing/onboarding screen
+      panel.innerHTML = '';
+      document.getElementById('detailPanel').innerHTML = renderLandingPage();
+    } else {
+      panel.innerHTML = '<div style="padding:20px;text-align:center;color:#aaa;font-size:0.82rem">No schedules match your filters.</div>';
+      document.getElementById('detailPanel').innerHTML = '<div class="no-select" style="padding:40px;text-align:center;color:#aaa">No results — try relaxing your filters.</div>';
+    }
     return;
   }
 
@@ -1363,6 +1371,104 @@ function setLab306Override(value) {
 function toggleHesf() {
   hesfToggle = !hesfToggle;
   if (currentDetailSchedule) renderDetail(currentDetailSchedule);
+}
+
+
+function downloadTemplate() {
+  const bytes = Uint8Array.from(atob(TEMPLATE_XLSX_B64), c => c.charCodeAt(0));
+  const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Class_Schedule_Template.xlsx';
+  a.click();
+}
+
+function renderLandingPage() {
+  const cols = [
+    { name: 'Course Name', ex: 'DEPT 101', note: 'Courses with the same name = alternatives' },
+    { name: 'Section', ex: '1', note: 'Section number' },
+    { name: 'Days of Week', ex: 'MW / TH / MWF / ONLINE', note: 'M T W H(Thu) F' },
+    { name: 'Time Block', ex: '9:00-10:15', note: 'Use ONLINE for online courses' },
+    { name: 'Professor', ex: 'Smith, John', note: 'Last, First' },
+    { name: 'Prof Rating', ex: '8', note: '1–10, leave blank if unknown' },
+    { name: 'Time Rating', ex: '7', note: 'How much you like that time slot' },
+    { name: 'Credit Hours', ex: '3', note: '' },
+    { name: 'Notes', ex: 'Lab / Online / (blank)', note: "Write \'Lab\' for lab sections" },
+  ];
+
+  let rows = cols.map(c =>
+    '<tr>'
+    + '<td style="padding:7px 12px;font-weight:600;font-size:0.8rem;color:#1e40af;white-space:nowrap">' + c.name + '</td>'
+    + '<td style="padding:7px 12px;font-family:monospace;font-size:0.78rem;color:#374151">' + c.ex + '</td>'
+    + '<td style="padding:7px 12px;font-size:0.75rem;color:#6b7280">' + c.note + '</td>'
+    + '</tr>'
+  ).join('');
+
+  return `
+  <div style="max-width:680px;margin:40px auto;padding:0 20px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-size:2.5rem;margin-bottom:12px">📅</div>
+      <h2 style="font-size:1.4rem;font-weight:700;color:#1a1a2e;margin-bottom:8px">Welcome to Schedule Viewer</h2>
+      <p style="color:#6b7280;font-size:0.9rem;line-height:1.6">
+        This tool generates every possible conflict-free class schedule from your course list,
+        scores them by professor and time-slot ratings, and lets you browse them visually.
+      </p>
+    </div>
+
+    <div style="background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;margin-bottom:24px">
+      <div style="background:#1a1a2e;padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
+        <span style="color:white;font-weight:700;font-size:0.9rem">📋 How to get started</span>
+        <span style="color:#aac;font-size:0.75rem">3 steps</span>
+      </div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:28px;height:28px;border-radius:50%;background:#4f86c6;color:white;font-weight:700;font-size:0.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+          <div>
+            <div style="font-weight:600;font-size:0.85rem;color:#1a1a2e;margin-bottom:4px">Download the template</div>
+            <div style="font-size:0.8rem;color:#6b7280;margin-bottom:8px">A pre-formatted Excel file with the right columns and example rows.</div>
+            <button onclick="downloadTemplate()" style="padding:7px 16px;background:#4f86c6;color:white;border:none;border-radius:6px;font-size:0.8rem;font-weight:600;cursor:pointer">
+              ⬇ Download Template (.xlsx)
+            </button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:28px;height:28px;border-radius:50%;background:#4f86c6;color:white;font-weight:700;font-size:0.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+          <div>
+            <div style="font-weight:600;font-size:0.85rem;color:#1a1a2e;margin-bottom:4px">Fill in your courses</div>
+            <div style="font-size:0.8rem;color:#6b7280">Open in Excel or Google Sheets. Add one row per section. Delete the example rows when done.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:28px;height:28px;border-radius:50%;background:#4f86c6;color:white;font-weight:700;font-size:0.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+          <div>
+            <div style="font-weight:600;font-size:0.85rem;color:#1a1a2e;margin-bottom:4px">Import & generate</div>
+            <div style="font-size:0.8rem;color:#6b7280;margin-bottom:8px">Click the button in the top right to upload your file. Schedules generate instantly.</div>
+            <button onclick="openWizard()" style="padding:7px 16px;background:#6366f1;color:white;border:none;border-radius:6px;font-size:0.8rem;font-weight:600;cursor:pointer">
+              ⚙️ Import &amp; Configure
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden">
+      <div style="background:#1a1a2e;padding:14px 20px">
+        <span style="color:white;font-weight:700;font-size:0.9rem">📊 Template column reference</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="background:#f8f9ff">
+              <th style="padding:8px 12px;text-align:left;font-size:0.72rem;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #e5e7eb">Column</th>
+              <th style="padding:8px 12px;text-align:left;font-size:0.72rem;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #e5e7eb">Example</th>
+              <th style="padding:8px 12px;text-align:left;font-size:0.72rem;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #e5e7eb">Notes</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
 }
 
 // ── INIT ──────────────────────────────────────────────
