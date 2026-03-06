@@ -157,6 +157,91 @@ input[type=number] { width: 72px; }
 
 .no-select { padding: 60px; text-align: center; color: #aaa; }
 
+/* IMPORT WIZARD MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55); z-index: 1000;
+  align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: white; border-radius: 12px;
+  width: 480px; max-width: 95vw; max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-header h2 { font-size: 1rem; font-weight: 700; color: #111827; }
+.modal-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #9ca3af; }
+.modal-close:hover { color: #374151; }
+.modal-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 16px; }
+.modal-step { display: none; flex-direction: column; gap: 12px; }
+.modal-step.active { display: flex; }
+.modal-footer { padding: 12px 20px; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; justify-content: flex-end; }
+.mbtn { padding: 7px 16px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; cursor: pointer; border: none; }
+.mbtn-danger  { background: #ef4444; color: white; }
+.mbtn-danger:hover { background: #dc2626; }
+.mbtn-primary { background: #4f86c6; color: white; }
+.mbtn-primary:hover { background: #3a6fa8; }
+.mbtn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+.mbtn-secondary:hover { background: #e5e7eb; }
+.warn-box { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; color: #92400e; }
+.info-box { background: #eff6ff; border: 1px solid #93c5fd; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; color: #1e40af; }
+.ok-box  { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; color: #166534; }
+.step-label { font-size: 0.7rem; font-weight: 700; color: #9ca3af; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: -4px; }
+.import-btn-bar {
+  display: flex; align-items: center; gap: 10px; background: #f9fafb;
+  border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 12px;
+}
+.import-btn-bar button { padding: 5px 12px; background: #4f86c6; color: white; border: none; border-radius: 5px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+.import-btn-bar button:hover { background: #3a6fa8; }
+.file-name { font-size: 0.78rem; color: #6b7280; font-style: italic; }
+.file-name.loaded { color: #16a34a; font-style: normal; font-weight: 600; }
+.step-dots { display: flex; gap: 6px; justify-content: center; padding: 4px 0 8px; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; transition: background 0.2s; }
+.step-dot.active { background: #4f86c6; }
+.step-dot.done { background: #86efac; }
+.cond-list { display: flex; flex-direction: column; gap: 5px; }
+.cond-item {
+  display: flex; align-items: center; gap: 6px;
+  background: #f8fafc; border: 1px solid #e5e7eb;
+  border-radius: 6px; padding: 5px 8px; font-size: 0.78rem;
+}
+.cond-item .cond-label { flex: 1; }
+.cond-remove {
+  background: none; border: none; cursor: pointer; color: #9ca3af;
+  font-size: 0.85rem; padding: 0 2px; line-height: 1;
+}
+.cond-remove:hover { color: #ef4444; }
+.cond-badge {
+  font-size: 0.65rem; font-weight: 700; padding: 1px 5px;
+  border-radius: 4px; white-space: nowrap;
+}
+.cond-badge.required  { background: #dbeafe; color: #1d4ed8; }
+.cond-badge.linked    { background: #dcfce7; color: #15803d; }
+.cond-badge.excluded  { background: #fee2e2; color: #b91c1c; }
+.cond-badge.credits   { background: #fef3c7; color: #b45309; }
+.cond-badge.atleast   { background: #ede9fe; color: #6d28d9; }
+.cond-course-tag { display:inline-block; background:#e0e7ff; color:#3730a3; border-radius:4px; padding:1px 6px; font-size:0.72rem; margin:1px; }
+.cond-course-tag.lab  { background:#ffedd5; color:#9a3412; }
+.cond-course-tag.hesf { background:#fce7f3; color:#9d174d; }
+.add-cond-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.add-cond-row select, .add-cond-row input { 
+  font-size: 0.78rem; padding: 4px 7px; border-radius: 5px;
+  border: 1px solid #d1d5db; background: white; color: #333;
+}
+.add-cond-btn {
+  padding: 4px 10px; background: #374151; color: white; border: none;
+  border-radius: 5px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+}
+.add-cond-btn:hover { background: #1f2937; }
+.cr-inputs { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; }
+.cr-inputs input { width: 52px; }
+
 /* MOBILE */
 @media (max-width: 700px) {
   .layout { flex-direction: column; height: auto; overflow: visible; }
@@ -170,6 +255,7 @@ input[type=number] { width: 72px; }
   .course-table table { min-width: 460px; }
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -197,6 +283,7 @@ input[type=number] { width: 72px; }
     <input type="number" id="jumpInput" min="1" max="39" placeholder="rank">
     <button class="hbtn" onclick="jumpToRank()">Go</button>
     <span class="count-badge" id="countBadge">39 schedules</span>
+    <button class="hbtn" style="background:#6366f1;margin-left:auto" onclick="openWizard()">⚙️ Import &amp; Configure</button>
   </div>
 </header>
 
@@ -204,7 +291,7 @@ input[type=number] { width: 72px; }
   <div class="sidebar">
     <!-- Chip filter for non-306 courses -->
     <div class="filter-panel" id="filterPanel">
-      <div class="filter-title">🔍 Filter by Section</div>
+      <div class="filter-title">🔍 Filter by Course</div>
       <div id="filterGrid"></div>
       <div class="filter-footer">
         <span class="filter-count" id="filterCount"></span>
@@ -221,18 +308,633 @@ input[type=number] { width: 72px; }
   </div>
 </div>
 
-<script>
-const SCHEDULES = [{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":205,"rank":1},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":205,"rank":2},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":190,"rank":3},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":184,"rank":4},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":184,"rank":5},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":183,"rank":6},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":183,"rank":7},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":177,"rank":8},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":177,"rank":9},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":174,"rank":10},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":174,"rank":11},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":174,"rank":12},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":174,"rank":13},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":171,"rank":14},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":171,"rank":15},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":171,"rank":16},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":171,"rank":17},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":169,"rank":18},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":168,"rank":19},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":168,"rank":20},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":168,"rank":21},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":162,"rank":22},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":162,"rank":23},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":162,"rank":24},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":159,"rank":25},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":159,"rank":26},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":1,"days":"MW","time":"8:30-9:45","prof":"Chen,Mingtai Ted","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":156,"rank":27},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":156,"rank":28},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":3,"days":"TH","time":"1:30-2:45","prof":"Chen,Chuyi","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":153,"rank":29},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":153,"rank":30},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":153,"rank":31},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":206,"days":"T","time":"10:40-12:30","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":150,"rank":32},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":150,"rank":33},{"classes":[{"course":"MAE 302","section":2,"days":"TH","time":"8:30-9:45","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":147,"rank":34},{"classes":[{"course":"MAE 302","section":3,"days":"TH","time":"11:45-1:00","prof":"Moore,Nancy Jennings","credits":3},{"course":"MAE 306","section":210,"days":"T","time":"3:00-4:50","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":147,"rank":35},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":1,"days":"MW","time":"8:30-9:45","prof":"Kiefer,Scott Fredrick","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":147,"rank":36},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":138,"rank":37},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":204,"days":"T","time":"8:30-10:20","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":3,"days":"MW","time":"1:30-2:45","prof":"Xu,Cheryl","credits":3},{"course":"ST 370","section":1,"days":"MW","time":"11:45-1:00","prof":"Hamrick,Spencer Cline","credits":3}],"weighted_score":135,"rank":38},{"classes":[{"course":"MAE 302","section":1,"days":"MW","time":"4:30-5:45","prof":"Liu, Jun","credits":3},{"course":"MAE 306","section":208,"days":"T","time":"12:50-2:40","prof":"—","credits":1},{"course":"MAE 308","section":2,"days":"MW","time":"3:00-4:15","prof":"Heiranian,Dariush M","credits":3},{"course":"MAE 315","section":2,"days":"MW","time":"11:45-1:00","prof":"Muller,Marie","credits":3},{"course":"MAE 420","section":1,"days":"TH","time":"10:15-11:30","prof":"Saul,Katherine Reed","credits":3}],"weighted_score":132,"rank":39}];
+<!-- IMPORT WIZARD MODAL -->
+<div class="modal-overlay" id="wizardOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="wizardTitle">Import &amp; Configure</h2>
+      <button class="modal-close" onclick="closeWizard()">✕</button>
+    </div>
+    <div class="modal-body">
 
-const COLORS = {
-  'MAE 302': ['#ef4444','#fff'],
-  'MAE 306': ['#f97316','#fff'],
-  'MAE 308': ['#8b5cf6','#fff'],
-  'MAE 315': ['#06b6d4','#fff'],
-  'MAE 420': ['#10b981','#fff'],
-  'ST 370':  ['#3b82f6','#fff'],
-  'HESF 106':['#ec4899','#fff'],
+      <!-- Step dots -->
+      <div class="step-dots">
+        <div class="step-dot" id="dot0"></div>
+        <div class="step-dot" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+      </div>
+
+      <!-- Step 0: Warning / confirm wipe -->
+      <div class="modal-step" id="step0">
+        <div class="step-label">Step 1 of 4 — Confirm</div>
+        <div class="warn-box">
+          ⚠️ <strong>This will wipe all current schedule data.</strong><br><br>
+          Your existing 39 schedules, scores, and any active filters will be cleared and replaced with the data from your new .xlsx file.<br><br>
+          This cannot be undone.
+        </div>
+        <p style="font-size:0.82rem;color:#374151">Do you want to continue?</p>
+      </div>
+
+      <!-- Step 1: Upload xlsx -->
+      <div class="modal-step" id="step1">
+        <div class="step-label">Step 2 of 4 — Import .xlsx</div>
+        <div class="info-box">Upload your <strong>Class_Schedule_Row_Format.xlsx</strong> file. The file should have columns: Course Name, Section, Days, Time Block, Professor, Rating out of 10, Time slot rating out of 10, Credit Hours, Notes.</div>
+        <div class="import-btn-bar">
+          <button onclick="document.getElementById('xlsxInput').click()">📂 Choose File</button>
+          <span class="file-name" id="fileLabel">No file chosen</span>
+          <input type="file" id="xlsxInput" accept=".xlsx" style="display:none" onchange="handleXlsxFile(event)">
+        </div>
+        <div id="parseStatus" style="font-size:0.78rem;display:none"></div>
+      </div>
+
+      <!-- Step 2: Credit hours -->
+      <div class="modal-step" id="step2">
+        <div class="step-label">Step 3 of 4 — Credit Hours</div>
+        <div class="info-box">Set the credit hour range for schedules to show. MAE 306 lab always adds +1 credit.</div>
+        <div class="cr-inputs">
+          <span>Min credits:</span>
+          <input type="number" id="crMin" min="0" max="30" value="0">
+          <span>Max credits:</span>
+          <input type="number" id="crMax" min="0" max="30" value="18">
+        </div>
+      </div>
+
+      <!-- Step 3: Conditions -->
+      <div class="modal-step" id="step3">
+        <div class="step-label">Step 4 of 4 — Conditions</div>
+        <div class="info-box">Add rules to filter schedules. All active conditions apply simultaneously.</div>
+        <div class="cond-list" id="condList"></div>
+        <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-size:0.72rem;font-weight:700;color:#6b7280;white-space:nowrap">Type:</span>
+            <select id="condType" onchange="updateCondInputs()" style="font-size:0.78rem;padding:4px 7px;border-radius:5px;border:1px solid #d1d5db;flex:1;min-width:160px">
+              <option value="required">Required — must appear in every schedule</option>
+              <option value="linked">Linked Group — all appear or none appear</option>
+              <option value="mingroup">Minimum From Group</option>
+              <option value="excluded">Never Together</option>
+            </select>
+          </div>
+          <div id="condInputs" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div>
+            <button class="add-cond-btn" onclick="addCondition()">+ Add Condition</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer" id="wizardFooter"></div>
+  </div>
+</div>
+
+<script>
+// SCHEDULES is populated at init from buildBuiltinSections() via applyConditions()
+let SCHEDULES = [];
+
+// ── IMPORT & CONDITIONS ENGINE ────────────────────────────────────────────────
+
+// Special courses that get custom logic (not scored, not deduplicated normally)
+const SPECIAL_NO_SCORE = ['MAE 306'];
+const SPECIAL_HESF     = 'HESF 106';
+const SPECIAL_LAB      = 'MAE 306';
+
+// Conditions state
+let conditions = [];  // [{type, courses}]
+
+// Raw sections from xlsx (or built-in). Each: {course, section, days, time, prof, credits, profR, timeR, notes}
+let COURSE_SECTIONS = buildBuiltinSections();
+
+function buildBuiltinSections() {
+  return [
+    { course:'MAE 302', section:1, days:'MW',     time:'4:30-5:45',  prof:'Liu, Jun',             credits:3, profR:6,  timeR:1,  notes:'' },
+    { course:'MAE 302', section:2, days:'TH',     time:'8:30-9:45',  prof:'Moore,Nancy Jennings',  credits:3, profR:4,  timeR:5,  notes:'' },
+    { course:'MAE 302', section:3, days:'TH',     time:'11:45-1:00', prof:'Moore,Nancy Jennings',  credits:3, profR:4,  timeR:8,  notes:'' },
+    { course:'MAE 306', section:204, days:'T',    time:'8:30-10:20',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 306', section:205, days:'H',    time:'8:30-10:20',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 306', section:206, days:'T',    time:'10:40-12:30', prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 306', section:207, days:'H',    time:'10:40-12:30', prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 306', section:208, days:'T',    time:'12:50-2:40',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 306', section:209, days:'H',    time:'12:50-2:40',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 306', section:210, days:'T',    time:'3:00-4:50',   prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 306', section:211, days:'H',    time:'3:00-4:50',   prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
+    { course:'MAE 308', section:1,  days:'MW',    time:'8:30-9:45',  prof:'Chen,Mingtai Ted',     credits:3, profR:7,  timeR:5,  notes:'' },
+    { course:'MAE 308', section:3,  days:'TH',    time:'1:30-2:45',  prof:'Chen,Chuyi',           credits:3, profR:7,  timeR:7,  notes:'' },
+    { course:'MAE 315', section:1,  days:'MW',    time:'8:30-9:45',  prof:'Kiefer,Scott Fredrick', credits:3, profR:10, timeR:5,  notes:'' },
+    { course:'MAE 315', section:2,  days:'MW',    time:'11:45-1:00', prof:'Muller,Marie',          credits:3, profR:4,  timeR:8,  notes:'' },
+    { course:'MAE 315', section:3,  days:'MW',    time:'1:30-2:45',  prof:'Xu,Cheryl',             credits:3, profR:7,  timeR:7,  notes:'' },
+    { course:'HESF 106', section:95, days:'M',    time:'12:50-2:40', prof:'Harrington,Renee',      credits:1, profR:null, timeR:null, notes:'' },
+    { course:'ST 370',  section:1,  days:'MW',    time:'11:45-1:00', prof:'Hamrick,Spencer Cline', credits:3, profR:9,  timeR:8,  notes:'' },
+    { course:'EC301',   section:601, days:'ONLINE', time:'ONLINE',   prof:'N/A',                   credits:3, profR:8,  timeR:10, notes:'Online' },
+    { course:'EC302',   section:1,  days:'TH',    time:'8:30-9:45',  prof:'Andy Nowel',            credits:3, profR:8,  timeR:5,  notes:'' },
+    { course:'EC302',   section:2,  days:'TH',    time:'10:15-11:30',prof:'Andy Nowel',            credits:3, profR:8,  timeR:9,  notes:'' },
+  ];
+}
+
+// ── XLSX IMPORT (handled by wizard) ─────────────────────────────────────────
+
+function parseXlsxRows(rows) {
+  // Find header row (has "Course Name" or similar)
+  let dataStart = 1;
+  for (let i = 0; i < Math.min(rows.length, 5); i++) {
+    const r = rows[i];
+    if (r && r.some(v => v && String(v).toLowerCase().includes('course'))) {
+      dataStart = i + 1;
+      break;
+    }
+  }
+  const sections = [];
+  for (let i = dataStart; i < rows.length; i++) {
+    const r = rows[i];
+    if (!r || !r[0]) continue;
+    const course  = String(r[0] || '').trim();
+    const section = r[1];
+    const days    = String(r[2] || '').trim();
+    const time    = String(r[3] || '').trim();
+    const prof    = String(r[4] || '').trim();
+    const profR   = (r[5] !== null && r[5] !== undefined && r[5] !== '') ? Number(r[5]) : null;
+    const timeR   = (r[6] !== null && r[6] !== undefined && r[6] !== '') ? Number(r[6]) : null;
+    const credits = r[7] ? Number(r[7]) : 3;
+    const notes   = String(r[8] || '').trim();
+    if (!course || !section) continue;
+    sections.push({ course, section: Number(section), days, time, prof, credits, profR, timeR, notes });
+  }
+  return sections;
+}
+
+// ── SCHEDULE GENERATION ───────────────────────────────────────────────────────
+
+// Returns the set of course names currently marked Required via conditions
+function getRequiredCourseNames() {
+  return conditions
+    .filter(c => c.type === 'required')
+    .map(c => c.courses[0])
+    .filter(c => c !== SPECIAL_HESF); // HESF handled separately
+}
+
+// Power-set helper: returns all subsets of an array
+function powerSet(arr) {
+  return arr.reduce((sets, item) => {
+    return sets.concat(sets.map(s => [...s, item]));
+  }, [[]]);
+}
+
+// Cartesian product of arrays of arrays
+function cartesian(arrays) {
+  return arrays.reduce((acc, arr) => {
+    const result = [];
+    acc.forEach(a => arr.forEach(b => result.push([...a, b])));
+    return result;
+  }, [[]]);
+}
+
+function generateSchedules() {
+  // Group sections by course
+  const courseMap = {};
+  COURSE_SECTIONS.forEach(s => {
+    if (!courseMap[s.course]) courseMap[s.course] = [];
+    courseMap[s.course].push(s);
+  });
+
+  // Detect lab course(s) by notes='Lab'
+  const labCourseNames = [...new Set(
+    COURSE_SECTIONS.filter(s => String(s.notes||'').toLowerCase().includes('lab')).map(s => s.course)
+  )];
+
+  const allCourseNames = Object.keys(courseMap);
+  const requiredNames  = getRequiredCourseNames();
+
+  // Scored courses = not lab, not HESF
+  const scoredNames = allCourseNames.filter(c => !labCourseNames.includes(c) && c !== SPECIAL_HESF);
+
+  // Split into required-scored and optional-scored
+  const requiredScored = scoredNames.filter(c => requiredNames.includes(c));
+  const optionalScored = scoredNames.filter(c => !requiredNames.includes(c));
+
+  // For each subset of optional courses, build combos
+  const optSubsets = powerSet(optionalScored);
+
+  let combos = [];
+
+  optSubsets.forEach(optSubset => {
+    // Courses in this subset + all required
+    const activeCourses = [...requiredScored, ...optSubset];
+    if (activeCourses.length === 0) return;
+
+    // Cartesian product of sections for each active course
+    const sectionArrays = activeCourses.map(c => courseMap[c]);
+    const subCombos = cartesian(sectionArrays);
+
+    subCombos.forEach(combo => {
+      if (!hasTimeConflict(combo)) combos.push(combo);
+    });
+  });
+
+  // Deduplicate by sorted course:section key
+  const seen = new Set();
+  combos = combos.filter(combo => {
+    const key = combo.map(s => s.course + ':' + s.section).sort().join('|');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  // Add default lab section to each combo
+  const labSections = labCourseNames.flatMap(c => courseMap[c] || []);
+  const schedules = combos.map(combo => {
+    const defaultLab = labSections.find(lab => !hasTimeConflict([...combo, lab])) || labSections[0];
+    const classes = [...combo];
+    if (defaultLab) classes.push(defaultLab);
+    return { classes, weighted_score: calcScore(combo), rank: 0 };
+  });
+
+  schedules.sort((a, b) => b.weighted_score - a.weighted_score);
+  schedules.forEach((s, i) => s.rank = i + 1);
+  return schedules;
+}
+
+function calcScore(combo) {
+  // combo = array of section objects (no lab, no hesf)
+  let score = 0;
+  combo.forEach(s => {
+    if (s.course === SPECIAL_LAB) return;
+    if (s.course === SPECIAL_HESF) {
+      score += 19; // HESF fixed bonus
+      return;
+    }
+    if (s.profR !== null && s.timeR !== null) {
+      score += (s.profR + s.timeR) * s.credits;
+    }
+  });
+  return score;
+}
+
+function hasTimeConflict(sections) {
+  const slots = [];
+  sections.forEach(s => {
+    if (isOnlineSection(s)) return; // online never conflicts
+    const parts = (s.time || '').split('-');
+    if (parts.length < 2) return;
+    const start = parseTime(parts[0]);
+    const end   = parseTime(parts[1]);
+    expandDays(s.days).forEach(d => slots.push({ d, start, end }));
+  });
+  for (let i = 0; i < slots.length; i++) {
+    for (let j = i + 1; j < slots.length; j++) {
+      const a = slots[i], b = slots[j];
+      if (a.d === b.d && a.start < b.end && a.end > b.start) return true;
+    }
+  }
+  return false;
+}
+
+// ── CONDITIONS HELPERS ────────────────────────────────────────────────────────
+
+function isLabCourse(name) {
+  return COURSE_SECTIONS.some(s => s.course === name && String(s.notes||'').toLowerCase().includes('lab'));
+}
+
+function isOnlineSection(sec) {
+  return String(sec.days||'').toUpperCase() === 'ONLINE' || String(sec.time||'').toUpperCase() === 'ONLINE';
+}
+
+function isHesfCourse(name) {
+  return name === SPECIAL_HESF;
+}
+
+function courseTag(name) {
+  const cls = isLabCourse(name) ? ' lab' : isHesfCourse(name) ? ' hesf' : '';
+  const suffix = isLabCourse(name) ? ' (lab)' : isHesfCourse(name) ? ' (hesf)' : '';
+  return '<span class="cond-course-tag' + cls + '">' + name + suffix + '</span>';
+}
+
+// Build a multi-select checklist of all courses
+function buildCourseChecklist(idPrefix, selectedList) {
+  const courses = getCourseNames();
+  return courses.map((c, i) => {
+    const checked = selectedList && selectedList.includes(c) ? 'checked' : '';
+    const cls = isLabCourse(c) ? ' lab' : isHesfCourse(c) ? ' hesf' : '';
+    return '<label style="display:flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;padding:2px 0">'
+         + '<input type="checkbox" id="' + idPrefix + '_' + i + '" value="' + c + '" ' + checked + ' style="cursor:pointer">'
+         + '<span class="cond-course-tag' + cls + '">' + c + (isLabCourse(c) ? ' (lab)' : isHesfCourse(c) ? ' (hesf)' : '') + '</span>'
+         + '</label>';
+  }).join('');
+}
+
+function getCheckedCourses(idPrefix) {
+  // Use el.value so order doesn't matter — robust against list changes between render and submit
+  const courses = getCourseNames();
+  return courses.reduce((acc, c, i) => {
+    const el = document.getElementById(idPrefix + '_' + i);
+    if (el && el.checked) acc.push(el.value);
+    return acc;
+  }, []);
+}
+
+// ── WIZARD ────────────────────────────────────────────────────────────────────
+let wizardStep = 0;
+let pendingSections = null;
+
+function openWizard() {
+  wizardStep = 0;
+  pendingSections = null;
+  document.getElementById('fileLabel').textContent = 'No file chosen';
+  document.getElementById('fileLabel').className = 'file-name';
+  document.getElementById('parseStatus').style.display = 'none';
+  // Reset step 0 warning to show current count
+  document.querySelector('#step0 .warn-box').innerHTML = 
+    '⚠️ <strong>This will wipe all current schedule data.</strong><br><br>'
+    + 'Your existing <strong>' + SCHEDULES.length + ' schedules</strong>, scores, and any active filters will be cleared and replaced with data from your new .xlsx file.<br><br>'
+    + 'This cannot be undone.';
+  showWizardStep(0);
+  document.getElementById('wizardOverlay').classList.add('open');
+}
+
+function closeWizard() {
+  document.getElementById('wizardOverlay').classList.remove('open');
+}
+
+function showWizardStep(step) {
+  wizardStep = step;
+  // Show/hide steps
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('step' + i).classList.toggle('active', i === step);
+    const dot = document.getElementById('dot' + i);
+    dot.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+  }
+  // Update title
+  const titles = ['Confirm Reset', 'Import .xlsx', 'Credit Hours', 'Conditions'];
+  document.getElementById('wizardTitle').textContent = titles[step];
+  // Update footer buttons
+  const footer = document.getElementById('wizardFooter');
+  if (step === 0) {
+    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="closeWizard()">Cancel</button>'
+                     + '<button class="mbtn mbtn-danger" onclick="confirmWipe()">Yes, wipe &amp; continue →</button>';
+  } else if (step === 1) {
+    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="showWizardStep(0)">← Back</button>'
+                     + '<button class="mbtn mbtn-primary" id="nextFromImport" onclick="wizardFromImport()" disabled>Next →</button>';
+  } else if (step === 2) {
+    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="showWizardStep(1)">← Back</button>'
+                     + '<button class="mbtn mbtn-primary" onclick="showWizardStep(3)">Next →</button>';
+  } else if (step === 3) {
+    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="showWizardStep(2)">← Back</button>'
+                     + '<button class="mbtn mbtn-primary" onclick="finishWizard()">✓ Apply &amp; Close</button>';
+  }
+}
+
+function confirmWipe() {
+  // Actually wipe data and conditions
+  conditions = [];
+  renderConditions();
+  showWizardStep(1);
+}
+
+function handleXlsxFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const label = document.getElementById('fileLabel');
+  const status = document.getElementById('parseStatus');
+  label.textContent = 'Loading…';
+  label.className = 'file-name';
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const wb = XLSX.read(e.target.result, { type: 'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
+      const sections = parseXlsxRows(rows);
+      if (sections.length === 0) throw new Error('No valid rows found — check column format');
+      pendingSections = sections;
+      label.textContent = '✓ ' + file.name + ' (' + sections.length + ' sections loaded)';
+      label.className = 'file-name loaded';
+      status.style.display = 'none';
+      document.getElementById('nextFromImport').disabled = false;
+    } catch(err) {
+      label.textContent = file.name;
+      label.className = 'file-name';
+      status.textContent = '✗ ' + err.message;
+      status.style.color = '#dc2626';
+      status.style.display = 'block';
+      pendingSections = null;
+      document.getElementById('nextFromImport').disabled = true;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function wizardFromImport() {
+  if (!pendingSections) return;
+  COURSE_SECTIONS = pendingSections;
+  rebuildColors();
+  updateCondInputs();
+  showWizardStep(2);
+}
+
+function finishWizard() {
+  applyConditions();
+  buildFilterPanel();
+  closeWizard();
+}
+
+// ── DYNAMIC COLOR SYSTEM ──────────────────────────────────────────────────────
+// Seeded palette — will auto-assign a color to any course name not already known.
+const COLOR_PALETTE = [
+  ['#ef4444','#fff'], // red
+  ['#8b5cf6','#fff'], // purple
+  ['#0ea5e9','#fff'], // sky
+  ['#06b6d4','#fff'], // cyan
+  ['#3b82f6','#fff'], // blue
+  ['#10b981','#fff'], // emerald
+  ['#f59e0b','#fff'], // amber
+  ['#ec4899','#fff'], // pink
+  ['#14b8a6','#fff'], // teal
+  ['#a855f7','#fff'], // violet
+  ['#f97316','#fff'], // orange
+  ['#84cc16','#000'], // lime
+];
+// Fixed overrides for known courses
+const COLOR_OVERRIDES = {
+  'MAE 306':  ['#f97316','#fff'],
+  'HESF 106': ['#ec4899','#fff'],
 };
+// Runtime map — built/extended whenever new courses appear
+let COLORS = { ...COLOR_OVERRIDES };
+let _colorIdx = 0;
+function getCourseColor(course) {
+  if (!COLORS[course]) {
+    COLORS[course] = COLOR_PALETTE[_colorIdx % COLOR_PALETTE.length];
+    _colorIdx++;
+  }
+  return COLORS[course];
+}
+// Rebuild color assignments from current COURSE_SECTIONS (called after import)
+function rebuildColors() {
+  COLORS = { ...COLOR_OVERRIDES };
+  _colorIdx = 0;
+  [...new Set(COURSE_SECTIONS.map(s => s.course))].sort().forEach(getCourseColor);
+}
+
+// ── CONDITIONS UI (correct full version) ─────────────────────────────────────
+function getCourseNames() {
+  return [...new Set(COURSE_SECTIONS.map(s => s.course))].sort();
+}
+
+function updateCondInputs() {
+  const type = document.getElementById('condType').value;
+  const courses = getCourseNames();
+  let out = '';
+  if (type === 'required') {
+    const opts = courses.map(c => {
+      const suffix = isLabCourse(c) ? ' (lab)' : isHesfCourse(c) ? ' (hesf)' : '';
+      return '<option value="' + c + '">' + c + suffix + '</option>';
+    }).join('');
+    out = '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+        + '<span style="font-size:0.72rem;color:#6b7280">Course:</span>'
+        + '<select id="ci_single" style="font-size:0.78rem;padding:4px 7px;border-radius:5px;border:1px solid #d1d5db">' + opts + '</select>'
+        + '</div>';
+  } else if (type === 'linked') {
+    out = '<div style="font-size:0.72rem;color:#6b7280;margin-bottom:2px">Check 2–6 courses — all will appear together or none will:</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">'
+        + buildCourseChecklist('ci_linked', [])
+        + '</div>';
+  } else if (type === 'mingroup') {
+    out = '<div style="font-size:0.72rem;color:#6b7280;margin-bottom:2px">Step 1 — Check all courses in the group (2–6):</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px" id="ci_min_grid">'
+        + buildCourseChecklist('ci_min', [])
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid #e5e7eb;font-size:0.78rem">'
+        + '<span style="color:#6b7280;white-space:nowrap">Step 2 — Must take at least</span>'
+        + '<input type="number" id="ci_min_x" min="1" max="6" value="1" style="width:44px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;font-size:0.78rem">'
+        + '<span style="color:#6b7280">of the checked courses.</span>'
+        + '</div>';
+  } else if (type === 'excluded') {
+    out = '<div style="font-size:0.72rem;color:#6b7280;margin-bottom:2px">Check 2–6 courses — none of these can appear together in the same schedule:</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">'
+        + buildCourseChecklist('ci_excl', [])
+        + '</div>';
+  }
+  document.getElementById('condInputs').innerHTML = out;
+}
+
+function addCondition() {
+  const type = document.getElementById('condType').value;
+  let cond = null;
+  if (type === 'required') {
+    const c = document.getElementById('ci_single').value;
+    cond = { type: 'required', courses: [c] };
+  } else if (type === 'linked') {
+    const selected = getCheckedCourses('ci_linked');
+    if (selected.length < 2) { alert('Check at least 2 courses to link.'); return; }
+    if (selected.length > 6) { alert('Maximum 6 courses per linked group.'); return; }
+    cond = { type: 'linked', courses: selected };
+  } else if (type === 'mingroup') {
+    const selected = getCheckedCourses('ci_min');
+    const x = parseInt(document.getElementById('ci_min_x').value) || 1;
+    if (selected.length < 2) { alert('Check at least 2 courses for the group.'); return; }
+    if (x < 1 || x > selected.length) { alert('Minimum must be between 1 and the number of checked courses.'); return; }
+    cond = { type: 'mingroup', courses: selected, x };
+  } else if (type === 'excluded') {
+    const selected = getCheckedCourses('ci_excl');
+    if (selected.length < 2) { alert('Check at least 2 courses.'); return; }
+    if (selected.length > 6) { alert('Maximum 6 courses.'); return; }
+    cond = { type: 'excluded', courses: selected };
+  }
+  if (cond) { conditions.push(cond); renderConditions(); updateCondInputs(); }
+}
+
+function removeCondition(i) {
+  conditions.splice(i, 1);
+  renderConditions();
+}
+
+function renderConditions() {
+  const list = document.getElementById('condList');
+  if (!list) return;
+  if (conditions.length === 0) {
+    list.innerHTML = '<div style="font-size:0.75rem;color:#9ca3af;font-style:italic;padding:4px 0">No conditions set — all valid schedules shown.</div>';
+    return;
+  }
+  conditions.forEach(c => { if (c.type === 'atleast') c.type = 'mingroup'; });
+  const labels    = { required:'Required', linked:'Linked Group', mingroup:'Minimum From Group', excluded:'Never Together' };
+  const badgeClass = { required:'required', linked:'linked', mingroup:'atleast', excluded:'excluded' };
+  list.innerHTML = conditions.map((c, i) => {
+    const label = labels[c.type] || c.type;
+    const bClass = badgeClass[c.type] || c.type;
+    const badge = '<span class="cond-badge ' + bClass + '">' + label + '</span>';
+    let desc = '';
+    if (c.type === 'required') {
+      desc = courseTag(c.courses[0]);
+    } else if (c.type === 'linked') {
+      desc = c.courses.map(courseTag).join(' <span style="font-size:0.7rem;color:#6b7280">+</span> ');
+    } else if (c.type === 'mingroup') {
+      desc = '<span style="font-size:0.72rem;color:#6d28d9;font-weight:700">≥' + c.x + ' of:</span> '
+           + c.courses.map(courseTag).join(' <span style="font-size:0.7rem;color:#6b7280">,</span> ');
+    } else if (c.type === 'excluded') {
+      desc = c.courses.map(courseTag).join(' <span style="font-size:0.7rem;color:#b91c1c">✕</span> ');
+    }
+    return '<div class="cond-item">'
+         + badge
+         + ' <span class="cond-label" style="flex:1;display:flex;align-items:center;gap:4px;flex-wrap:wrap">' + desc + '</span>'
+         + '<button class="cond-remove" onclick="removeCondition(' + i + ')">✕</button>'
+         + '</div>';
+  }).join('');
+}
+
+function applyConditions() {
+  const crMinEl = document.getElementById('crMin');
+  const crMaxEl = document.getElementById('crMax');
+  const crMin = crMinEl ? (parseInt(crMinEl.value) || 0) : 0;
+  const crMax = crMaxEl ? (parseInt(crMaxEl.value) || 18) : 18;
+
+  let schedules = generateSchedules();
+
+  const labCourseNames = [...new Set(
+    COURSE_SECTIONS.filter(s => String(s.notes||'').toLowerCase().includes('lab')).map(s => s.course)
+  )];
+
+  schedules = schedules.filter(s => {
+    const allCourses = s.classes.map(c => c.course);
+    const totalCr = s.classes
+      .filter(c => c.course !== SPECIAL_HESF)
+      .reduce((sum, c) => sum + (c.credits || 0), 0);
+    if (totalCr < crMin || totalCr > crMax) return false;
+
+    for (const cond of conditions) {
+      const relevant = cond.courses;
+      if (cond.type === 'required') continue; // enforced by generateSchedules
+      if (cond.type === 'excluded') {
+        const present = relevant.filter(c => allCourses.includes(c));
+        if (present.length >= 2) return false;
+      }
+      if (cond.type === 'linked') {
+        const presences = relevant.map(c => allCourses.includes(c));
+        if (presences.some(Boolean) && !presences.every(Boolean)) return false;
+      }
+      if (cond.type === 'mingroup') {
+        const count = relevant.filter(c => allCourses.includes(c)).length;
+        if (count < cond.x) return false;
+      }
+    }
+    return true;
+  });
+
+  schedules.forEach((s, i) => s.rank = i + 1);
+  SCHEDULES.length = 0;
+  schedules.forEach(s => SCHEDULES.push(s));
+  updateMaxRank();
+  renderList();
+}
+
+function updateMaxRank() {
+  const max = SCHEDULES.length;
+  document.getElementById('jumpInput').max = max;
+  document.getElementById('countBadge').textContent = max + ' schedules';
+}
+
+function rebuildAndRender() {
+  renderConditions();
+  buildFilterPanel();
+  applyConditions();
+}
 
 const DAYS_ORDER = ['M','T','W','H','F'];
 const DAY_NAMES  = ['Mon','Tue','Wed','Thu','Fri'];
@@ -243,56 +945,88 @@ const PX_PER_MIN = 32 / 60;
 // ── State ──────────────────────────────────────────────
 // filters[course] = Set of allowed section strings, or null (= all allowed)
 // MAE 306 is handled separately via lab306 dropdown
-const filters = {};
+let filters = {};
 let activeIdx  = null;
 let currentSchedules = [];
+let courseMap = {};
+let courseNames = [];
 
-// ── Build course→sections map ──────────────────────────
-const courseMap = {};
-SCHEDULES.forEach(s => {
-  s.classes.forEach(c => {
-    if (!courseMap[c.course]) courseMap[c.course] = new Map();
-    const key = String(c.section);
-    if (!courseMap[c.course].has(key))
-      courseMap[c.course].set(key, `§${c.section}  ${c.days}  ${c.time}`);
-  });
-});
-const courseNames = Object.keys(courseMap);
+// courseMap / courseNames / filters are rebuilt in buildFilterPanel()
 
-// Initialize filters (null = no filter)
-courseNames.forEach(course => { filters[course] = null; });
+// ── FILTER PANEL ─────────────────────────────────────────────────────────────
+// courseFilters[course] = true (included) | false (excluded)
+// sectionFilters[course] = null (all sections ok) | Set of allowed section keys
+let courseFilters = {};
+let sectionFilters = {};
 
-// ── FILTER PANEL (chips, excludes MAE 306 since it has its own control) ──
 function buildFilterPanel() {
+  // Rebuild courseMap for lab pin dropdown + section filter chips
+  courseMap = {};
+  SCHEDULES.forEach(s => {
+    s.classes.forEach(c => {
+      if (!courseMap[c.course]) courseMap[c.course] = new Map();
+      const key = String(c.section);
+      if (!courseMap[c.course].has(key))
+        courseMap[c.course].set(key, `§${c.section}  ${c.days}  ${c.time}`);
+    });
+  });
+  courseNames = Object.keys(courseMap);
+
+  const labNames = [...new Set(
+    COURSE_SECTIONS.filter(s => String(s.notes||'').toLowerCase().includes('lab')).map(s => s.course)
+  )];
+  const filterableCourses = [...new Set(COURSE_SECTIONS.map(s => s.course))]
+    .filter(c => !labNames.includes(c) && c !== SPECIAL_HESF)
+    .sort();
+
+  // Initialise state for new courses
+  filterableCourses.forEach(c => {
+    if (courseFilters[c] === undefined) courseFilters[c] = true;
+    if (sectionFilters[c] === undefined) sectionFilters[c] = null;
+  });
+
   const grid = document.getElementById('filterGrid');
   grid.innerHTML = '';
 
-  courseNames.forEach(course => {
-
+  filterableCourses.forEach(course => {
+    const included = courseFilters[course] !== false;
+    const [color] = getCourseColor(course);
     const sections = courseMap[course];
+    const hasMultipleSections = sections && sections.size > 1;
 
-    // skip courses that only have one section, or MAE 306 (handled by pin section)
-    if (sections.size <= 1) return;
-    if (course === 'MAE 306') return;
-    const [color] = COLORS[course] || ['#888'];
-    const activeSet = filters[course];
+    // Course toggle chip — no nested backticks, use plain string concat
+    const courseStyle = included
+      ? 'background:' + color + ';border-color:transparent;color:#fff;font-weight:600'
+      : 'opacity:0.45';
+    const courseClass = 'chip' + (included ? ' active' : '');
+    let html = '<div style="margin-bottom:8px">';
+    html += '<div class="filter-section-chips">';
+    html += '<span class="' + courseClass + '" style="' + courseStyle + '" onclick="toggleCourseFilter(\'' + course + '\')">' + course + '</span>';
+    html += '</div>';
 
-    const chips = [];
-    // "All" chip
-    chips.push(`<span class="chip${activeSet === null ? ' active" style="background:' + color + '"' : '"'} onclick="toggleCourseFilter('${course}')"}>All</span>`);
-    sections.forEach((label, key) => {
-      const isActive = activeSet !== null && activeSet.has(key);
-      chips.push(`<span class="chip${isActive ? '" style="background:' + color + '"' : '"'} onclick="toggleSection('${course}','${key}')">${label}</span>`);
-    });
+    // Section chips — only when included AND >1 section
+    if (included && hasMultipleSections) {
+      const activeSet = sectionFilters[course];
+      const allActive = activeSet === null;
+      html += '<div class="filter-section-chips" style="margin-top:5px;padding-left:4px">';
+      // All chip
+      const allStyle = allActive ? 'background:' + color + ';border-color:transparent;color:#fff' : '';
+      const allClass = 'chip' + (allActive ? ' active' : '');
+      html += '<span class="' + allClass + '" style="' + allStyle + '" onclick="setSectionAll(\'' + course + '\')">All</span>';
+      // Per-section chips
+      sections.forEach((label, key) => {
+        const isActive = !allActive && activeSet.has(key);
+        const secStyle = isActive ? 'background:' + color + ';border-color:transparent;color:#fff' : '';
+        const secClass = 'chip' + (isActive ? ' active' : '');
+        html += '<span class="' + secClass + '" style="' + secStyle + '" onclick="toggleSection(\'' + course + '\',\'' + key + '\')">' + label + '</span>';
+      });
+      html += '</div>';
+    }
 
+    html += '</div>';
     const block = document.createElement('div');
     block.className = 'filter-course-block';
-    block.innerHTML = `
-      <div class="filter-course-label">
-        <span class="filter-dot" style="background:${color}"></span>
-        ${course}
-      </div>
-      <div class="filter-section-chips">${chips.join('')}</div>`;
+    block.innerHTML = html;
     grid.appendChild(block);
   });
 
@@ -300,26 +1034,39 @@ function buildFilterPanel() {
 }
 
 function updateFilterCount() {
-  const active = courseNames.filter(c => filters[c] !== null).length;
-  document.getElementById('filterCount').textContent = active > 0 ? `${active} filter${active > 1 ? 's' : ''} active` : '';
+  const excluded = Object.values(courseFilters).filter(v => v === false).length;
+  const secActive = Object.values(sectionFilters).filter(v => v !== null).length;
+  const parts = [];
+  if (excluded > 0) parts.push(`${excluded} course${excluded > 1 ? 's' : ''} hidden`);
+  if (secActive > 0) parts.push(`${secActive} section filter${secActive > 1 ? 's' : ''}`);
+  document.getElementById('filterCount').textContent = parts.join(' · ');
 }
 
 function toggleCourseFilter(course) {
-  filters[course] = null;
+  courseFilters[course] = courseFilters[course] === false ? true : false;
+  // Clear section filter when course is excluded (irrelevant while hidden)
+  if (courseFilters[course] === false) sectionFilters[course] = null;
+  buildFilterPanel();
+  renderList();
+}
+
+function setSectionAll(course) {
+  sectionFilters[course] = null;
   buildFilterPanel();
   renderList();
 }
 
 function toggleSection(course, key) {
-  if (filters[course] === null) {
-    filters[course] = new Set([key]);
+  const current = sectionFilters[course];
+  if (current === null) {
+    // Was "all" — now pin to just this one
+    sectionFilters[course] = new Set([key]);
   } else {
-    const s = filters[course];
-    if (s.has(key)) {
-      s.delete(key);
-      if (s.size === 0) filters[course] = null;
+    if (current.has(key)) {
+      current.delete(key);
+      if (current.size === 0) sectionFilters[course] = null;
     } else {
-      s.add(key);
+      current.add(key);
     }
   }
   buildFilterPanel();
@@ -327,7 +1074,8 @@ function toggleSection(course, key) {
 }
 
 function resetFilters() {
-  courseNames.forEach(c => { filters[c] = null; });
+  Object.keys(courseFilters).forEach(c => { courseFilters[c] = true; });
+  Object.keys(sectionFilters).forEach(c => { sectionFilters[c] = null; });
   buildFilterPanel();
   renderList();
 }
@@ -335,8 +1083,9 @@ function resetFilters() {
 function applyFilters(list) {
   return list.filter(s =>
     s.classes.every(c => {
-      const f = filters[c.course];
-      return f === null || f.has(String(c.section));
+      if (courseFilters[c.course] === false) return false;
+      const sf = sectionFilters[c.course];
+      return sf == null || sf.has(String(c.section));
     })
   );
 }
@@ -367,7 +1116,7 @@ function renderList() {
 
   panel.innerHTML = currentSchedules.map((s, i) => {
     const tags = s.classes.filter(c => c.course !== 'MAE 306').map(c => {
-      const [bg] = COLORS[c.course] || ['#888'];
+      const [bg] = getCourseColor(c.course);
       return '<span class="tag" style="background:' + bg + '">' + c.course + '</span>';
     }).join('');
     const hesfTag = !hesfHasConflict(s)
@@ -441,6 +1190,7 @@ function hesfHasConflict(schedule) {
   return schedule.classes
     .filter(c => c.course !== 'MAE 306')
     .some(c => {
+      if (isOnlineSection(c)) return false; // online never conflicts
       const cDays = expandDays(c.days);
       if (!hesfDays.some(d => cDays.includes(d))) return false;
       const [cs, ce] = c.time.split('-').map(parseTime);
@@ -450,6 +1200,7 @@ function hesfHasConflict(schedule) {
 
 function renderDetail(s) {
   const panel = document.getElementById('detailPanel');
+  // Online classes row — rendered separately below calendar
   const totalPx = (CAL_END - CAL_START) * PX_PER_MIN;
 
   // Determine HESF availability; auto-on only when switching to a new schedule
@@ -466,18 +1217,11 @@ function renderDetail(s) {
   // Build the effective class list — swap MAE 306 with the override if set, inject HESF if toggled
   let effectiveClasses = s.classes.map(c => {
     if (c.course === 'MAE 306' && lab306Override !== null) {
-      // Find the override section's data from courseMap
-      const overrideLabel = courseMap['MAE 306'].get(lab306Override); // "§210  T  3:00-4:50"
-      // Parse label back into parts: "§210  T  3:00-4:50"
-      const labelMatch = overrideLabel && overrideLabel.match(/§(\S+)\s+(\S+)\s+(\S+)/);
-      if (labelMatch) {
-        return {
-          ...c,
-          section: parseInt(labelMatch[1]) || lab306Override,
-          days: labelMatch[2],
-          time: labelMatch[3],
-        };
-      }
+      // Look up override section directly from COURSE_SECTIONS — reliable source of truth
+      const overrideSec = COURSE_SECTIONS.find(
+        sec => sec.course === 'MAE 306' && String(sec.section) === String(lab306Override)
+      );
+      if (overrideSec) return { ...overrideSec };
     }
     return c;
   });
@@ -488,7 +1232,9 @@ function renderDetail(s) {
   }
 
   const dayMap = { M:[], T:[], W:[], H:[], F:[] };
+  const onlineClasses = [];
   effectiveClasses.forEach(c => {
+    if (isOnlineSection(c)) { onlineClasses.push(c); return; }
     const parts = (c.time || '').split('-');
     if (parts.length < 2) return;
     const start = parseTime(parts[0]), end = parseTime(parts[1]);
@@ -505,7 +1251,7 @@ function renderDetail(s) {
     const events = dayMap[d].map(ev => {
       const top = (ev.start - CAL_START) * PX_PER_MIN;
       const height = Math.max((ev.end - ev.start) * PX_PER_MIN, 20);
-      const [bg, fg] = COLORS[ev.course] || ['#999','#fff'];
+      const [bg, fg] = getCourseColor(ev.course);
       return `<div class="event-block" style="top:${top}px;height:${height}px;background:${bg};color:${fg}">
         <div class="ev-course">${ev.course}</div>
         <div class="ev-section">§${ev.section}</div>
@@ -516,7 +1262,7 @@ function renderDetail(s) {
   }).join('');
 
   const tableRows = effectiveClasses.map(c => {
-    const [bg] = COLORS[c.course] || ['#888'];
+    const [bg] = getCourseColor(c.course);
     const isOverridden = c.course === 'MAE 306' && lab306Override !== null;
     return `<tr${isOverridden ? ' style="background:#fff8f0"' : ''}>
       <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${bg};margin-right:5px"></span>
@@ -576,6 +1322,22 @@ ALL_LABS.forEach(({ key, label, days, time }) => {
   html += '<h2>Rank #' + s.rank + '</h2>';
   html += '<span class="detail-score">Weighted Score: ' + s.weighted_score + '</span>';
   html += '</div>';
+
+  // Online course banner
+  if (onlineClasses.length > 0) {
+    html += '<div style="background:white;border-radius:10px;padding:10px 16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex;align-items:center;gap:10px;flex-wrap:wrap">';
+    html += '<span style="font-size:0.68rem;font-weight:700;letter-spacing:0.08em;color:#0ea5e9;text-transform:uppercase;white-space:nowrap">🌐 Online</span>';
+    html += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
+    onlineClasses.forEach(c => {
+      const [bg, fg] = getCourseColor(c.course);
+      html += '<span style="display:inline-flex;align-items:center;gap:5px;background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;font-size:0.75rem;font-weight:600">';
+      html += c.course + ' <span style="opacity:0.75;font-size:0.68rem">§' + c.section + '</span>';
+      html += '<span style="opacity:0.6;font-size:0.65rem;font-weight:400">' + c.prof + '</span>';
+      html += '</span>';
+    });
+    html += '</div></div>';
+  }
+
   html += '<div class="calendar">';
   html += '<div class="cal-head" style="grid-template-columns:60px repeat(5,1fr)">';
   html += '<div></div>' + DAY_NAMES.map(n => '<div>' + n + '</div>').join('');
@@ -628,8 +1390,11 @@ function toggleHesf() {
 // ── INIT ──────────────────────────────────────────────
 document.getElementById('jumpInput').onkeydown = e => { if (e.key === 'Enter') jumpToRank(); };
 
+// Generate schedules from built-in data, build UI
+rebuildColors();
+renderConditions();
+applyConditions();   // populates SCHEDULES, calls renderList
 buildFilterPanel();
-renderList();
 </script>
 </body>
 </html>
