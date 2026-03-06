@@ -7,8 +7,6 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
-
-/* HEADER */
 header {
   background: #1a1a2e; color: white;
   padding: 10px 18px;
@@ -30,85 +28,32 @@ input[type=number] { width: 72px; }
   font-size: 0.82rem; font-weight: 600; cursor: pointer; border-radius: 5px;
 }
 .hbtn:hover { background: #3a6fa8; }
-.count-badge {
-  background: #4f86c6; border-radius: 10px;
-  padding: 2px 10px; font-size: 0.75rem; white-space: nowrap;
-}
-
-/* LAYOUT */
+.count-badge { background: #4f86c6; border-radius: 10px; padding: 2px 10px; font-size: 0.75rem; white-space: nowrap; }
 .layout { display: flex; height: calc(100vh - 56px); overflow: hidden; }
-
-/* SIDEBAR */
-.sidebar {
-  width: 300px; min-width: 220px;
-  display: flex; flex-direction: column;
-  background: white; border-right: 1px solid #ddd;
-  overflow: hidden;
-}
+.sidebar { width: 300px; min-width: 220px; display: flex; flex-direction: column; background: white; border-right: 1px solid #ddd; overflow: hidden; }
 .schedule-list { flex: 1; overflow-y: auto; }
-.sched-item {
-  padding: 9px 13px; cursor: pointer;
-  border-bottom: 1px solid #f0f0f0; transition: background 0.1s;
-}
+.sched-item { padding: 9px 13px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background 0.1s; }
 .sched-item:hover { background: #f5f7ff; }
 .sched-item.active { background: #dbeafe; border-left: 3px solid #3b82f6; }
 .sched-rank { font-weight: 700; font-size: 0.95rem; color: #1e40af; }
 .sched-score { font-size: 0.75rem; color: #666; }
 .sched-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
 .tag { font-size: 0.62rem; padding: 1px 5px; border-radius: 3px; color: white; font-family: monospace; }
-
-/* FILTER PANEL (chip style, top of sidebar) */
-.filter-panel {
-  background: #f8f9ff;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 13px;
-  flex-shrink: 0;
-  max-height: 220px;
-  overflow-y: auto;
-}
-.filter-title {
-  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
-  color: #666; text-transform: uppercase; margin-bottom: 8px;
-}
+.filter-panel { background: #f8f9ff; border-bottom: 1px solid #ddd; padding: 10px 13px; flex-shrink: 0; max-height: 220px; overflow-y: auto; }
+.filter-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; color: #666; text-transform: uppercase; margin-bottom: 8px; }
 .filter-course-block { margin-bottom: 10px; }
-.filter-course-label {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 0.72rem; color: #555; margin-bottom: 4px;
-  font-family: monospace;
-}
-.filter-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .filter-section-chips { display: flex; flex-wrap: wrap; gap: 4px; }
-.chip {
-  padding: 2px 8px; border-radius: 10px;
-  border: 1px solid #ccc; background: transparent;
-  color: #666; font-size: 0.66rem; font-family: monospace;
-  cursor: pointer; transition: all 0.1s; white-space: nowrap;
-}
+.chip { padding: 2px 8px; border-radius: 10px; border: 1px solid #ccc; background: transparent; color: #666; font-size: 0.66rem; font-family: monospace; cursor: pointer; transition: all 0.1s; white-space: nowrap; }
 .chip:hover { border-color: #999; color: #333; }
 .chip.active { color: white; border-color: transparent; }
-.filter-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-top: 6px; padding-top: 6px; border-top: 1px solid #e8e8e8;
-}
+.filter-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding-top: 6px; border-top: 1px solid #e8e8e8; }
 .filter-count { font-size: 0.68rem; font-family: monospace; color: #888; }
-.filter-reset {
-  padding: 3px 10px; background: transparent;
-  border: 1px solid #ccc; color: #888;
-  font-size: 0.66rem; cursor: pointer; border-radius: 3px; font-family: monospace;
-}
+.filter-reset { padding: 3px 10px; background: transparent; border: 1px solid #ccc; color: #888; font-size: 0.66rem; cursor: pointer; border-radius: 3px; font-family: monospace; }
 .filter-reset:hover { border-color: #4f86c6; color: #4f86c6; }
-
-/* DETAIL */
 .detail-panel { flex: 1; overflow-y: auto; padding: 14px; background: #f0f2f5; }
-.detail-header {
-  background: white; border-radius: 10px; padding: 12px 18px;
-  margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-}
+.detail-header { background: white; border-radius: 10px; padding: 12px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
 .detail-header h2 { font-size: 1.2rem; color: #1e40af; }
 .detail-score { font-size: 1rem; font-weight: 700; color: #374151; }
-
-/* CALENDAR */
 .calendar { background: white; border-radius: 10px; overflow: hidden; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
 .cal-head { display: grid; background: #1a1a2e; color: white; font-size: 0.75rem; font-weight: 600; text-align: center; }
 .cal-head > div { padding: 8px 4px; }
@@ -117,16 +62,10 @@ input[type=number] { width: 72px; }
 .time-label { height: 40px; display: flex; align-items: flex-start; justify-content: flex-end; padding-right: 6px; padding-top: 3px; font-size: 0.62rem; color: #999; }
 .day-col { position: relative; border-left: 1px solid #efefef; }
 .hour-line { height: 40px; border-bottom: 1px solid #f5f5f5; }
-.event-block {
-  position: absolute; left: 2px; right: 2px; border-radius: 5px;
-  font-size: 0.68rem; padding: 3px 5px; z-index: 2;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.18); overflow: hidden;
-}
+.event-block { position: absolute; left: 2px; right: 2px; border-radius: 5px; font-size: 0.68rem; padding: 3px 5px; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,0.18); overflow: hidden; }
 .ev-course { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ev-section { opacity: 0.85; font-size: 0.65rem; }
 .ev-time { opacity: 0.75; font-size: 0.6rem; }
-
-/* TABLE */
 .course-table { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 12px; }
 .course-table table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
 .course-table th { background: #1a1a2e; color: white; padding: 8px 12px; text-align: left; font-size: 0.72rem; }
@@ -134,115 +73,14 @@ input[type=number] { width: 72px; }
 .course-table tr:last-child td { border-bottom: none; }
 .course-table tr:hover td { background: #fafafa; }
 .cr-badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; background: #dbeafe; color: #1e40af; margin-left: 4px; }
-
-/* MAE 306 QUICK PICK — shown below table inside detail panel */
-.lab-pick-box {
-  background: white; border-radius: 10px; padding: 14px 18px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  border-top: 3px solid #f97316;
-}
-.lab-pick-title {
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
-  color: #f97316; text-transform: uppercase; margin-bottom: 10px;
-}
+.lab-pick-box { background: white; border-radius: 10px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-top: 3px solid #f97316; }
+.lab-pick-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; color: #f97316; text-transform: uppercase; margin-bottom: 10px; }
 .lab-pick-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .lab-pick-label { font-size: 0.8rem; color: #555; white-space: nowrap; }
-.lab-pick-select {
-  flex: 1; min-width: 180px; padding: 6px 10px; border-radius: 6px;
-  border: 1px solid #ddd; background: white; color: #333;
-  font-size: 0.8rem; font-family: monospace; cursor: pointer;
-}
+.lab-pick-select { flex: 1; min-width: 180px; padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; background: white; color: #333; font-size: 0.8rem; font-family: monospace; cursor: pointer; }
 .lab-pick-select:focus { outline: none; border-color: #f97316; }
 .lab-pick-info { font-size: 0.72rem; color: #888; margin-top: 8px; font-family: monospace; }
-
 .no-select { padding: 60px; text-align: center; color: #aaa; }
-
-/* IMPORT WIZARD MODAL */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.55); z-index: 1000;
-  align-items: center; justify-content: center;
-}
-.modal-overlay.open { display: flex; }
-.modal-box {
-  background: white; border-radius: 12px;
-  width: 480px; max-width: 95vw; max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-.modal-header {
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.modal-header h2 { font-size: 1rem; font-weight: 700; color: #111827; }
-.modal-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #9ca3af; }
-.modal-close:hover { color: #374151; }
-.modal-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 16px; }
-.modal-step { display: none; flex-direction: column; gap: 12px; }
-.modal-step.active { display: flex; }
-.modal-footer { padding: 12px 20px; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; justify-content: flex-end; }
-.mbtn { padding: 7px 16px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; cursor: pointer; border: none; }
-.mbtn-danger  { background: #ef4444; color: white; }
-.mbtn-danger:hover { background: #dc2626; }
-.mbtn-primary { background: #4f86c6; color: white; }
-.mbtn-primary:hover { background: #3a6fa8; }
-.mbtn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
-.mbtn-secondary:hover { background: #e5e7eb; }
-.warn-box { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; color: #92400e; }
-.info-box { background: #eff6ff; border: 1px solid #93c5fd; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; color: #1e40af; }
-.ok-box  { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; color: #166534; }
-.step-label { font-size: 0.7rem; font-weight: 700; color: #9ca3af; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: -4px; }
-.import-btn-bar {
-  display: flex; align-items: center; gap: 10px; background: #f9fafb;
-  border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 12px;
-}
-.import-btn-bar button { padding: 5px 12px; background: #4f86c6; color: white; border: none; border-radius: 5px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
-.import-btn-bar button:hover { background: #3a6fa8; }
-.file-name { font-size: 0.78rem; color: #6b7280; font-style: italic; }
-.file-name.loaded { color: #16a34a; font-style: normal; font-weight: 600; }
-.step-dots { display: flex; gap: 6px; justify-content: center; padding: 4px 0 8px; }
-.step-dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; transition: background 0.2s; }
-.step-dot.active { background: #4f86c6; }
-.step-dot.done { background: #86efac; }
-.cond-list { display: flex; flex-direction: column; gap: 5px; }
-.cond-item {
-  display: flex; align-items: center; gap: 6px;
-  background: #f8fafc; border: 1px solid #e5e7eb;
-  border-radius: 6px; padding: 5px 8px; font-size: 0.78rem;
-}
-.cond-item .cond-label { flex: 1; }
-.cond-remove {
-  background: none; border: none; cursor: pointer; color: #9ca3af;
-  font-size: 0.85rem; padding: 0 2px; line-height: 1;
-}
-.cond-remove:hover { color: #ef4444; }
-.cond-badge {
-  font-size: 0.65rem; font-weight: 700; padding: 1px 5px;
-  border-radius: 4px; white-space: nowrap;
-}
-.cond-badge.required  { background: #dbeafe; color: #1d4ed8; }
-.cond-badge.linked    { background: #dcfce7; color: #15803d; }
-.cond-badge.excluded  { background: #fee2e2; color: #b91c1c; }
-.cond-badge.credits   { background: #fef3c7; color: #b45309; }
-.cond-badge.atleast   { background: #ede9fe; color: #6d28d9; }
-.cond-course-tag { display:inline-block; background:#e0e7ff; color:#3730a3; border-radius:4px; padding:1px 6px; font-size:0.72rem; margin:1px; }
-.cond-course-tag.lab  { background:#ffedd5; color:#9a3412; }
-.cond-course-tag.hesf { background:#fce7f3; color:#9d174d; }
-.add-cond-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.add-cond-row select, .add-cond-row input { 
-  font-size: 0.78rem; padding: 4px 7px; border-radius: 5px;
-  border: 1px solid #d1d5db; background: white; color: #333;
-}
-.add-cond-btn {
-  padding: 4px 10px; background: #374151; color: white; border: none;
-  border-radius: 5px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
-}
-.add-cond-btn:hover { background: #1f2937; }
-.cr-inputs { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; }
-.cr-inputs input { width: 52px; }
-
-/* MOBILE */
 @media (max-width: 700px) {
   .layout { flex-direction: column; height: auto; overflow: visible; }
   .sidebar { width: 100%; height: auto; max-height: 300px; border-right: none; border-bottom: 1px solid #ddd; }
@@ -255,7 +93,6 @@ input[type=number] { width: 72px; }
   .course-table table { min-width: 460px; }
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -280,16 +117,14 @@ input[type=number] { width: 72px; }
       <option value="200">≥ 200</option>
     </select>
     <span class="hlabel">Jump to #:</span>
-    <input type="number" id="jumpInput" min="1" max="39" placeholder="rank">
+    <input type="number" id="jumpInput" min="1" placeholder="rank">
     <button class="hbtn" onclick="jumpToRank()">Go</button>
-    <span class="count-badge" id="countBadge">39 schedules</span>
-    <button class="hbtn" style="background:#6366f1;margin-left:auto" onclick="openWizard()">⚙️ Import &amp; Configure</button>
+    <span class="count-badge" id="countBadge">0 schedules</span>
   </div>
 </header>
 
 <div class="layout">
   <div class="sidebar">
-    <!-- Chip filter for non-306 courses -->
     <div class="filter-panel" id="filterPanel">
       <div class="filter-title">🔍 Filter by Course</div>
       <div id="filterGrid"></div>
@@ -298,187 +133,112 @@ input[type=number] { width: 72px; }
         <button class="filter-reset" onclick="resetFilters()">Clear All</button>
       </div>
     </div>
-
-    <!-- Schedule list -->
     <div class="schedule-list" id="listPanel"></div>
   </div>
-
   <div class="detail-panel" id="detailPanel">
     <div class="no-select">← Select a schedule from the list</div>
   </div>
 </div>
 
-<!-- IMPORT WIZARD MODAL -->
-<div class="modal-overlay" id="wizardOverlay">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h2 id="wizardTitle">Import &amp; Configure</h2>
-      <button class="modal-close" onclick="closeWizard()">✕</button>
-    </div>
-    <div class="modal-body">
-
-      <!-- Step dots -->
-      <div class="step-dots">
-        <div class="step-dot" id="dot0"></div>
-        <div class="step-dot" id="dot1"></div>
-        <div class="step-dot" id="dot2"></div>
-        <div class="step-dot" id="dot3"></div>
-      </div>
-
-      <!-- Step 0: Warning / confirm wipe -->
-      <div class="modal-step" id="step0">
-        <div class="step-label">Step 1 of 4 — Confirm</div>
-        <div class="warn-box">
-          ⚠️ <strong>This will wipe all current schedule data.</strong><br><br>
-          Your existing 39 schedules, scores, and any active filters will be cleared and replaced with the data from your new .xlsx file.<br><br>
-          This cannot be undone.
-        </div>
-        <p style="font-size:0.82rem;color:#374151">Do you want to continue?</p>
-      </div>
-
-      <!-- Step 1: Upload xlsx -->
-      <div class="modal-step" id="step1">
-        <div class="step-label">Step 2 of 4 — Import .xlsx</div>
-        <div class="info-box">Upload your <strong>Class_Schedule_Row_Format.xlsx</strong> file. The file should have columns: Course Name, Section, Days, Time Block, Professor, Rating out of 10, Time slot rating out of 10, Credit Hours, Notes.</div>
-        <div class="import-btn-bar">
-          <button onclick="document.getElementById('xlsxInput').click()">📂 Choose File</button>
-          <span class="file-name" id="fileLabel">No file chosen</span>
-          <input type="file" id="xlsxInput" accept=".xlsx" style="display:none" onchange="handleXlsxFile(event)">
-        </div>
-        <div id="parseStatus" style="font-size:0.78rem;display:none"></div>
-      </div>
-
-      <!-- Step 2: Credit hours -->
-      <div class="modal-step" id="step2">
-        <div class="step-label">Step 3 of 4 — Credit Hours</div>
-        <div class="info-box">Set the credit hour range for schedules to show. MAE 306 lab always adds +1 credit.</div>
-        <div class="cr-inputs">
-          <span>Min credits:</span>
-          <input type="number" id="crMin" min="0" max="30" value="0">
-          <span>Max credits:</span>
-          <input type="number" id="crMax" min="0" max="30" value="18">
-        </div>
-      </div>
-
-      <!-- Step 3: Conditions -->
-      <div class="modal-step" id="step3">
-        <div class="step-label">Step 4 of 4 — Conditions</div>
-        <div class="info-box">Add rules to filter schedules. All active conditions apply simultaneously.</div>
-        <div class="cond-list" id="condList"></div>
-        <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span style="font-size:0.72rem;font-weight:700;color:#6b7280;white-space:nowrap">Type:</span>
-            <select id="condType" onchange="updateCondInputs()" style="font-size:0.78rem;padding:4px 7px;border-radius:5px;border:1px solid #d1d5db;flex:1;min-width:160px">
-              <option value="required">Required — must appear in every schedule</option>
-              <option value="linked">Linked Group — all appear or none appear</option>
-              <option value="mingroup">Minimum From Group</option>
-              <option value="excluded">Never Together</option>
-            </select>
-          </div>
-          <div id="condInputs" style="display:flex;flex-direction:column;gap:6px"></div>
-          <div>
-            <button class="add-cond-btn" onclick="addCondition()">+ Add Condition</button>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="modal-footer" id="wizardFooter"></div>
-  </div>
-</div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// SCHEDULES is populated at init from buildBuiltinSections() via applyConditions()
 let SCHEDULES = [];
 
-// ── IMPORT & CONDITIONS ENGINE ────────────────────────────────────────────────
+const SPECIAL_HESF = 'HESF 106';
+const SPECIAL_LAB  = 'MAE 306';
 
-// Special courses that get custom logic (not scored, not deduplicated normally)
-const SPECIAL_NO_SCORE = ['MAE 306'];
-const SPECIAL_HESF     = 'HESF 106';
-const SPECIAL_LAB      = 'MAE 306';
+// ── COURSE DATA ───────────────────────────────────────────────────────────────
+const COURSE_SECTIONS = [
+  // MAE 302 — required
+  { course:'MAE 302',  section:1,   days:'MW',     time:'4:30-5:45',   prof:'Liu, Jun',           credits:3, profR:6,  timeR:1  },
+  { course:'MAE 302',  section:2,   days:'TH',     time:'8:30-9:45',   prof:'Moore,Nancy',        credits:3, profR:4,  timeR:5  },
+  { course:'MAE 302',  section:3,   days:'TH',     time:'11:45-1:00',  prof:'Moore,Nancy',        credits:3, profR:4,  timeR:8  },
+  // MAE 306 lab — required
+  { course:'MAE 306',  section:204, days:'T',      time:'8:30-10:20',  prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  { course:'MAE 306',  section:205, days:'H',      time:'8:30-10:20',  prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  { course:'MAE 306',  section:206, days:'T',      time:'10:40-12:30', prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  { course:'MAE 306',  section:207, days:'H',      time:'10:40-12:30', prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  { course:'MAE 306',  section:208, days:'T',      time:'12:50-2:40',  prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  { course:'MAE 306',  section:209, days:'H',      time:'12:50-2:40',  prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  { course:'MAE 306',  section:210, days:'T',      time:'3:00-4:50',   prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  { course:'MAE 306',  section:211, days:'H',      time:'3:00-4:50',   prof:'—',                  credits:1, profR:null, timeR:null, notes:'Lab' },
+  // MAE 315 — required
+  { course:'MAE 315',  section:1,   days:'MW',     time:'8:30-9:45',   prof:'Kiefer,Scott',       credits:3, profR:10, timeR:5  },
+  { course:'MAE 315',  section:2,   days:'MW',     time:'11:45-1:00',  prof:'Muller,Marie',       credits:3, profR:4,  timeR:8  },
+  { course:'MAE 315',  section:3,   days:'MW',     time:'1:30-2:45',   prof:'Xu,Cheryl',          credits:3, profR:7,  timeR:7  },
+  // ENG 331 — required, online
+  { course:'ENG 331',  section:600, days:'ONLINE', time:'ONLINE',      prof:'N/A',                credits:3, profR:10, timeR:10 },
+  // ST 370 / EC301 / EC302 — exactly one required
+  { course:'ST 370',   section:1,   days:'MW',     time:'11:45-1:00',  prof:'Hamrick,Spencer',    credits:3, profR:9,  timeR:8  },
+  { course:'EC301',    section:601, days:'ONLINE', time:'ONLINE',      prof:'N/A',                credits:3, profR:8,  timeR:10 },
+  { course:'EC302',    section:1,   days:'TH',     time:'8:30-9:45',   prof:'Andy Nowel',         credits:3, profR:8,  timeR:5  },
+  { course:'EC302',    section:2,   days:'TH',     time:'10:15-11:30', prof:'Andy Nowel',         credits:3, profR:8,  timeR:9  },
+  // HESF 106 — optional toggle
+  { course:'HESF 106', section:95,  days:'M',      time:'12:50-2:40',  prof:'Harrington,Renee',   credits:1, profR:null, timeR:null },
+];
 
-// Conditions state
-let conditions = [];  // [{type, courses}]
+// Courses that must appear in every schedule
+const REQUIRED_COURSES = ['MAE 302', 'MAE 315', 'ENG 331'];
+// Exactly one of these must appear
+const PICK_ONE_GROUP   = ['ST 370', 'EC301', 'EC302'];
+// Lab course (handled separately, always included)
+const LAB_COURSE       = 'MAE 306';
+const MAX_CREDITS      = 18;
 
-// Raw sections from xlsx (or built-in). Each: {course, section, days, time, prof, credits, profR, timeR, notes}
-let COURSE_SECTIONS = buildBuiltinSections();
-
-function buildBuiltinSections() {
-  return [
-    { course:'MAE 302', section:1, days:'MW',     time:'4:30-5:45',  prof:'Liu, Jun',             credits:3, profR:6,  timeR:1,  notes:'' },
-    { course:'MAE 302', section:2, days:'TH',     time:'8:30-9:45',  prof:'Moore,Nancy Jennings',  credits:3, profR:4,  timeR:5,  notes:'' },
-    { course:'MAE 302', section:3, days:'TH',     time:'11:45-1:00', prof:'Moore,Nancy Jennings',  credits:3, profR:4,  timeR:8,  notes:'' },
-    { course:'MAE 306', section:204, days:'T',    time:'8:30-10:20',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 306', section:205, days:'H',    time:'8:30-10:20',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 306', section:206, days:'T',    time:'10:40-12:30', prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 306', section:207, days:'H',    time:'10:40-12:30', prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 306', section:208, days:'T',    time:'12:50-2:40',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 306', section:209, days:'H',    time:'12:50-2:40',  prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 306', section:210, days:'T',    time:'3:00-4:50',   prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 306', section:211, days:'H',    time:'3:00-4:50',   prof:'—', credits:1, profR:null, timeR:null, notes:'Lab' },
-    { course:'MAE 308', section:1,  days:'MW',    time:'8:30-9:45',  prof:'Chen,Mingtai Ted',     credits:3, profR:7,  timeR:5,  notes:'' },
-    { course:'MAE 308', section:3,  days:'TH',    time:'1:30-2:45',  prof:'Chen,Chuyi',           credits:3, profR:7,  timeR:7,  notes:'' },
-    { course:'MAE 315', section:1,  days:'MW',    time:'8:30-9:45',  prof:'Kiefer,Scott Fredrick', credits:3, profR:10, timeR:5,  notes:'' },
-    { course:'MAE 315', section:2,  days:'MW',    time:'11:45-1:00', prof:'Muller,Marie',          credits:3, profR:4,  timeR:8,  notes:'' },
-    { course:'MAE 315', section:3,  days:'MW',    time:'1:30-2:45',  prof:'Xu,Cheryl',             credits:3, profR:7,  timeR:7,  notes:'' },
-    { course:'HESF 106', section:95, days:'M',    time:'12:50-2:40', prof:'Harrington,Renee',      credits:1, profR:null, timeR:null, notes:'' },
-    { course:'ST 370',  section:1,  days:'MW',    time:'11:45-1:00', prof:'Hamrick,Spencer Cline', credits:3, profR:9,  timeR:8,  notes:'' },
-    { course:'EC301',   section:601, days:'ONLINE', time:'ONLINE',   prof:'N/A',                   credits:3, profR:8,  timeR:10, notes:'Online' },
-    { course:'EC302',   section:1,  days:'TH',    time:'8:30-9:45',  prof:'Andy Nowel',            credits:3, profR:8,  timeR:5,  notes:'' },
-    { course:'EC302',   section:2,  days:'TH',    time:'10:15-11:30',prof:'Andy Nowel',            credits:3, profR:8,  timeR:9,  notes:'' },
-  ];
-}
-
-// ── XLSX IMPORT (handled by wizard) ─────────────────────────────────────────
-
-function parseXlsxRows(rows) {
-  // Find header row (has "Course Name" or similar)
-  let dataStart = 1;
-  for (let i = 0; i < Math.min(rows.length, 5); i++) {
-    const r = rows[i];
-    if (r && r.some(v => v && String(v).toLowerCase().includes('course'))) {
-      dataStart = i + 1;
-      break;
-    }
-  }
-  const sections = [];
-  for (let i = dataStart; i < rows.length; i++) {
-    const r = rows[i];
-    if (!r || !r[0]) continue;
-    const course  = String(r[0] || '').trim();
-    const section = r[1];
-    const days    = String(r[2] || '').trim();
-    const time    = String(r[3] || '').trim();
-    const prof    = String(r[4] || '').trim();
-    const profR   = (r[5] !== null && r[5] !== undefined && r[5] !== '') ? Number(r[5]) : null;
-    const timeR   = (r[6] !== null && r[6] !== undefined && r[6] !== '') ? Number(r[6]) : null;
-    const credits = r[7] ? Number(r[7]) : 3;
-    const notes   = String(r[8] || '').trim();
-    if (!course || !section) continue;
-    sections.push({ course, section: Number(section), days, time, prof, credits, profR, timeR, notes });
-  }
-  return sections;
+// ── COLOR SYSTEM ─────────────────────────────────────────────────────────────
+const COURSE_COLORS = {
+  'MAE 302':  ['#ef4444','#fff'],
+  'MAE 306':  ['#f97316','#fff'],
+  'MAE 315':  ['#8b5cf6','#fff'],
+  'ENG 331':  ['#10b981','#fff'],
+  'ST 370':   ['#3b82f6','#fff'],
+  'EC301':    ['#0ea5e9','#fff'],
+  'EC302':    ['#06b6d4','#fff'],
+  'HESF 106': ['#ec4899','#fff'],
+};
+function getCourseColor(course) {
+  return COURSE_COLORS[course] || ['#6b7280','#fff'];
 }
 
 // ── SCHEDULE GENERATION ───────────────────────────────────────────────────────
-
-// Returns the set of course names currently marked Required via conditions
-function getRequiredCourseNames() {
-  return conditions
-    .filter(c => c.type === 'required')
-    .map(c => c.courses[0])
-    .filter(c => c !== SPECIAL_HESF); // HESF handled separately
+function isOnlineSection(sec) {
+  return String(sec.days||'').toUpperCase() === 'ONLINE' || String(sec.time||'').toUpperCase() === 'ONLINE';
 }
 
-// Power-set helper: returns all subsets of an array
-function powerSet(arr) {
-  return arr.reduce((sets, item) => {
-    return sets.concat(sets.map(s => [...s, item]));
-  }, [[]]);
+function parseTime(str) {
+  const m = str.match(/(\d+):(\d+)/);
+  if (!m) return null;
+  let h = parseInt(m[1]), min = parseInt(m[2]);
+  if (h < 7) h += 12;
+  return h * 60 + min;
 }
 
-// Cartesian product of arrays of arrays
+function expandDays(d) {
+  const s = (d || '').trim();
+  if (s === 'MW')  return ['M','W'];
+  if (s === 'TH')  return ['T','H'];
+  if (s === 'MWF') return ['M','W','F'];
+  return [s];
+}
+
+function hasTimeConflict(sections) {
+  const slots = [];
+  sections.forEach(s => {
+    if (isOnlineSection(s)) return;
+    const parts = (s.time || '').split('-');
+    if (parts.length < 2) return;
+    const start = parseTime(parts[0]);
+    const end   = parseTime(parts[1]);
+    expandDays(s.days).forEach(d => slots.push({ d, start, end }));
+  });
+  for (let i = 0; i < slots.length; i++)
+    for (let j = i + 1; j < slots.length; j++) {
+      const a = slots[i], b = slots[j];
+      if (a.d === b.d && a.start < b.end && a.end > b.start) return true;
+    }
+  return false;
+}
+
 function cartesian(arrays) {
   return arrays.reduce((acc, arr) => {
     const result = [];
@@ -487,64 +247,48 @@ function cartesian(arrays) {
   }, [[]]);
 }
 
+function calcScore(classes) {
+  let score = 0;
+  classes.forEach(s => {
+    if (s.course === LAB_COURSE || s.course === SPECIAL_HESF) return;
+    if (s.profR !== null && s.timeR !== null)
+      score += (s.profR + s.timeR) * s.credits;
+  });
+  return score;
+}
+
 function generateSchedules() {
   // Group sections by course
-  const courseMap = {};
+  const cm = {};
   COURSE_SECTIONS.forEach(s => {
-    if (!courseMap[s.course]) courseMap[s.course] = [];
-    courseMap[s.course].push(s);
+    if (!cm[s.course]) cm[s.course] = [];
+    cm[s.course].push(s);
   });
 
-  // Detect lab course(s) by notes='Lab'
-  const labCourseNames = [...new Set(
-    COURSE_SECTIONS.filter(s => String(s.notes||'').toLowerCase().includes('lab')).map(s => s.course)
-  )];
+  const labSections  = cm[LAB_COURSE] || [];
+  const requiredSecs = REQUIRED_COURSES.map(c => cm[c] || []);
+  const pickOneSecs  = PICK_ONE_GROUP.map(c => cm[c] || []).filter(arr => arr.length > 0);
 
-  const allCourseNames = Object.keys(courseMap);
-  const requiredNames  = getRequiredCourseNames();
+  // For each pick-one choice, build all combos of required + that choice
+  let allCombos = [];
 
-  // Scored courses = not lab, not HESF
-  const scoredNames = allCourseNames.filter(c => !labCourseNames.includes(c) && c !== SPECIAL_HESF);
-
-  // Split into required-scored and optional-scored
-  const requiredScored = scoredNames.filter(c => requiredNames.includes(c));
-  const optionalScored = scoredNames.filter(c => !requiredNames.includes(c));
-
-  // For each subset of optional courses, build combos
-  const optSubsets = powerSet(optionalScored);
-
-  let combos = [];
-
-  optSubsets.forEach(optSubset => {
-    // Courses in this subset + all required
-    const activeCourses = [...requiredScored, ...optSubset];
-    if (activeCourses.length === 0) return;
-
-    // Cartesian product of sections for each active course
-    const sectionArrays = activeCourses.map(c => courseMap[c]);
-    const subCombos = cartesian(sectionArrays);
-
-    subCombos.forEach(combo => {
-      if (!hasTimeConflict(combo)) combos.push(combo);
+  pickOneSecs.forEach(choiceSections => {
+    // cartesian of all required courses + this one pick
+    const arrays = [...requiredSecs, choiceSections];
+    const combos = cartesian(arrays);
+    combos.forEach(combo => {
+      if (!hasTimeConflict(combo)) allCombos.push(combo);
     });
   });
 
-  // Deduplicate by sorted course:section key
-  const seen = new Set();
-  combos = combos.filter(combo => {
-    const key = combo.map(s => s.course + ':' + s.section).sort().join('|');
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-
-  // Add default lab section to each combo
-  const labSections = labCourseNames.flatMap(c => courseMap[c] || []);
-  const schedules = combos.map(combo => {
+  // Assign a default lab to each combo, filter by credit hours
+  const schedules = [];
+  allCombos.forEach(combo => {
     const defaultLab = labSections.find(lab => !hasTimeConflict([...combo, lab])) || labSections[0];
-    const classes = [...combo];
-    if (defaultLab) classes.push(defaultLab);
-    return { classes, weighted_score: calcScore(combo), rank: 0 };
+    const classes = defaultLab ? [...combo, defaultLab] : [...combo];
+    const totalCr = classes.reduce((sum, c) => sum + (c.credits || 0), 0);
+    if (totalCr > MAX_CREDITS) return;
+    schedules.push({ classes, weighted_score: calcScore(classes), rank: 0 });
   });
 
   schedules.sort((a, b) => b.weighted_score - a.weighted_score);
@@ -552,436 +296,32 @@ function generateSchedules() {
   return schedules;
 }
 
-function calcScore(combo) {
-  // combo = array of section objects (no lab, no hesf)
-  let score = 0;
-  combo.forEach(s => {
-    if (s.course === SPECIAL_LAB) return;
-    if (s.course === SPECIAL_HESF) {
-      score += 19; // HESF fixed bonus
-      return;
-    }
-    if (s.profR !== null && s.timeR !== null) {
-      score += (s.profR + s.timeR) * s.credits;
-    }
-  });
-  return score;
-}
-
-function hasTimeConflict(sections) {
-  const slots = [];
-  sections.forEach(s => {
-    if (isOnlineSection(s)) return; // online never conflicts
-    const parts = (s.time || '').split('-');
-    if (parts.length < 2) return;
-    const start = parseTime(parts[0]);
-    const end   = parseTime(parts[1]);
-    expandDays(s.days).forEach(d => slots.push({ d, start, end }));
-  });
-  for (let i = 0; i < slots.length; i++) {
-    for (let j = i + 1; j < slots.length; j++) {
-      const a = slots[i], b = slots[j];
-      if (a.d === b.d && a.start < b.end && a.end > b.start) return true;
-    }
-  }
-  return false;
-}
-
-// ── CONDITIONS HELPERS ────────────────────────────────────────────────────────
-
-function isLabCourse(name) {
-  return COURSE_SECTIONS.some(s => s.course === name && String(s.notes||'').toLowerCase().includes('lab'));
-}
-
-function isOnlineSection(sec) {
-  return String(sec.days||'').toUpperCase() === 'ONLINE' || String(sec.time||'').toUpperCase() === 'ONLINE';
-}
-
-function isHesfCourse(name) {
-  return name === SPECIAL_HESF;
-}
-
-function courseTag(name) {
-  const cls = isLabCourse(name) ? ' lab' : isHesfCourse(name) ? ' hesf' : '';
-  const suffix = isLabCourse(name) ? ' (lab)' : isHesfCourse(name) ? ' (hesf)' : '';
-  return '<span class="cond-course-tag' + cls + '">' + name + suffix + '</span>';
-}
-
-// Build a multi-select checklist of all courses
-function buildCourseChecklist(idPrefix, selectedList) {
-  const courses = getCourseNames();
-  return courses.map((c, i) => {
-    const checked = selectedList && selectedList.includes(c) ? 'checked' : '';
-    const cls = isLabCourse(c) ? ' lab' : isHesfCourse(c) ? ' hesf' : '';
-    return '<label style="display:flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;padding:2px 0">'
-         + '<input type="checkbox" id="' + idPrefix + '_' + i + '" value="' + c + '" ' + checked + ' style="cursor:pointer">'
-         + '<span class="cond-course-tag' + cls + '">' + c + (isLabCourse(c) ? ' (lab)' : isHesfCourse(c) ? ' (hesf)' : '') + '</span>'
-         + '</label>';
-  }).join('');
-}
-
-function getCheckedCourses(idPrefix) {
-  // Use el.value so order doesn't matter — robust against list changes between render and submit
-  const courses = getCourseNames();
-  return courses.reduce((acc, c, i) => {
-    const el = document.getElementById(idPrefix + '_' + i);
-    if (el && el.checked) acc.push(el.value);
-    return acc;
-  }, []);
-}
-
-// ── WIZARD ────────────────────────────────────────────────────────────────────
-let wizardStep = 0;
-let pendingSections = null;
-
-function openWizard() {
-  wizardStep = 0;
-  pendingSections = null;
-  document.getElementById('fileLabel').textContent = 'No file chosen';
-  document.getElementById('fileLabel').className = 'file-name';
-  document.getElementById('parseStatus').style.display = 'none';
-  // Reset step 0 warning to show current count
-  document.querySelector('#step0 .warn-box').innerHTML = 
-    '⚠️ <strong>This will wipe all current schedule data.</strong><br><br>'
-    + 'Your existing <strong>' + SCHEDULES.length + ' schedules</strong>, scores, and any active filters will be cleared and replaced with data from your new .xlsx file.<br><br>'
-    + 'This cannot be undone.';
-  showWizardStep(0);
-  document.getElementById('wizardOverlay').classList.add('open');
-}
-
-function closeWizard() {
-  document.getElementById('wizardOverlay').classList.remove('open');
-}
-
-function showWizardStep(step) {
-  wizardStep = step;
-  // Show/hide steps
-  for (let i = 0; i < 4; i++) {
-    document.getElementById('step' + i).classList.toggle('active', i === step);
-    const dot = document.getElementById('dot' + i);
-    dot.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
-  }
-  // Update title
-  const titles = ['Confirm Reset', 'Import .xlsx', 'Credit Hours', 'Conditions'];
-  document.getElementById('wizardTitle').textContent = titles[step];
-  // Update footer buttons
-  const footer = document.getElementById('wizardFooter');
-  if (step === 0) {
-    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="closeWizard()">Cancel</button>'
-                     + '<button class="mbtn mbtn-danger" onclick="confirmWipe()">Yes, wipe &amp; continue →</button>';
-  } else if (step === 1) {
-    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="showWizardStep(0)">← Back</button>'
-                     + '<button class="mbtn mbtn-primary" id="nextFromImport" onclick="wizardFromImport()" disabled>Next →</button>';
-  } else if (step === 2) {
-    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="showWizardStep(1)">← Back</button>'
-                     + '<button class="mbtn mbtn-primary" onclick="showWizardStep(3)">Next →</button>';
-  } else if (step === 3) {
-    footer.innerHTML = '<button class="mbtn mbtn-secondary" onclick="showWizardStep(2)">← Back</button>'
-                     + '<button class="mbtn mbtn-primary" onclick="finishWizard()">✓ Apply &amp; Close</button>';
-  }
-}
-
-function confirmWipe() {
-  // Actually wipe data and conditions
-  conditions = [];
-  renderConditions();
-  showWizardStep(1);
-}
-
-function handleXlsxFile(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const label = document.getElementById('fileLabel');
-  const status = document.getElementById('parseStatus');
-  label.textContent = 'Loading…';
-  label.className = 'file-name';
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const wb = XLSX.read(e.target.result, { type: 'array' });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
-      const sections = parseXlsxRows(rows);
-      if (sections.length === 0) throw new Error('No valid rows found — check column format');
-      pendingSections = sections;
-      label.textContent = '✓ ' + file.name + ' (' + sections.length + ' sections loaded)';
-      label.className = 'file-name loaded';
-      status.style.display = 'none';
-      document.getElementById('nextFromImport').disabled = false;
-    } catch(err) {
-      label.textContent = file.name;
-      label.className = 'file-name';
-      status.textContent = '✗ ' + err.message;
-      status.style.color = '#dc2626';
-      status.style.display = 'block';
-      pendingSections = null;
-      document.getElementById('nextFromImport').disabled = true;
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function wizardFromImport() {
-  if (!pendingSections) return;
-  COURSE_SECTIONS = pendingSections;
-  rebuildColors();
-  updateCondInputs();
-  showWizardStep(2);
-}
-
-function finishWizard() {
-  applyConditions();
-  buildFilterPanel();
-  closeWizard();
-}
-
-// ── DYNAMIC COLOR SYSTEM ──────────────────────────────────────────────────────
-// Seeded palette — will auto-assign a color to any course name not already known.
-const COLOR_PALETTE = [
-  ['#ef4444','#fff'], // red
-  ['#8b5cf6','#fff'], // purple
-  ['#0ea5e9','#fff'], // sky
-  ['#06b6d4','#fff'], // cyan
-  ['#3b82f6','#fff'], // blue
-  ['#10b981','#fff'], // emerald
-  ['#f59e0b','#fff'], // amber
-  ['#ec4899','#fff'], // pink
-  ['#14b8a6','#fff'], // teal
-  ['#a855f7','#fff'], // violet
-  ['#f97316','#fff'], // orange
-  ['#84cc16','#000'], // lime
-];
-// Fixed overrides for known courses
-const COLOR_OVERRIDES = {
-  'MAE 306':  ['#f97316','#fff'],
-  'HESF 106': ['#ec4899','#fff'],
-};
-// Runtime map — built/extended whenever new courses appear
-let COLORS = { ...COLOR_OVERRIDES };
-let _colorIdx = 0;
-function getCourseColor(course) {
-  if (!COLORS[course]) {
-    COLORS[course] = COLOR_PALETTE[_colorIdx % COLOR_PALETTE.length];
-    _colorIdx++;
-  }
-  return COLORS[course];
-}
-// Rebuild color assignments from current COURSE_SECTIONS (called after import)
-function rebuildColors() {
-  COLORS = { ...COLOR_OVERRIDES };
-  _colorIdx = 0;
-  [...new Set(COURSE_SECTIONS.map(s => s.course))].sort().forEach(getCourseColor);
-}
-
-// ── CONDITIONS UI (correct full version) ─────────────────────────────────────
-function getCourseNames() {
-  return [...new Set(COURSE_SECTIONS.map(s => s.course))].sort();
-}
-
-function updateCondInputs() {
-  const type = document.getElementById('condType').value;
-  const courses = getCourseNames();
-  let out = '';
-  if (type === 'required') {
-    const opts = courses.map(c => {
-      const suffix = isLabCourse(c) ? ' (lab)' : isHesfCourse(c) ? ' (hesf)' : '';
-      return '<option value="' + c + '">' + c + suffix + '</option>';
-    }).join('');
-    out = '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
-        + '<span style="font-size:0.72rem;color:#6b7280">Course:</span>'
-        + '<select id="ci_single" style="font-size:0.78rem;padding:4px 7px;border-radius:5px;border:1px solid #d1d5db">' + opts + '</select>'
-        + '</div>';
-  } else if (type === 'linked') {
-    out = '<div style="font-size:0.72rem;color:#6b7280;margin-bottom:2px">Check 2–6 courses — all will appear together or none will:</div>'
-        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">'
-        + buildCourseChecklist('ci_linked', [])
-        + '</div>';
-  } else if (type === 'mingroup') {
-    out = '<div style="font-size:0.72rem;color:#6b7280;margin-bottom:2px">Step 1 — Check all courses in the group (2–6):</div>'
-        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px" id="ci_min_grid">'
-        + buildCourseChecklist('ci_min', [])
-        + '</div>'
-        + '<div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid #e5e7eb;font-size:0.78rem">'
-        + '<span style="color:#6b7280;white-space:nowrap">Step 2 — Must take at least</span>'
-        + '<input type="number" id="ci_min_x" min="1" max="6" value="1" style="width:44px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;font-size:0.78rem">'
-        + '<span style="color:#6b7280">of the checked courses.</span>'
-        + '</div>';
-  } else if (type === 'excluded') {
-    out = '<div style="font-size:0.72rem;color:#6b7280;margin-bottom:2px">Check 2–6 courses — none of these can appear together in the same schedule:</div>'
-        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">'
-        + buildCourseChecklist('ci_excl', [])
-        + '</div>';
-  }
-  document.getElementById('condInputs').innerHTML = out;
-}
-
-function addCondition() {
-  const type = document.getElementById('condType').value;
-  let cond = null;
-  if (type === 'required') {
-    const c = document.getElementById('ci_single').value;
-    cond = { type: 'required', courses: [c] };
-  } else if (type === 'linked') {
-    const selected = getCheckedCourses('ci_linked');
-    if (selected.length < 2) { alert('Check at least 2 courses to link.'); return; }
-    if (selected.length > 6) { alert('Maximum 6 courses per linked group.'); return; }
-    cond = { type: 'linked', courses: selected };
-  } else if (type === 'mingroup') {
-    const selected = getCheckedCourses('ci_min');
-    const x = parseInt(document.getElementById('ci_min_x').value) || 1;
-    if (selected.length < 2) { alert('Check at least 2 courses for the group.'); return; }
-    if (x < 1 || x > selected.length) { alert('Minimum must be between 1 and the number of checked courses.'); return; }
-    cond = { type: 'mingroup', courses: selected, x };
-  } else if (type === 'excluded') {
-    const selected = getCheckedCourses('ci_excl');
-    if (selected.length < 2) { alert('Check at least 2 courses.'); return; }
-    if (selected.length > 6) { alert('Maximum 6 courses.'); return; }
-    cond = { type: 'excluded', courses: selected };
-  }
-  if (cond) { conditions.push(cond); renderConditions(); updateCondInputs(); }
-}
-
-function removeCondition(i) {
-  conditions.splice(i, 1);
-  renderConditions();
-}
-
-function renderConditions() {
-  const list = document.getElementById('condList');
-  if (!list) return;
-  if (conditions.length === 0) {
-    list.innerHTML = '<div style="font-size:0.75rem;color:#9ca3af;font-style:italic;padding:4px 0">No conditions set — all valid schedules shown.</div>';
-    return;
-  }
-  conditions.forEach(c => { if (c.type === 'atleast') c.type = 'mingroup'; });
-  const labels    = { required:'Required', linked:'Linked Group', mingroup:'Minimum From Group', excluded:'Never Together' };
-  const badgeClass = { required:'required', linked:'linked', mingroup:'atleast', excluded:'excluded' };
-  list.innerHTML = conditions.map((c, i) => {
-    const label = labels[c.type] || c.type;
-    const bClass = badgeClass[c.type] || c.type;
-    const badge = '<span class="cond-badge ' + bClass + '">' + label + '</span>';
-    let desc = '';
-    if (c.type === 'required') {
-      desc = courseTag(c.courses[0]);
-    } else if (c.type === 'linked') {
-      desc = c.courses.map(courseTag).join(' <span style="font-size:0.7rem;color:#6b7280">+</span> ');
-    } else if (c.type === 'mingroup') {
-      desc = '<span style="font-size:0.72rem;color:#6d28d9;font-weight:700">≥' + c.x + ' of:</span> '
-           + c.courses.map(courseTag).join(' <span style="font-size:0.7rem;color:#6b7280">,</span> ');
-    } else if (c.type === 'excluded') {
-      desc = c.courses.map(courseTag).join(' <span style="font-size:0.7rem;color:#b91c1c">✕</span> ');
-    }
-    return '<div class="cond-item">'
-         + badge
-         + ' <span class="cond-label" style="flex:1;display:flex;align-items:center;gap:4px;flex-wrap:wrap">' + desc + '</span>'
-         + '<button class="cond-remove" onclick="removeCondition(' + i + ')">✕</button>'
-         + '</div>';
-  }).join('');
-}
-
-function applyConditions() {
-  const crMinEl = document.getElementById('crMin');
-  const crMaxEl = document.getElementById('crMax');
-  const crMin = crMinEl ? (parseInt(crMinEl.value) || 0) : 0;
-  const crMax = crMaxEl ? (parseInt(crMaxEl.value) || 18) : 18;
-
-  let schedules = generateSchedules();
-
-  const labCourseNames = [...new Set(
-    COURSE_SECTIONS.filter(s => String(s.notes||'').toLowerCase().includes('lab')).map(s => s.course)
-  )];
-
-  schedules = schedules.filter(s => {
-    const allCourses = s.classes.map(c => c.course);
-    const totalCr = s.classes
-      .filter(c => c.course !== SPECIAL_HESF)
-      .reduce((sum, c) => sum + (c.credits || 0), 0);
-    if (totalCr < crMin || totalCr > crMax) return false;
-
-    for (const cond of conditions) {
-      const relevant = cond.courses;
-      if (cond.type === 'required') continue; // enforced by generateSchedules
-      if (cond.type === 'excluded') {
-        const present = relevant.filter(c => allCourses.includes(c));
-        if (present.length >= 2) return false;
-      }
-      if (cond.type === 'linked') {
-        const presences = relevant.map(c => allCourses.includes(c));
-        if (presences.some(Boolean) && !presences.every(Boolean)) return false;
-      }
-      if (cond.type === 'mingroup') {
-        const count = relevant.filter(c => allCourses.includes(c)).length;
-        if (count < cond.x) return false;
-      }
-    }
-    return true;
-  });
-
-  schedules.forEach((s, i) => s.rank = i + 1);
-  SCHEDULES.length = 0;
-  schedules.forEach(s => SCHEDULES.push(s));
-  updateMaxRank();
-  renderList();
-}
-
-function updateMaxRank() {
-  const max = SCHEDULES.length;
-  document.getElementById('jumpInput').max = max;
-  document.getElementById('countBadge').textContent = max + ' schedules';
-}
-
-function rebuildAndRender() {
-  renderConditions();
-  buildFilterPanel();
-  applyConditions();
-}
-
-const DAYS_ORDER = ['M','T','W','H','F'];
-const DAY_NAMES  = ['Mon','Tue','Wed','Thu','Fri'];
-const CAL_START  = 8 * 60;
-const CAL_END    = 18 * 60;
-const PX_PER_MIN = 32 / 60;
-
-// ── State ──────────────────────────────────────────────
-// filters[course] = Set of allowed section strings, or null (= all allowed)
-// MAE 306 is handled separately via lab306 dropdown
-let filters = {};
-let activeIdx  = null;
-let currentSchedules = [];
-let courseMap = {};
-let courseNames = [];
-
-// courseMap / courseNames / filters are rebuilt in buildFilterPanel()
-
 // ── FILTER PANEL ─────────────────────────────────────────────────────────────
-// courseFilters[course] = true (included) | false (excluded)
-// sectionFilters[course] = null (all sections ok) | Set of allowed section keys
-let courseFilters = {};
+let courseFilters  = {};
 let sectionFilters = {};
+let courseMap      = {};
+let courseNames    = [];
+let filters        = {}; // kept for applyFilters compat
 
 function buildFilterPanel() {
-  // Rebuild courseMap for lab pin dropdown + section filter chips
   courseMap = {};
   SCHEDULES.forEach(s => {
     s.classes.forEach(c => {
       if (!courseMap[c.course]) courseMap[c.course] = new Map();
       const key = String(c.section);
       if (!courseMap[c.course].has(key))
-        courseMap[c.course].set(key, `§${c.section}  ${c.days}  ${c.time}`);
+        courseMap[c.course].set(key, '\u00a7' + c.section + '  ' + c.days + '  ' + c.time);
     });
   });
   courseNames = Object.keys(courseMap);
 
-  const labNames = [...new Set(
-    COURSE_SECTIONS.filter(s => String(s.notes||'').toLowerCase().includes('lab')).map(s => s.course)
-  )];
+  const labNames = [LAB_COURSE];
   const filterableCourses = [...new Set(COURSE_SECTIONS.map(s => s.course))]
     .filter(c => !labNames.includes(c) && c !== SPECIAL_HESF)
     .sort();
 
-  // Initialise state for new courses
   filterableCourses.forEach(c => {
-    if (courseFilters[c] === undefined) courseFilters[c] = true;
+    if (courseFilters[c] === undefined)  courseFilters[c]  = true;
     if (sectionFilters[c] === undefined) sectionFilters[c] = null;
   });
 
@@ -990,30 +330,26 @@ function buildFilterPanel() {
 
   filterableCourses.forEach(course => {
     const included = courseFilters[course] !== false;
-    const [color] = getCourseColor(course);
+    const [color]  = getCourseColor(course);
     const sections = courseMap[course];
-    const hasMultipleSections = sections && sections.size > 1;
+    const hasMulti = sections && sections.size > 1;
 
-    // Course toggle chip — no nested backticks, use plain string concat
     const courseStyle = included
       ? 'background:' + color + ';border-color:transparent;color:#fff;font-weight:600'
       : 'opacity:0.45';
     const courseClass = 'chip' + (included ? ' active' : '');
-    let html = '<div style="margin-bottom:8px">';
-    html += '<div class="filter-section-chips">';
+
+    let html = '<div style="margin-bottom:8px"><div class="filter-section-chips">';
     html += '<span class="' + courseClass + '" style="' + courseStyle + '" onclick="toggleCourseFilter(\'' + course + '\')">' + course + '</span>';
     html += '</div>';
 
-    // Section chips — only when included AND >1 section
-    if (included && hasMultipleSections) {
+    if (included && hasMulti) {
       const activeSet = sectionFilters[course];
       const allActive = activeSet === null;
+      const allStyle  = allActive ? 'background:' + color + ';border-color:transparent;color:#fff' : '';
+      const allClass  = 'chip' + (allActive ? ' active' : '');
       html += '<div class="filter-section-chips" style="margin-top:5px;padding-left:4px">';
-      // All chip
-      const allStyle = allActive ? 'background:' + color + ';border-color:transparent;color:#fff' : '';
-      const allClass = 'chip' + (allActive ? ' active' : '');
       html += '<span class="' + allClass + '" style="' + allStyle + '" onclick="setSectionAll(\'' + course + '\')">All</span>';
-      // Per-section chips
       sections.forEach((label, key) => {
         const isActive = !allActive && activeSet.has(key);
         const secStyle = isActive ? 'background:' + color + ';border-color:transparent;color:#fff' : '';
@@ -1022,7 +358,6 @@ function buildFilterPanel() {
       });
       html += '</div>';
     }
-
     html += '</div>';
     const block = document.createElement('div');
     block.className = 'filter-course-block';
@@ -1034,52 +369,38 @@ function buildFilterPanel() {
 }
 
 function updateFilterCount() {
-  const excluded = Object.values(courseFilters).filter(v => v === false).length;
+  const excluded  = Object.values(courseFilters).filter(v => v === false).length;
   const secActive = Object.values(sectionFilters).filter(v => v !== null).length;
   const parts = [];
-  if (excluded > 0) parts.push(`${excluded} course${excluded > 1 ? 's' : ''} hidden`);
-  if (secActive > 0) parts.push(`${secActive} section filter${secActive > 1 ? 's' : ''}`);
+  if (excluded  > 0) parts.push(excluded  + ' course' + (excluded  > 1 ? 's' : '') + ' hidden');
+  if (secActive > 0) parts.push(secActive + ' section filter' + (secActive > 1 ? 's' : ''));
   document.getElementById('filterCount').textContent = parts.join(' · ');
 }
 
 function toggleCourseFilter(course) {
-  courseFilters[course] = courseFilters[course] === false ? true : false;
-  // Clear section filter when course is excluded (irrelevant while hidden)
+  courseFilters[course] = (courseFilters[course] === false) ? true : false;
   if (courseFilters[course] === false) sectionFilters[course] = null;
-  buildFilterPanel();
-  renderList();
+  buildFilterPanel(); renderList();
 }
-
 function setSectionAll(course) {
   sectionFilters[course] = null;
-  buildFilterPanel();
-  renderList();
+  buildFilterPanel(); renderList();
 }
-
 function toggleSection(course, key) {
   const current = sectionFilters[course];
   if (current === null) {
-    // Was "all" — now pin to just this one
     sectionFilters[course] = new Set([key]);
   } else {
-    if (current.has(key)) {
-      current.delete(key);
-      if (current.size === 0) sectionFilters[course] = null;
-    } else {
-      current.add(key);
-    }
+    if (current.has(key)) { current.delete(key); if (current.size === 0) sectionFilters[course] = null; }
+    else current.add(key);
   }
-  buildFilterPanel();
-  renderList();
+  buildFilterPanel(); renderList();
 }
-
 function resetFilters() {
-  Object.keys(courseFilters).forEach(c => { courseFilters[c] = true; });
+  Object.keys(courseFilters).forEach(c  => { courseFilters[c]  = true; });
   Object.keys(sectionFilters).forEach(c => { sectionFilters[c] = null; });
-  buildFilterPanel();
-  renderList();
+  buildFilterPanel(); renderList();
 }
-
 function applyFilters(list) {
   return list.filter(s =>
     s.classes.every(c => {
@@ -1090,7 +411,10 @@ function applyFilters(list) {
   );
 }
 
-// ── SCHEDULE LIST ──────────────────────────────────────
+// ── SCHEDULE LIST ─────────────────────────────────────────────────────────────
+let activeIdx        = null;
+let currentSchedules = [];
+
 function getFiltered() {
   const sort     = document.getElementById('sortSelect').value;
   const minScore = parseInt(document.getElementById('filterSelect').value) || 0;
@@ -1105,7 +429,8 @@ function getFiltered() {
 
 function renderList() {
   currentSchedules = getFiltered();
-  document.getElementById('countBadge').textContent = `${currentSchedules.length} schedules`;
+  document.getElementById('countBadge').textContent = currentSchedules.length + ' schedules';
+  document.getElementById('jumpInput').max = currentSchedules.length;
   const panel = document.getElementById('listPanel');
 
   if (currentSchedules.length === 0) {
@@ -1115,28 +440,20 @@ function renderList() {
   }
 
   panel.innerHTML = currentSchedules.map((s, i) => {
-    const tags = s.classes.filter(c => c.course !== 'MAE 306').map(c => {
+    const tags = s.classes.filter(c => c.course !== LAB_COURSE).map(c => {
       const [bg] = getCourseColor(c.course);
       return '<span class="tag" style="background:' + bg + '">' + c.course + '</span>';
     }).join('');
-    const hesfTag = !hesfHasConflict(s)
-      ? '<span class="tag" style="background:#ec4899">HESF 106</span>'
-      : '';
+    const hesfTag = !hesfHasConflict(s) ? '<span class="tag" style="background:#ec4899">HESF 106</span>' : '';
     return '<div class="sched-item' + (i === activeIdx ? ' active' : '') + '" onclick="selectSchedule(' + i + ')">'
       + '<div style="display:flex;justify-content:space-between;align-items:baseline">'
       + '<span class="sched-rank">#' + s.rank + '</span>'
       + '<span class="sched-score">Score: ' + s.weighted_score + '</span>'
-      + '</div>'
-      + '<div class="sched-tags">' + tags + hesfTag + '</div>'
-      + '</div>';
+      + '</div><div class="sched-tags">' + tags + hesfTag + '</div></div>';
   }).join('');
 
-  if (activeIdx !== null && activeIdx < currentSchedules.length) {
-    selectSchedule(activeIdx);
-  } else {
-    activeIdx = 0;
-    selectSchedule(0);
-  }
+  if (activeIdx !== null && activeIdx < currentSchedules.length) selectSchedule(activeIdx);
+  else { activeIdx = 0; selectSchedule(0); }
 }
 
 function selectSchedule(i) {
@@ -1154,82 +471,57 @@ function jumpToRank() {
   document.querySelectorAll('.sched-item')[idx]?.scrollIntoView({ behavior:'smooth', block:'center' });
 }
 
-// ── CALENDAR ──────────────────────────────────────────
-function parseTime(str) {
-  const m = str.match(/(\d+):(\d+)/);
-  if (!m) return null;
-  let h = parseInt(m[1]), min = parseInt(m[2]);
-  if (h < 7) h += 12;
-  return h * 60 + min;
-}
-function expandDays(d) {
-  const s = (d || '').trim();
-  if (s === 'MW')  return ['M','W'];
-  if (s === 'TH')  return ['T','H'];
-  if (s === 'MWF') return ['M','W','F'];
-  return [s];
-}
+// ── CALENDAR ─────────────────────────────────────────────────────────────────
+const DAYS_ORDER = ['M','T','W','H','F'];
+const DAY_NAMES  = ['Mon','Tue','Wed','Thu','Fri'];
+const CAL_START  = 8 * 60;
+const CAL_END    = 18 * 60;
+const PX_PER_MIN = 32 / 60;
+
 function toAMPM(mins) {
   const h = Math.floor(mins/60), m = mins % 60;
-  return `${h > 12 ? h-12 : h}:${String(m).padStart(2,'0')}${h >= 12 ? 'pm' : 'am'}`;
+  return (h > 12 ? h-12 : h) + ':' + String(m).padStart(2,'0') + (h >= 12 ? 'pm' : 'am');
 }
 
-// ── DETAIL VIEW ────────────────────────────────────────
-// lab306Override: section string to display in calendar/table instead of the schedule's own lab.
-// null = show the schedule's original lab.
-let lab306Override = null;
-let currentDetailSchedule = null; // keep reference so setLab306 can re-render
+// ── DETAIL VIEW ───────────────────────────────────────────────────────────────
+let lab306Override       = null;
+let currentDetailSchedule = null;
+let hesfToggle           = true;
 
-// HESF 106 toggle — true = show it, false = hide it
-const HESF_106 = { course: 'HESF 106', section: 95, days: 'M', time: '12:50-2:40', prof: 'Harrington,Renee', credits: 1 };
-let hesfToggle = true; // default on; will be corrected per-schedule in renderDetail
+const HESF_106 = { course:'HESF 106', section:95, days:'M', time:'12:50-2:40', prof:'Harrington,Renee', credits:1 };
 
 function hesfHasConflict(schedule) {
   const hesfDays = expandDays(HESF_106.days);
   const [hs, he] = HESF_106.time.split('-').map(parseTime);
-  return schedule.classes
-    .filter(c => c.course !== 'MAE 306')
-    .some(c => {
-      if (isOnlineSection(c)) return false; // online never conflicts
-      const cDays = expandDays(c.days);
-      if (!hesfDays.some(d => cDays.includes(d))) return false;
-      const [cs, ce] = c.time.split('-').map(parseTime);
-      return hs < ce && he > cs;
-    });
+  return schedule.classes.filter(c => c.course !== LAB_COURSE).some(c => {
+    if (isOnlineSection(c)) return false;
+    const cDays = expandDays(c.days);
+    if (!hesfDays.some(d => cDays.includes(d))) return false;
+    const [cs, ce] = c.time.split('-').map(parseTime);
+    return hs < ce && he > cs;
+  });
 }
 
 function renderDetail(s) {
-  const panel = document.getElementById('detailPanel');
-  // Online classes row — rendered separately below calendar
-  const totalPx = (CAL_END - CAL_START) * PX_PER_MIN;
-
-  // Determine HESF availability; auto-on only when switching to a new schedule
-  const hesfConflict = hesfHasConflict(s);
+  const panel    = document.getElementById('detailPanel');
+  const totalPx  = (CAL_END - CAL_START) * PX_PER_MIN;
+  const hesfConflict  = hesfHasConflict(s);
   const isNewSchedule = currentDetailSchedule !== s;
-  if (hesfConflict) {
-    hesfToggle = false;
-  } else if (isNewSchedule) {
-    hesfToggle = true; // auto-on when first viewing this schedule
-  }
-  // (if same schedule, preserve whatever the user set via toggleHesf)
+  if (hesfConflict) hesfToggle = false;
+  else if (isNewSchedule) hesfToggle = true;
   currentDetailSchedule = s;
 
-  // Build the effective class list — swap MAE 306 with the override if set, inject HESF if toggled
+  // Swap MAE 306 if overridden
   let effectiveClasses = s.classes.map(c => {
-    if (c.course === 'MAE 306' && lab306Override !== null) {
-      // Look up override section directly from COURSE_SECTIONS — reliable source of truth
+    if (c.course === LAB_COURSE && lab306Override !== null) {
       const overrideSec = COURSE_SECTIONS.find(
-        sec => sec.course === 'MAE 306' && String(sec.section) === String(lab306Override)
+        sec => sec.course === LAB_COURSE && String(sec.section) === String(lab306Override)
       );
       if (overrideSec) return { ...overrideSec };
     }
     return c;
   });
-
-  // Inject HESF 106 if toggled on and no conflict
-  if (!hesfConflict && hesfToggle) {
-    effectiveClasses = [...effectiveClasses, HESF_106];
-  }
+  if (!hesfConflict && hesfToggle) effectiveClasses = [...effectiveClasses, HESF_106];
 
   const dayMap = { M:[], T:[], W:[], H:[], F:[] };
   const onlineClasses = [];
@@ -1244,7 +536,7 @@ function renderDetail(s) {
 
   const timeLabels = [];
   for (let m = CAL_START; m <= CAL_END; m += 60)
-    timeLabels.push(`<div class="time-label">${toAMPM(m)}</div>`);
+    timeLabels.push('<div class="time-label">' + toAMPM(m) + '</div>');
 
   const dayCols = DAYS_ORDER.map(d => {
     const lines = Array.from({length: Math.ceil((CAL_END-CAL_START)/60)}, () => '<div class="hour-line"></div>').join('');
@@ -1252,127 +544,96 @@ function renderDetail(s) {
       const top = (ev.start - CAL_START) * PX_PER_MIN;
       const height = Math.max((ev.end - ev.start) * PX_PER_MIN, 20);
       const [bg, fg] = getCourseColor(ev.course);
-      return `<div class="event-block" style="top:${top}px;height:${height}px;background:${bg};color:${fg}">
-        <div class="ev-course">${ev.course}</div>
-        <div class="ev-section">§${ev.section}</div>
-        <div class="ev-time">${ev.time}</div>
-      </div>`;
+      return '<div class="event-block" style="top:' + top + 'px;height:' + height + 'px;background:' + bg + ';color:' + fg + '">'
+        + '<div class="ev-course">' + ev.course + '</div>'
+        + '<div class="ev-section">\u00a7' + ev.section + '</div>'
+        + '<div class="ev-time">' + ev.time + '</div></div>';
     }).join('');
-    return `<div class="day-col" style="height:${totalPx}px">${lines}${events}</div>`;
+    return '<div class="day-col" style="height:' + totalPx + 'px">' + lines + events + '</div>';
   }).join('');
 
   const tableRows = effectiveClasses.map(c => {
     const [bg] = getCourseColor(c.course);
-    const isOverridden = c.course === 'MAE 306' && lab306Override !== null;
-    return `<tr${isOverridden ? ' style="background:#fff8f0"' : ''}>
-      <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${bg};margin-right:5px"></span>
-        ${c.course}<span class="cr-badge">${c.credits}cr</span>${isOverridden ? ' <span style="font-size:0.65rem;color:#f97316;font-weight:700">★ pinned</span>' : ''}</td>
-      <td>§${c.section}</td><td>${c.days}</td><td>${c.time}</td><td>${c.prof}</td>
-    </tr>`;
+    const isOverridden = c.course === LAB_COURSE && lab306Override !== null;
+    return '<tr' + (isOverridden ? ' style="background:#fff8f0"' : '') + '>'
+      + '<td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:' + bg + ';margin-right:5px"></span>'
+      + c.course + '<span class="cr-badge">' + c.credits + 'cr</span>'
+      + (isOverridden ? ' <span style="font-size:0.65rem;color:#f97316;font-weight:700">\u2605 pinned</span>' : '') + '</td>'
+      + '<td>\u00a7' + c.section + '</td><td>' + c.days + '</td><td>' + c.time + '</td><td>' + c.prof + '</td></tr>';
   }).join('');
 
-// All 8 MAE 306 lab sections
-const ALL_LABS = [
-  { key: '204', days: 'T', time: '8:30-10:20',  label: '§204  T   8:30-10:20' },
-  { key: '205', days: 'H', time: '8:30-10:20',  label: '§205  H   8:30-10:20' },
-  { key: '206', days: 'T', time: '10:40-12:30', label: '§206  T   10:40-12:30' },
-  { key: '207', days: 'H', time: '10:40-12:30', label: '§207  H   10:40-12:30' },
-  { key: '208', days: 'T', time: '12:50-2:40',  label: '§208  T   12:50-2:40' },
-  { key: '209', days: 'H', time: '12:50-2:40',  label: '§209  H   12:50-2:40' },
-  { key: '210', days: 'T', time: '3:00-4:50',   label: '§210  T   3:00-4:50' },
-  { key: '211', days: 'H', time: '3:00-4:50',   label: '§211  H   3:00-4:50' },
-];
-
-// Check if a lab option overlaps with any existing class in the schedule
-function labHasConflict(lab, schedule) {
-  const labDays = expandDays(lab.days);
-  const labParts = lab.time.split('-');
-  const labStart = parseTime(labParts[0]);
-  const labEnd   = parseTime(labParts[1]);
-
-  return schedule.classes
-    .filter(c => c.course !== 'MAE 306')
-    .some(c => {
-      const parts = (c.time || '').split('-');
+  // Lab pin options
+  const ALL_LABS = [
+    { key:'204', days:'T', time:'8:30-10:20'  },
+    { key:'205', days:'H', time:'8:30-10:20'  },
+    { key:'206', days:'T', time:'10:40-12:30' },
+    { key:'207', days:'H', time:'10:40-12:30' },
+    { key:'208', days:'T', time:'12:50-2:40'  },
+    { key:'209', days:'H', time:'12:50-2:40'  },
+    { key:'210', days:'T', time:'3:00-4:50'   },
+    { key:'211', days:'H', time:'3:00-4:50'   },
+  ];
+  function labConflicts(lab) {
+    const lDays = expandDays(lab.days);
+    const lS = parseTime(lab.time.split('-')[0]);
+    const lE = parseTime(lab.time.split('-')[1]);
+    return s.classes.filter(c => c.course !== LAB_COURSE).some(c => {
+      if (isOnlineSection(c)) return false;
+      const parts = (c.time||'').split('-');
       if (parts.length < 2) return false;
-      const cStart = parseTime(parts[0]);
-      const cEnd   = parseTime(parts[1]);
-      const cDays  = expandDays(c.days);
-      // Check day overlap first
-      const sharedDay = labDays.some(d => cDays.includes(d));
-      if (!sharedDay) return false;
-      // Then check time overlap (treat as exclusive end)
-      return labStart < cEnd && labEnd > cStart;
+      const cS = parseTime(parts[0]), cE = parseTime(parts[1]);
+      return expandDays(c.days).some(d => lDays.includes(d)) && lS < cE && lE > cS;
     });
-}
-
-const labOptions = [
-  '<option value="">— original (from schedule) —</option>'
-];
-
-ALL_LABS.forEach(({ key, label, days, time }) => {
-  if (labHasConflict({ days, time }, s)) return;
-  labOptions.push(
-    `<option value="${key}" ${lab306Override === key ? 'selected' : ''}>${label}</option>`
-  );
-});
+  }
+  let labOpts = '<option value="">— original (from schedule) —</option>';
+  ALL_LABS.forEach(lab => {
+    if (labConflicts(lab)) return;
+    const lbl = '\u00a7' + lab.key + '  ' + lab.days + '   ' + lab.time;
+    labOpts += '<option value="' + lab.key + '"' + (lab306Override === lab.key ? ' selected' : '') + '>' + lbl + '</option>';
+  });
 
   let html = '';
-  html += '<div class="detail-header">';
-  html += '<h2>Rank #' + s.rank + '</h2>';
-  html += '<span class="detail-score">Weighted Score: ' + s.weighted_score + '</span>';
-  html += '</div>';
+  html += '<div class="detail-header"><h2>Rank #' + s.rank + '</h2><span class="detail-score">Weighted Score: ' + s.weighted_score + '</span></div>';
 
-  // Online course banner
+  // Online banner
   if (onlineClasses.length > 0) {
     html += '<div style="background:white;border-radius:10px;padding:10px 16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex;align-items:center;gap:10px;flex-wrap:wrap">';
-    html += '<span style="font-size:0.68rem;font-weight:700;letter-spacing:0.08em;color:#0ea5e9;text-transform:uppercase;white-space:nowrap">🌐 Online</span>';
+    html += '<span style="font-size:0.68rem;font-weight:700;letter-spacing:0.08em;color:#0ea5e9;text-transform:uppercase;white-space:nowrap">\uD83C\uDF10 Online</span>';
     html += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
     onlineClasses.forEach(c => {
       const [bg, fg] = getCourseColor(c.course);
-      html += '<span style="display:inline-flex;align-items:center;gap:5px;background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;font-size:0.75rem;font-weight:600">';
-      html += c.course + ' <span style="opacity:0.75;font-size:0.68rem">§' + c.section + '</span>';
-      html += '<span style="opacity:0.6;font-size:0.65rem;font-weight:400">' + c.prof + '</span>';
-      html += '</span>';
+      html += '<span style="display:inline-flex;align-items:center;gap:5px;background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;font-size:0.75rem;font-weight:600">'
+        + c.course + ' <span style="opacity:0.75;font-size:0.68rem">\u00a7' + c.section + '</span>'
+        + '<span style="opacity:0.6;font-size:0.65rem;font-weight:400">' + c.prof + '</span></span>';
     });
     html += '</div></div>';
   }
 
-  html += '<div class="calendar">';
-  html += '<div class="cal-head" style="grid-template-columns:60px repeat(5,1fr)">';
+  html += '<div class="calendar"><div class="cal-head" style="grid-template-columns:60px repeat(5,1fr)">';
   html += '<div></div>' + DAY_NAMES.map(n => '<div>' + n + '</div>').join('');
-  html += '</div>';
-  html += '<div class="cal-body" style="grid-template-columns:60px repeat(5,1fr)">';
-  html += '<div class="time-col">' + timeLabels.join('') + '</div>';
-  html += dayCols;
+  html += '</div><div class="cal-body" style="grid-template-columns:60px repeat(5,1fr)">';
+  html += '<div class="time-col">' + timeLabels.join('') + '</div>' + dayCols;
   html += '</div></div>';
-  html += '<div class="course-table"><table>';
-  html += '<thead><tr><th>Course</th><th>Section</th><th>Days</th><th>Time</th><th>Professor</th></tr></thead>';
-  html += '<tbody>' + tableRows + '</tbody>';
-  html += '</table></div>';
-  html += '<div class="lab-pick-box">';
-  html += '<div class="lab-pick-title">🧪 MAE 306 Lab — Pin a section</div>';
+  html += '<div class="course-table"><table><thead><tr><th>Course</th><th>Section</th><th>Days</th><th>Time</th><th>Professor</th></tr></thead>';
+  html += '<tbody>' + tableRows + '</tbody></table></div>';
+  html += '<div class="lab-pick-box"><div class="lab-pick-title">\uD83E\uDDEA MAE 306 Lab \u2014 Pin a section</div>';
   html += '<div class="lab-pick-row"><span class="lab-pick-label">Show lab:</span>';
-  html += '<select class="lab-pick-select" id="lab306Select" onchange="setLab306Override(this.value)">';
-  html += labOptions.join('');
-  html += '</select></div>';
-  html += '<div class="lab-pick-info">' + (lab306Override === null ? "Showing this schedule's original lab assignment." : 'Calendar &amp; table updated to show §' + lab306Override + '. List is unchanged.') + '</div>';
-  html += '</div>';
+  html += '<select class="lab-pick-select" id="lab306Select" onchange="setLab306Override(this.value)">' + labOpts + '</select></div>';
+  html += '<div class="lab-pick-info">' + (lab306Override === null ? "Showing this schedule\u2019s original lab assignment." : 'Calendar &amp; table updated to show \u00a7' + lab306Override + '. List is unchanged.') + '</div></div>';
+
   if (!hesfConflict) {
-    const bg = hesfToggle ? '#ec4899' : '#ccc';
+    const bg       = hesfToggle ? '#ec4899' : '#ccc';
     const knobLeft = hesfToggle ? '21px' : '3px';
-    const onoff = hesfToggle ? 'On' : 'Off';
+    const onoff    = hesfToggle ? 'On' : 'Off';
     html += '<div class="lab-pick-box" style="border-top-color:#ec4899;margin-top:12px">';
-    html += '<div class="lab-pick-title" style="color:#ec4899">🏃 HESF 106 — Add 1-credit PE</div>';
-    html += '<div class="lab-pick-row">';
-    html += '<span class="lab-pick-label">Include HESF 106 (M 12:50–2:40)?</span>';
+    html += '<div class="lab-pick-title" style="color:#ec4899">\uD83C\uDFC3 HESF 106 \u2014 Add 1-credit PE</div>';
+    html += '<div class="lab-pick-row"><span class="lab-pick-label">Include HESF 106 (M 12:50\u20132:40)?</span>';
     html += '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-left:auto">';
     html += '<span style="font-size:0.78rem;color:#888">' + onoff + '</span>';
     html += '<div onclick="toggleHesf()" style="width:40px;height:22px;border-radius:11px;background:' + bg + ';position:relative;cursor:pointer;transition:background 0.2s">';
     html += '<div style="position:absolute;top:3px;left:' + knobLeft + ';width:16px;height:16px;border-radius:50%;background:white;transition:left 0.2s"></div>';
     html += '</div></label></div>';
-    html += '<div class="lab-pick-info">§95 · Mon 12:50–2:40 · Harrington,Renee · 1 cr</div>';
-    html += '</div>';
+    html += '<div class="lab-pick-info">\u00a795 \u00b7 Mon 12:50\u20132:40 \u00b7 Harrington,Renee \u00b7 1 cr</div></div>';
   }
   panel.innerHTML = html;
 }
@@ -1381,20 +642,18 @@ function setLab306Override(value) {
   lab306Override = value === '' ? null : value;
   if (currentDetailSchedule) renderDetail(currentDetailSchedule);
 }
-
 function toggleHesf() {
   hesfToggle = !hesfToggle;
   if (currentDetailSchedule) renderDetail(currentDetailSchedule);
 }
 
-// ── INIT ──────────────────────────────────────────────
+// ── INIT ─────────────────────────────────────────────────────────────────────
 document.getElementById('jumpInput').onkeydown = e => { if (e.key === 'Enter') jumpToRank(); };
 
-// Generate schedules from built-in data, build UI
-rebuildColors();
-renderConditions();
-applyConditions();   // populates SCHEDULES, calls renderList
+const raw = generateSchedules();
+raw.forEach(s => SCHEDULES.push(s));
 buildFilterPanel();
+renderList();
 </script>
 </body>
 </html>
