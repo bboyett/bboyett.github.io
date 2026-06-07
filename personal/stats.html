@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- File: stats.html -->
 <html lang="en">
 
 <head>
@@ -11,9 +12,8 @@
   <meta property="og:description" content="Analytics dashboard and activity heatmap." />
   <meta property="og:type" content="website" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="../assets/css/styles.css" />
-  <script src="../assets/js/main.js" defer></script>
-  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
+  <link rel="stylesheet" href="../assets/css/styles.css?v=1.1" />
+  <script src="../assets/js/main.js?v=1.1" defer></script>
   <style>
     .heatmap-container {
       background: var(--card-bg);
@@ -46,37 +46,15 @@
       z-index: 1;
     }
 
-    .heatmap-cell.l1 {
-      background: rgba(37, 99, 235, 0.25);
-    }
+    .heatmap-cell.l1 { background: rgba(37, 99, 235, 0.25); }
+    .heatmap-cell.l2 { background: rgba(37, 99, 235, 0.45); }
+    .heatmap-cell.l3 { background: rgba(37, 99, 235, 0.65); }
+    .heatmap-cell.l4 { background: var(--accent); }
 
-    .heatmap-cell.l2 {
-      background: rgba(37, 99, 235, 0.45);
-    }
-
-    .heatmap-cell.l3 {
-      background: rgba(37, 99, 235, 0.65);
-    }
-
-    .heatmap-cell.l4 {
-      background: var(--accent);
-    }
-
-    [data-theme="dark"] .heatmap-cell.l1 {
-      background: rgba(56, 189, 248, 0.2);
-    }
-
-    [data-theme="dark"] .heatmap-cell.l2 {
-      background: rgba(56, 189, 248, 0.4);
-    }
-
-    [data-theme="dark"] .heatmap-cell.l3 {
-      background: rgba(56, 189, 248, 0.6);
-    }
-
-    [data-theme="dark"] .heatmap-cell.l4 {
-      background: var(--accent);
-    }
+    [data-theme="dark"] .heatmap-cell.l1 { background: rgba(56, 189, 248, 0.2); }
+    [data-theme="dark"] .heatmap-cell.l2 { background: rgba(56, 189, 248, 0.4); }
+    [data-theme="dark"] .heatmap-cell.l3 { background: rgba(56, 189, 248, 0.6); }
+    [data-theme="dark"] .heatmap-cell.l4 { background: var(--accent); }
 
     .heatmap-tooltip {
       position: absolute;
@@ -95,9 +73,7 @@
       transition: opacity 0.15s;
     }
 
-    .heatmap-cell:hover .heatmap-tooltip {
-      opacity: 1;
-    }
+    .heatmap-cell:hover .heatmap-tooltip { opacity: 1; }
 
     .heatmap-legend {
       display: flex;
@@ -134,23 +110,12 @@
       border-bottom: 1px solid var(--card-border);
     }
 
-    .detail-row:last-child {
-      border-bottom: none;
-    }
-
-    .detail-name {
-      font-weight: 500;
-    }
-
-    .detail-count {
-      color: var(--accent);
-      font-weight: 700;
-    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-name { font-weight: 500; }
+    .detail-count { color: var(--accent); font-weight: 700; }
 
     @media (max-width: 768px) {
-      .detail-grid {
-        grid-template-columns: 1fr;
-      }
+      .detail-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -214,7 +179,6 @@
       const audioPlays = JSON.parse(localStorage.getItem("plays") || "{}");
       const dailyViews = JSON.parse(localStorage.getItem("dailyViews") || "{}");
 
-      // Totals
       let totalV = 0, totalP = 0;
       Object.values(pageViews).forEach(c => totalV += c);
       Object.values(audioPlays).forEach(c => totalP += c);
@@ -222,7 +186,6 @@
       document.getElementById('totalPlays').textContent = totalP;
       document.getElementById('activeDays').textContent = Object.keys(dailyViews).length;
 
-      // Page views list
       const pageList = document.getElementById("page-views-list");
       Object.entries(pageViews)
         .sort((a, b) => b[1] - a[1])
@@ -233,7 +196,6 @@
           pageList.appendChild(div);
         });
 
-      // Audio plays list
       const audioList = document.getElementById("audio-plays-list");
       if (Object.keys(audioPlays).length === 0) {
         audioList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">No audio plays recorded yet.</p>';
@@ -247,12 +209,10 @@
           audioList.appendChild(div);
         });
 
-      // Build heatmap (52 weeks × 7 days = 364 cells)
       const grid = document.getElementById('heatmapGrid');
       const today = new Date();
       const startDate = new Date(today);
-      startDate.setDate(startDate.getDate() - 363); // go back ~1 year
-      // Align to Sunday
+      startDate.setDate(startDate.getDate() - 363);
       startDate.setDate(startDate.getDate() - startDate.getDay());
 
       const maxVal = Math.max(1, ...Object.values(dailyViews));

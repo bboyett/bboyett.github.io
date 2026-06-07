@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- File: training.html -->
 <html lang="en">
 
 <head>
@@ -12,10 +13,9 @@
   <meta property="og:description" content="Training and performance tracking with charts." />
   <meta property="og:type" content="website" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/styles.css?v=1.1" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../assets/js/main.js" defer></script>
-  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
+  <script src="../assets/js/main.js?v=1.1" defer></script>
   <style>
     .training-table-container {
       overflow-x: auto;
@@ -146,7 +146,6 @@
           return;
         }
 
-        // Build table
         const headers = Object.keys(data[0]);
         let table = "<table><thead><tr>";
         headers.forEach(h => table += `<th>${h}</th>`);
@@ -159,7 +158,6 @@
         table += "</tbody></table>";
         container.innerHTML = table;
 
-        // Build charts from data
         buildCharts(data, headers);
       })
       .catch(() => {
@@ -167,20 +165,17 @@
       });
 
     function buildCharts(data, headers) {
-      // Attempt to find relevant columns for charting
-      // Look for columns that might contain week labels, miles, or workout counts
       const weekCol = headers.find(h => /week|date/i.test(h)) || headers[0];
       const mileCol = headers.find(h => /mile|distance|run/i.test(h));
       const volumeCol = headers.find(h => /volume|workout|session|total/i.test(h));
 
-      if (!mileCol && !volumeCol) return; // No chartable data
+      if (!mileCol && !volumeCol) return;
 
       document.getElementById('chartSection').style.display = 'grid';
 
       const labels = data.map(r => r[weekCol] || '');
       const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2563eb';
 
-      // Mileage chart
       if (mileCol) {
         const mileData = data.map(r => parseFloat(r[mileCol]) || 0);
         new Chart(document.getElementById('mileageChart'), {
@@ -209,7 +204,6 @@
         });
       }
 
-      // Volume chart
       if (volumeCol) {
         const volData = data.map(r => parseFloat(r[volumeCol]) || 0);
         new Chart(document.getElementById('volumeChart'), {
