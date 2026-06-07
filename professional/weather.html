@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<!-- File: weather.html -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather | Ben Boyette</title>
+  <meta name="description" content="Live weather for Cape Carteret, Raleigh, and beyond." />
+  <meta name="theme-color" content="#2563eb" />
+  <meta property="og:title" content="Weather | Ben Boyette" />
+  <meta property="og:type" content="website" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="../assets/css/styles.css?v=1.2" />
+  <script src="../assets/js/main.js?v=1.2" defer></script>
+  <style>
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .weather-card {
+      background: var(--cream);
+      border: 1px solid var(--card-border);
+      border-radius: 3px;
+      padding: 1.25rem 1rem;
+      position: relative;
+    }
+
+    .weather-card .city {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+    }
+
+    .weather-card .region {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .weather-card .temp {
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--text-main);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .weather-card .condition {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .weather-card .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--rule);
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .weather-card .detail-item span {
+      display: block;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .weather-card .detail-item strong {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .forecast-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      border-top: 1px solid var(--rule);
+      padding-top: 0.75rem;
+      overflow-x: auto;
+    }
+
+    .forecast-day {
+      flex: 1;
+      min-width: 44px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .forecast-day .f-day {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.2rem;
+    }
+
+    .forecast-day .f-icon {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .forecast-day .f-high {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .forecast-day .f-low {
+      color: var(--text-muted);
+    }
+
+    .weather-card.loading {
+      opacity: 0.5;
+    }
+
+    .weather-card.loading .temp {
+      color: var(--text-muted);
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .view-more-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: none;
+      border: none;
+      border-top: 1px solid var(--rule);
+      width: 100%;
+      padding: 1rem 0;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.15s;
+      margin-top: 1rem;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .view-more-btn:hover {
+      color: var(--accent);
+    }
+
+    .view-more-btn .arrow {
+      transition: transform 0.2s ease;
+      margin-left: auto;
+    }
+
+    .view-more-btn.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    .expandable {
+      display: none;
+    }
+
+    .expandable.open {
+      display: block;
+    }
+
+    .updated-at {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    .wind-dir {
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar"></div>
+
+  <main class="container">
+    <section class="intro">
+      <h1>Weather</h1>
+      <p>Live conditions and daily forecasts. Updates every 30 minutes.</p>
+    </section>
+
+    <section class="section">
+      <div class="updated-at" id="updated-at">Fetching data...</div>
+
+      <!-- DEFAULT: Cape Carteret + Raleigh -->
+      <div class="section-label">Home</div>
+      <div class="weather-grid" id="grid-home"></div>
+
+      <!-- VIEW MORE toggle -->
+      <button class="view-more-btn" id="view-more-btn" onclick="toggleMore()">
+        View More
+        <span class="arrow">▾</span>
+      </button>
+
+      <div class="expandable" id="expandable">
+
+        <!-- Big US Cities -->
+        <div class="section-label" style="margin-top: 1.5rem;">Major US Cities</div>
+        <div class="weather-grid" id="grid-us"></div>
+
+        <!-- North Carolina -->
+        <div class="section-label">North Carolina</div>
+        <div class="weather-grid" id="grid-nc"></div>
+
+        <!-- Carteret County -->
+        <div class="section-label">Carteret County</div>
+        <div class="weather-grid" id="grid-carteret"></div>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const LOCATIONS = {
+      home: [
+        { name: 'Cape Carteret', region: 'NC', lat: 34.6918, lon: -77.0580 },
+        { name: 'Raleigh', region: 'NC', lat: 35.7796, lon: -78.6382 },
+      ],
+      us: [
+        { name: 'New York', region: 'NY', lat: 40.7128, lon: -74.0060 },
+        { name: 'Los Angeles', region: 'CA', lat: 34.0522, lon: -118.2437 },
+        { name: 'Chicago', region: 'IL', lat: 41.8781, lon: -87.6298 },
+        { name: 'Boston', region: 'MA', lat: 42.3601, lon: -71.0589 },
+        { name: 'Atlanta', region: 'GA', lat: 33.7490, lon: -84.3880 },
+        { name: 'Dallas', region: 'TX', lat: 32.7767, lon: -96.7970 },
+        { name: 'Seattle', region: 'WA', lat: 47.6062, lon: -122.3321 },
+        { name: 'San Francisco', region: 'CA', lat: 37.7749, lon: -122.4194 },
+        { name: 'Miami', region: 'FL', lat: 25.7617, lon: -80.1918 },
+        { name: 'Denver', region: 'CO', lat: 39.7392, lon: -104.9903 },
+      ],
+      nc: [
+        { name: 'Charlotte', region: 'NC', lat: 35.2271, lon: -80.8431 },
+        { name: 'Durham', region: 'NC', lat: 35.9940, lon: -78.8986 },
+        { name: 'Chapel Hill', region: 'NC', lat: 35.9132, lon: -79.0558 },
+        { name: 'Wilmington', region: 'NC', lat: 34.2257, lon: -77.9447 },
+        { name: 'Greensboro', region: 'NC', lat: 36.0726, lon: -79.7920 },
+        { name: 'Asheville', region: 'NC', lat: 35.5951, lon: -82.5515 },
+        { name: 'Jacksonville', region: 'NC', lat: 34.7540, lon: -77.4302 },
+        { name: 'New Bern', region: 'NC', lat: 35.1085, lon: -77.0441 },
+      ],
+      carteret: [
+        { name: 'Morehead City', region: 'Carteret Co.', lat: 34.7218, lon: -76.7266 },
+        { name: 'Beaufort', region: 'Carteret Co.', lat: 34.7182, lon: -76.6549 },
+        { name: 'Emerald Isle', region: 'Carteret Co.', lat: 34.6596, lon: -77.0196 },
+        { name: 'Atlantic Beach', region: 'Carteret Co.', lat: 34.6985, lon: -76.7358 },
+        { name: 'Newport', region: 'Carteret Co.', lat: 34.7882, lon: -76.8563 },
+        { name: 'Cedar Point', region: 'Carteret Co.', lat: 34.6929, lon: -77.0724 },
+      ],
+    };
+
+    const WMO_CODES = {
+      0: ['Clear', '☀️'], 1: ['Mainly Clear', '🌤️'], 2: ['Partly Cloudy', '⛅'],
+      3: ['Overcast', '☁️'], 45: ['Foggy', '🌫️'], 48: ['Icy Fog', '🌫️'],
+      51: ['Light Drizzle', '🌦️'], 53: ['Drizzle', '🌦️'], 55: ['Heavy Drizzle', '🌧️'],
+      61: ['Light Rain', '🌧️'], 63: ['Rain', '🌧️'], 65: ['Heavy Rain', '🌧️'],
+      71: ['Light Snow', '🌨️'], 73: ['Snow', '❄️'], 75: ['Heavy Snow', '❄️'],
+      77: ['Snow Grains', '🌨️'], 80: ['Light Showers', '🌦️'], 81: ['Showers', '🌧️'],
+      82: ['Heavy Showers', '⛈️'], 85: ['Snow Showers', '🌨️'], 86: ['Heavy Snow Showers', '❄️'],
+      95: ['Thunderstorm', '⛈️'], 96: ['Thunderstorm w/ Hail', '⛈️'], 99: ['Severe Thunderstorm', '⛈️'],
+    };
+
+    const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    function getCondition(code) {
+      return WMO_CODES[code] || ['Unknown', '🌡️'];
+    }
+
+    function windDir(deg) {
+      const dirs = ['N','NE','E','SE','S','SW','W','NW'];
+      return dirs[Math.round(deg / 45) % 8];
+    }
+
+    function buildCard(loc, data) {
+      const current = data.current;
+      const daily = data.daily;
+      const [condText, condIcon] = getCondition(current.weather_code);
+      const tempF = Math.round(current.temperature_2m);
+      const feelsF = Math.round(current.apparent_temperature);
+      const humidity = Math.round(current.relative_humidity_2m);
+      const wind = Math.round(current.wind_speed_10m);
+      const wdir = windDir(current.wind_direction_10m);
+      const precip = current.precipitation ?? 0;
+
+      // 5-day forecast
+      let forecastHTML = '<div class="forecast-row">';
+      for (let i = 0; i < 5; i++) {
+        const date = new Date(daily.time[i]);
+        const dayName = i === 0 ? 'Today' : DAYS[date.getDay()];
+        const [, fIcon] = getCondition(daily.weather_code[i]);
+        const hi = Math.round(daily.temperature_2m_max[i]);
+        const lo = Math.round(daily.temperature_2m_min[i]);
+        forecastHTML += `
+          <div class="forecast-day">
+            <div class="f-day">${dayName}</div>
+            <div class="f-icon">${fIcon}</div>
+            <div class="f-high">${hi}°</div>
+            <div class="f-low">${lo}°</div>
+          </div>`;
+      }
+      forecastHTML += '</div>';
+
+      return `
+        <div class="weather-card">
+          <div class="city">${loc.name}</div>
+          <div class="region">${loc.region}</div>
+          <div class="temp">${condIcon} ${tempF}°F</div>
+          <div class="condition">${condText} · Feels like ${feelsF}°F</div>
+          <div class="details">
+            <div class="detail-item"><span>Humidity</span><strong>${humidity}%</strong></div>
+            <div class="detail-item"><span>Wind</span><strong>${wind} mph ${wdir}</strong></div>
+            <div class="detail-item"><span>Precip</span><strong>${precip} in</strong></div>
+            <div class="detail-item"><span>High / Low</span><strong>${Math.round(daily.temperature_2m_max[0])}° / ${Math.round(daily.temperature_2m_min[0])}°</strong></div>
+          </div>
+          ${forecastHTML}
+        </div>`;
+    }
+
+    function buildPlaceholder(loc) {
+      return `<div class="weather-card loading"><div class="city">${loc.name}</div><div class="region">${loc.region}</div><div class="temp">--°F</div><div class="condition">Loading...</div></div>`;
+    }
+
+    async function fetchWeather(loc) {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=5`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Failed');
+      return res.json();
+    }
+
+    async function loadGroup(groupKey, gridId) {
+      const grid = document.getElementById(gridId);
+      const locs = LOCATIONS[groupKey];
+
+      // placeholders
+      grid.innerHTML = locs.map(buildPlaceholder).join('');
+
+      // fetch all in parallel
+      const results = await Promise.allSettled(locs.map(fetchWeather));
+
+      grid.innerHTML = results.map((r, i) => {
+        if (r.status === 'fulfilled') return buildCard(locs[i], r.value);
+        return `<div class="weather-card"><div class="city">${locs[i].name}</div><div class="region">${locs[i].region}</div><div class="condition" style="color:var(--accent)">Failed to load</div></div>`;
+      }).join('');
+    }
+
+    function toggleMore() {
+      const btn = document.getElementById('view-more-btn');
+      const expandable = document.getElementById('expandable');
+      const isOpen = expandable.classList.contains('open');
+
+      btn.classList.toggle('open', !isOpen);
+      expandable.classList.toggle('open', !isOpen);
+      btn.childNodes[0].textContent = isOpen ? 'View More' : 'View Less';
+
+      // Lazy load expanded sections only when first opened
+      if (!isOpen && !expandable.dataset.loaded) {
+        expandable.dataset.loaded = 'true';
+        loadGroup('us', 'grid-us');
+        loadGroup('nc', 'grid-nc');
+        loadGroup('carteret', 'grid-carteret');
+      }
+    }
+
+    function updateTimestamp() {
+      const now = new Date();
+      document.getElementById('updated-at').textContent =
+        `Last updated: ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+
+    async function init() {
+      await loadGroup('home', 'grid-home');
+      updateTimestamp();
+
+      // Refresh home every 30 minutes
+      setInterval(async () => {
+        await loadGroup('home', 'grid-home');
+        // If expanded, refresh those too
+        if (document.getElementById('expandable').classList.contains('open')) {
+          loadGroup('us', 'grid-us');
+          loadGroup('nc', 'grid-nc');
+          loadGroup('carteret', 'grid-carteret');
+        }
+        updateTimestamp();
+      }, 30 * 60 * 1000);
+    }
+
+    init();
+  </script>
+</body>
+
+</html>
