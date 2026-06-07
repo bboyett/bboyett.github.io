@@ -3,15 +3,61 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Load Navbar
+    // 1. Initialize Theme
+    initTheme();
+
+    // 2. Load Navbar
     loadNavbar();
 
-    // 2. Track Page Views (with daily granularity for heatmap)
+    // 3. Track Page Views (with daily granularity for heatmap)
     trackPageViews();
 
-    // 3. Inject Command Palette
+    // 4. Inject Command Palette
     injectCommandPalette();
+
+    // 5. Inject Dark Mode Toggle
+    injectDarkModeToggle();
 });
+
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+function injectDarkModeToggle() {
+    const btn = document.createElement('button');
+    btn.id = 'dark-mode-toggle';
+    btn.title = 'Toggle dark mode';
+    btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+    btn.style.cssText = `
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 2000;
+        background: var(--cream);
+        border: 1px solid var(--rule);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.15s;
+    `;
+
+    btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    document.body.appendChild(btn);
+}
 
 async function loadNavbar() {
     const navbarContainer = document.getElementById('navbar');
@@ -51,7 +97,6 @@ function trackPageViews() {
         views[page] = (views[page] || 0) + 1;
         localStorage.setItem("views", JSON.stringify(views));
 
-        // Daily tracking for heatmap
         const today = new Date().toISOString().slice(0, 10);
         const daily = JSON.parse(localStorage.getItem("dailyViews") || "{}");
         daily[today] = (daily[today] || 0) + 1;

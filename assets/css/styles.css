@@ -20,6 +20,19 @@
   --glass-blur: 0px;
 }
 
+[data-theme="dark"] {
+  --bg-color: #1a1410;
+  --paper: #1a1410;
+  --cream: #241f1a;
+  --card-bg: #241f1a;
+  --card-border: #3a332c;
+  --text-main: #f0ebe3;
+  --text-muted: #9a8f83;
+  --accent: #e05a49;
+  --accent-soft: rgba(224, 90, 73, 0.1);
+  --rule: #3a332c;
+}
+
 /* =============================
    Reset & Base Styles
    ============================= */
