@@ -190,8 +190,7 @@ a:hover {
   margin-top: 4rem;
   margin-bottom: 4rem;
   padding-bottom: 3rem;
-  border-bottom: 1px solid var(--rule);
-}
+  }
 
 .intro h1 {
   background: none;
