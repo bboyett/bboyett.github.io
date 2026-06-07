@@ -12,8 +12,8 @@
   <meta property="og:description" content="Personal music collection and listening sessions." />
   <meta property="og:type" content="website" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="../assets/css/styles.css?v=1.1" />
-  <script src="../assets/js/main.js?v=1.1" defer></script>
+  <link rel="stylesheet" href="../assets/css/styles.css?v=1.2" />
+  <script src="../assets/js/main.js?v=1.2" defer></script>
 </head>
 
 <body>
@@ -163,7 +163,12 @@
     function formatTime(time) {
       if (!time) return "0:00";
       const minutes = Math.floor(time / 60);
-      const seconds = Math.floor(time % 60).toString().padStart(2, "0");
+      function formatTime(time) {
+        if (!time || isNaN(time)) return "0:00";
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60).toString().padStart(2, "0");
+        return `${minutes}:${seconds}`;
+      }
       return `${minutes}:${seconds}`;
     }
 

@@ -3,27 +3,15 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize Theme
-    initTheme();
-
-    // 2. Load Navbar
+    // 1. Load Navbar
     loadNavbar();
 
-    // 3. Track Page Views (with daily granularity for heatmap)
+    // 2. Track Page Views (with daily granularity for heatmap)
     trackPageViews();
 
-    // 4. Inject Pomodoro Timer
-    injectPomodoro();
-
-    // 5. Inject Command Palette
+    // 3. Inject Command Palette
     injectCommandPalette();
 });
-
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', savedTheme);
-}
 
 async function loadNavbar() {
     const navbarContainer = document.getElementById('navbar');
@@ -64,145 +52,13 @@ function trackPageViews() {
         localStorage.setItem("views", JSON.stringify(views));
 
         // Daily tracking for heatmap
-        const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const today = new Date().toISOString().slice(0, 10);
         const daily = JSON.parse(localStorage.getItem("dailyViews") || "{}");
         daily[today] = (daily[today] || 0) + 1;
         localStorage.setItem("dailyViews", JSON.stringify(daily));
     } catch (e) {
         console.warn('LocalStorage not available for view tracking');
     }
-}
-
-// Inject Dark Mode Toggle if not present
-if (!document.getElementById('dark-mode-toggle')) {
-    fetch('/assets/includes/darkmode.html')
-        .then(res => res.text())
-        .then(html => {
-            document.body.insertAdjacentHTML('afterbegin', html);
-        })
-        .catch(err => console.error('Error loading dark mode toggle:', err));
-}
-
-// =============================================
-//  POMODORO TIMER WIDGET
-// =============================================
-function injectPomodoro() {
-    // Restore state from localStorage
-    const state = JSON.parse(localStorage.getItem('pomodoroState') || '{}');
-    const remaining = state.remaining ?? 25 * 60;
-    const running = false; // never auto-resume on page load
-    const sessions = state.sessions ?? 0;
-
-    const widget = document.createElement('div');
-    widget.id = 'pomodoro-widget';
-    widget.innerHTML = `
-        <div class="pomo-ring">
-            <svg viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="44" fill="none" stroke="var(--card-border)" stroke-width="4"/>
-                <circle id="pomo-progress" cx="50" cy="50" r="44" fill="none" stroke="var(--accent)" stroke-width="4"
-                    stroke-dasharray="276.46" stroke-dashoffset="0" stroke-linecap="round"
-                    transform="rotate(-90 50 50)" style="transition: stroke-dashoffset 0.5s ease;"/>
-            </svg>
-            <span id="pomo-time" class="pomo-time">${formatTime(remaining)}</span>
-        </div>
-        <div class="pomo-controls">
-            <button id="pomo-start" title="Start / Pause">▶</button>
-            <button id="pomo-reset" title="Reset">↺</button>
-        </div>
-        <div class="pomo-sessions">${sessions} sessions</div>
-        <button id="pomo-collapse" class="pomo-collapse" title="Toggle Timer">⏱</button>
-    `;
-    document.body.appendChild(widget);
-
-    let timeLeft = remaining;
-    let isRunning = running;
-    let interval = null;
-    let sessionCount = sessions;
-    const TOTAL = 25 * 60;
-
-    const timeEl = document.getElementById('pomo-time');
-    const progressEl = document.getElementById('pomo-progress');
-    const startBtn = document.getElementById('pomo-start');
-    const resetBtn = document.getElementById('pomo-reset');
-    const collapseBtn = document.getElementById('pomo-collapse');
-    const sessionsEl = widget.querySelector('.pomo-sessions');
-
-    function updateDisplay() {
-        timeEl.textContent = formatTime(timeLeft);
-        const offset = 276.46 * (1 - timeLeft / TOTAL);
-        progressEl.setAttribute('stroke-dashoffset', offset);
-        sessionsEl.textContent = `${sessionCount} session${sessionCount !== 1 ? 's' : ''}`;
-    }
-
-    function saveState() {
-        localStorage.setItem('pomodoroState', JSON.stringify({
-            remaining: timeLeft, sessions: sessionCount
-        }));
-    }
-
-    function tick() {
-        if (timeLeft <= 0) {
-            clearInterval(interval);
-            isRunning = false;
-            startBtn.textContent = '▶';
-            sessionCount++;
-            timeLeft = TOTAL;
-            updateDisplay();
-            saveState();
-            // Notification sound via Web Audio API
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const o = ctx.createOscillator(); const g = ctx.createGain();
-                o.connect(g); g.connect(ctx.destination);
-                o.frequency.value = 880; g.gain.value = 0.3;
-                o.start(); o.stop(ctx.currentTime + 0.3);
-            } catch (e) { }
-            return;
-        }
-        timeLeft--;
-        updateDisplay();
-        saveState();
-    }
-
-    startBtn.addEventListener('click', () => {
-        if (isRunning) {
-            clearInterval(interval);
-            isRunning = false;
-            startBtn.textContent = '▶';
-        } else {
-            interval = setInterval(tick, 1000);
-            isRunning = true;
-            startBtn.textContent = '❚❚';
-        }
-        saveState();
-    });
-
-    resetBtn.addEventListener('click', () => {
-        clearInterval(interval);
-        isRunning = false;
-        timeLeft = TOTAL;
-        startBtn.textContent = '▶';
-        updateDisplay();
-        saveState();
-    });
-
-    // Collapse / expand
-    const isCollapsed = localStorage.getItem('pomoCollapsed') === 'true';
-    if (isCollapsed) widget.classList.add('collapsed');
-
-    collapseBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        widget.classList.toggle('collapsed');
-        localStorage.setItem('pomoCollapsed', widget.classList.contains('collapsed'));
-    });
-
-    updateDisplay();
-}
-
-function formatTime(s) {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
 }
 
 // =============================================
